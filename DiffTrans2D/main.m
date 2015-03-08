@@ -15,14 +15,17 @@ f = @(x,y) 1; % Loading function
 % Assemble Matrices and loading function
 	Ah = stiffness_2D(dofs,p,tri);
 	fh = load_2D(dofs,p,tri,f);
+	Gh = gradient_2D(dofs,p,tri,b);
+	K = Ah;%+Gh; % Total matrix
 % 
+
 
 % Imposing boundary conditions
 %
 %
 
 % Solving 
-uh = Ah\fh;
+uh = K\fh;
 	
 %% Plotting the numerical solution
 figure(1);
