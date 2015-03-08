@@ -1,6 +1,19 @@
 function I = quadrature2D(p1,p2,p3,Nq,g)
-%g = @(x,y) log(x+y);
-%p1 = [1;0]; p2 = [3;1]; p3 = [3;2];
+% function I = quadrature2D(p1,p2,p3,Nq,g)
+% 
+% description:
+%   Calculates the integral over the element spanned by
+%		p1,p2,p3 of the function g using gaussian quadrature with Nq points 
+%
+% arguments:
+%		- p1,p2,p3 	coordinates to the corners of the triangular element
+%   - Nq 				Number of quadrature points
+%   - g 				Function to be evaluated
+% returns:
+%   - I 				The value of the integral
+%
+% author: Magnus Aa. Rud
+% last edit: March 2015
 j1 = p1-p3;
 j2 = p2-p3;
 Jacobi = [j1(1) j1(2); j2(1) j2(2)];
