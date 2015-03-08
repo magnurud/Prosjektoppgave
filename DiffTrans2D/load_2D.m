@@ -26,6 +26,7 @@ function [fh] = load_2D(dofs,p,tri,f)
         p3 = p(pis(3),:);
 
         A_k = (1/2)*abs((p1(1)-p3(1))*(p2(2)-p1(2)) - (p1(1)-p2(1))*(p3(2)-p1(2)));
+       %A_k = polyarea(X,Y); %Area of the element,(Jacobi determinant) 
         
         %f=@(x,y) -8*pi*cos(2*pi*(x^2+y^2))+16*pi^2*(x^2+y^2)*sin(2*pi*(x^2+y^2)); %As argument in function
         
@@ -41,6 +42,18 @@ function [fh] = load_2D(dofs,p,tri,f)
             I = quadrature2D(p1,p2,p3,Nq,g);
             fh(pis(n),1) = fh(pis(n),1) + I;       
         end         
+				% Alternative 
+			%%phi1 = @(x,y) (1/(2*A_k))*((p2(1)*p3(2) - p3(1)*p2(2)) + (p2(2)-p3(2))*x + (p3(1)-p2(1))*y);
+			%%phi2 = @(x,y) (1/(2*A_k))*((p3(1)*p1(2) - p1(1)*p3(2)) + (p3(2)-p1(2))*x + (p1(1)-p3(1))*y);
+			%%phi3 = @(x,y) (1/(2*A_k))*((p1(1)*p2(2) - p2(1)*p1(2)) + (p1(2)-p2(2))*x + (p2(1)-p1(1))*y); 
+			%%PHI = @(x,y) [phi1 ; phi2 ; phi3];
+      %%g = @(x,y) f(x,y)*PHI(x,y);   
+
+			%%for n = 1:3
+      %%I = quadrature2D(p1,p2,p3,Nq,g(n));
+      %%fh(pis(n),1) = fh(pis(n),1) + I;       
+			%%end
+
     end
 end
 
