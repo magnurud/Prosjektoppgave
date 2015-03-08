@@ -1,4 +1,4 @@
-function [p tri edge] = getDisk(N)
+function [p tri edge] = getDisk(N),
 % function [p tri edge] = getDisk(N),
 % 
 % description:
@@ -9,10 +9,10 @@ function [p tri edge] = getDisk(N)
 % returns:
 %   - p     nodal points. (x,y)-coordinates for point i given in row i.
 %   - tri   elements. Index to the three corners of element i given in row i.
-%   - edge  edge lines. Index list to the two corners of edge line i given in row i
+%   - edge  index list of all nodal points on the outer edge (r=1)
 
 % author: Kjetil A. Johannessen
-% last edit: September 2012
+% last edit: October 2010
 
 % approximating design
 M = floor(sqrt(N/pi));    % number of circles outward (not counting origin)
@@ -57,6 +57,3 @@ end
 
 tri  = delaunay(p(:,1), p(:,2));
 edge = N-alpha(end)+1:N;
-edge = [edge', edge'+1];
-edge(end) = N-alpha(end)+1;
-
