@@ -1,20 +1,19 @@
-function [Gh] = gradient_2D(dofs,p,tri,b)
+function [Ah] = stiffness_2D(dofs,p,tri)
 % description:
-%      generate the gradient matrix Gh;
+%      generate the stiffness matrix Ah;
 %
 % arguments:
 %   - dofs  Degrees of freedom.  
-%   - p     Nodal points. (x,y)-coordinates for point i given in row i.
-%   - tri   Elements. Index to the three corners of element i given in row i.
-%		- b 		Constant! Vector field 
+%   - p     nodal points. (x,y)-coordinates for point i given in row i.
+%   - tri   elements. Index to the three corners of element i given in row i.
 % returns:
-%		- Gh 	  Gradient matrix (dofs^2 elements)
+%		- Ah 	  Stiffness matrix (dofs^2 elements)
 %
 % author: Magnus Aa. Rud
 % last edit: March 2015
 
-    Gh = sparse(dofs,dofs);
-		%Gh = spalloc(dofs,dofs,6*dofs); %Estimate number of nnz elements, saves a lot of memory!
+    Ah = sparse(dofs,dofs);
+		%Ah = spalloc(dofs,dofs,6*dofs); %Estimate number of nnz elements, saves a lot of memory!
     % Nq = 4; %number of integration points in quadrature2D
     Ne = length(tri(:,1)); %number of elements
     
@@ -37,13 +36,9 @@ function [Gh] = gradient_2D(dofs,p,tri,b)
         delPhi(1,3) = p1(2)-p2(2);
         delPhi(2,3) = p2(1)-p1(1);
         
-        delPhi = (1/(2*A_k))*delPhi; % Why should there be one half here ??? 
-
-				test = A_k*[1/2; 1/6; 1/3]; % Value of the integral of the three test functions over the element
-
-				I = kron(test,*b'*delPhi); % Total Integral, Check indexing! 
+        delPhi = (1/(2*A_k))*delPhi;
         
-        Gh(pis,pis) = Gh(pis,pis) + I;
+        Ah(pis,pis) = Ah(pis,pis) + A_k*delPhi'*delPhi;
+
     end
 end
-
