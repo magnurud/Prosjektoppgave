@@ -12,8 +12,8 @@ function [Ah] = stiffness_2D(dofs,p,tri)
 % author: Magnus Aa. Rud
 % last edit: March 2015
 
-    Ah = sparse(dofs,dofs);
-		%Ah = spalloc(dofs,dofs,6*dofs); %Estimate number of nnz elements, saves a lot of memory!
+    %Ah = sparse(dofs,dofs);
+		Ah = spalloc(dofs,dofs,5*dofs); %Estimate number of nnz elements, saves a lot of memory!
     % Nq = 4; %number of integration points in quadrature2D
     Ne = length(tri(:,1)); %number of elements
     

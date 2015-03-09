@@ -13,8 +13,8 @@ function [Gh] = gradient_2D(dofs,p,tri,b)
 % author: Magnus Aa. Rud
 % last edit: March 2015
 
-    Gh = sparse(dofs,dofs);
-		%Gh = spalloc(dofs,dofs,6*dofs); %Estimate number of nnz elements, saves a lot of memory!
+    %Gh = sparse(dofs,dofs);
+		Gh = spalloc(dofs,dofs,6*dofs); %Estimate number of nnz elements, saves a lot of memory!
     % Nq = 4; %number of integration points in quadrature2D
     Ne = length(tri(:,1)); %number of elements
     
@@ -27,7 +27,9 @@ function [Gh] = gradient_2D(dofs,p,tri,b)
         
         X = [p1(1) p2(1) p3(1)];
         Y = [p1(2) p2(2) p3(2)];
-        A_k = polyarea(X,Y); %Area of the element,(Jacobi determinant) 
+        A_k = 2*polyarea(X,Y); %Area of the element,(Jacobi determinant) 
+        %A_k = (p2(1)-p1(1))*(p3(2)-p1(2))-(p3(1)-p1(1))*(p2(2)-p1(2)); %Direct
+        %calculation
         
         delPhi = zeros(2,3);
         delPhi(1,1) = p2(2)-p3(2);
@@ -37,11 +39,11 @@ function [Gh] = gradient_2D(dofs,p,tri,b)
         delPhi(1,3) = p1(2)-p2(2);
         delPhi(2,3) = p2(1)-p1(1);
         
-        delPhi = (1/(2*A_k))*delPhi; % Why should there be one half here ??? 
+        delPhi = (1/(A_k))*delPhi; % Why should there be one half here ??? 
 
-				test = A_k*[1/2; 1/6; 1/3]; % Value of the integral of the three test functions over the element
+				test = A_k*[1/6; 1/6; 1/6]; % Value of the integral of the three test functions over the element
 
-				I = kron(test,b'*delPhi); % Total Integral, Check indexing! 
+				I = kron(test',(b'*delPhi)'); % Total Integral, Check indexing! 
         
         Gh(pis,pis) = Gh(pis,pis) + I;
     end
