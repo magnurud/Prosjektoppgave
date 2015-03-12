@@ -40,7 +40,7 @@ function [Ah] = stiffness_2D(dofs,p,tri)
         delPhi(1,3) = p1(2)-p2(2);
         delPhi(2,3) = p2(1)-p1(1);
 
-        I = zeros(9,9) % This will be the stiffness element matrix for this element! 
+        I = zeros(9,9); % This will be the stiffness element matrix for this element! 
 				% to help out with numerating
 				n1 = [1 4 7]; n2 = [2 5 8];	n3 = [3 6 9];
 
