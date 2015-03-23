@@ -1,7 +1,7 @@
 % main.m
 %
 % description:
-%      Solving the Poisson problem on the square (0,1)^2;
+%      Solving the Poisson problem on the square (0,1)^2 using LSFEM;
 %
 % author: Magnus Aa. Rud
 % last edit: March 2015

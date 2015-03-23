@@ -45,7 +45,7 @@ function [Ah] = stiffness_2D(dofs,p,tri)
 				n1 = [1 4 7]; n2 = [2 5 8];	n3 = [3 6 9];
 
 				% Component 1,1   
-				I(n1,n1) = A_k/2*(kron(delPhi(1,:)',delPhi(1,:)) + 1/6);
+				I(n1,n1) = A_k/2*(kron(delPhi(1,:)',delPhi(1,:)) + 1/12);
 				% Component 1,2
 				I(n1,n2) = A_k/2*(kron(delPhi(1,:)',delPhi(2,:))      );
 				% Component 1,3
@@ -53,7 +53,7 @@ function [Ah] = stiffness_2D(dofs,p,tri)
 				% Component 2,1
 				I(n2,n1) = A_k/2*(kron(delPhi(2,:)',delPhi(1,:))      );
 				% Component 2,2
-				I(n2,n2) = A_k/2*(kron(delPhi(2,:)',delPhi(2,:)) + 1/6);
+				I(n2,n2) = A_k/2*(kron(delPhi(2,:)',delPhi(2,:)) + 1/12);
 				% Component 2,3
 				I(n2,n3) = A_k/6*(kron(ones(3,1)   ,delPhi(2,:))      );
 				% Component 3,1
@@ -63,6 +63,11 @@ function [Ah] = stiffness_2D(dofs,p,tri)
 				% Component 3,3
 				I(n3,n3) = A_k/2*(kron(delPhi(1,:)',delPhi(1,:))+kron(delPhi(2,:)',delPhi(2,:)));
 				
+        % Correcting for the diagonal elements where i=j
+        ndiag = [1 1 0 1 1 0 1 1 0];
+        I = I + A_k/24*diag(ndiag);
+
+
         Ah(Map,Map) = Ah(Map,Map) + I;  % Can do this directly as well.
 
     end
