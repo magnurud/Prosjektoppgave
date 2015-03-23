@@ -1,5 +1,5 @@
-function [fh] = load_2D(dofs,p,tri,f)
-% function [fh] = load_2D(dofs,p,tri,f),
+function [fh] = load_2D(dofs,p,tri,f,b,mu)
+% function [fh] = load_2D(dofs,p,tri,f,b,mu),
 % 
 % description:
 %     Evaluates the loading function f in all the nodes.
@@ -9,6 +9,8 @@ function [fh] = load_2D(dofs,p,tri,f)
 %   - dofs  Degrees of freedom. 
 %   - p     Nodal points. (x,y)-coordinates for point i given in row i.
 %   - tri   Elements. Index to the three corners of element i given in row i.
+%   - mu    Viscosity
+%   - b     Vector field as a function handle
 % returns:
 %   - fh 		The loading function evaluated in all the nodes.
 %
@@ -18,6 +20,7 @@ function [fh] = load_2D(dofs,p,tri,f)
     fh = zeros(dofs,1);
     Nq = 4;
     Ne = length(tri(:,1)); %Number of elements
+    B = b(0,0);
     
     for i = 1:Ne
         pis = tri(i,:);
@@ -37,11 +40,13 @@ function [fh] = load_2D(dofs,p,tri,f)
         delPhi(1,3) = p1(2)-p2(2);
         delPhi(2,3) = p2(1)-p1(1);
 
-				M = [delPhi;0 0 0];	
+				M = 1/2*mu*[delPhi;0 0 0];
+        M(1,:) = M(1,:) - ones(1,3)*B(1)/6;
+        M(2,:) = M(2,:) - ones(1,3)*B(2)/6;
         
-				I = quadrature2D(p1,p2,p3,Nq,f);
+				%I = quadrature2D(p1,p2,p3,Nq,f);
         % If f is const
-        %I = A_k*f(0,0)/2;
+        I = A_k*f(0,0);
 				fh(Map) = fh(Map) + I*reshape(M,9,1);       
     end
 end

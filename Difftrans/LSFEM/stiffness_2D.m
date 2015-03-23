@@ -1,4 +1,4 @@
-function [Ah] = stiffness_2D(dofs,p,tri)
+function [Ah] = stiffness_2D(dofs,p,tri,mu)
 % description:
 %      generate the stiffness matrix Ah;
 %
@@ -6,6 +6,7 @@ function [Ah] = stiffness_2D(dofs,p,tri)
 %   - dofs  Degrees of freedom.  
 %   - p     nodal points. (x,y)-coordinates for point i given in row i.
 %   - tri   elements. Index to the three corners of element i given in row i.
+%   - mu    viscosity coefficient
 % returns:
 %		- Ah 	  Stiffness matrix (dofs^2 elements)
 %
@@ -16,6 +17,7 @@ function [Ah] = stiffness_2D(dofs,p,tri)
 		%Ah = spalloc(dofs,dofs,6*dofs); %Estimate number of nnz elements, saves a lot of memory!
     % Nq = 4; %number of integration points in quadrature2D
     Ne = length(tri(:,1)); %number of elements
+    Mu = mu^2;
     
     for i = 1:Ne %iterates over all elements
         
@@ -45,21 +47,21 @@ function [Ah] = stiffness_2D(dofs,p,tri)
 				n1 = [1 4 7]; n2 = [2 5 8];	n3 = [3 6 9];
 
 				% Component 1,1   
-				I(n1,n1) = A_k/2*(kron(delPhi(1,:)',delPhi(1,:)) + 1/12);
+				I(n1,n1) = A_k/2*(kron(delPhi(1,:)',delPhi(1,:))*Mu + 1/12);
 				% Component 1,2
-				I(n1,n2) = A_k/2*(kron(delPhi(1,:)',delPhi(2,:))      );
+				I(n1,n2) = A_k/2*(kron(delPhi(1,:)',delPhi(2,:))*Mu       );
 				% Component 1,3
-				I(n1,n3) = A_k/6*(kron(ones(3,1)   ,delPhi(1,:))      );
+				I(n1,n3) = A_k/6*(kron(ones(3,1)   ,delPhi(1,:))          );
 				% Component 2,1
-				I(n2,n1) = A_k/2*(kron(delPhi(2,:)',delPhi(1,:))      );
+				I(n2,n1) = A_k/2*(kron(delPhi(2,:)',delPhi(1,:))*Mu       );
 				% Component 2,2
-				I(n2,n2) = A_k/2*(kron(delPhi(2,:)',delPhi(2,:)) + 1/12);
+				I(n2,n2) = A_k/2*(kron(delPhi(2,:)',delPhi(2,:))*Mu + 1/12);
 				% Component 2,3
-				I(n2,n3) = A_k/6*(kron(ones(3,1)   ,delPhi(2,:))      );
+				I(n2,n3) = A_k/6*(kron(ones(3,1)   ,delPhi(2,:))          );
 				% Component 3,1
-				I(n3,n1) = A_k/6*(kron(delPhi(1,:)',ones(1,3))        );
+				I(n3,n1) = A_k/6*(kron(delPhi(1,:)',ones(1,3))            );
 				% Component 3,2
-				I(n3,n2) = A_k/6*(kron(delPhi(2,:)',ones(1,3))        );
+				I(n3,n2) = A_k/6*(kron(delPhi(2,:)',ones(1,3))            );
 				% Component 3,3
 				I(n3,n3) = A_k/2*(kron(delPhi(1,:)',delPhi(1,:))+kron(delPhi(2,:)',delPhi(2,:)));
 				

@@ -9,29 +9,32 @@
 N = 30; % Number of Nodes in each direction.
 dofs = 3*N^2; % Number of degrees of freedom.
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
-f = @(x,y) x-y; % Loading function
+f = @(x,y) 1; % Loading function
 %f=@(x,y) -8*pi*cos(2*pi*(x^2+y^2))+16*pi^2*(x^2+y^2)*sin(2*pi*(x^2+y^2)); %Loading function
+b = @(x,y) [1 ; 1]; % Vector field creating the transport
+mu = 0.0001; %Viscosity
 
 % Assemble Matrices and loading function
-	Ah = stiffness_2D(dofs,p,tri);
-	fh = load_2D(dofs,p,tri,f);
+	Ah = stiffness_2D(dofs,p,tri,mu); % Now needs to include viscosity
+	fh = load_2D(dofs,p,tri,f,b,mu);
+	Dh = gradient_2D(dofs,p,tri,b,mu);
+	K = Ah+Dh; % Total matrix
+	%K = Ah; % Total matrix
 % 
-
 
 % Imposing Homogenous boundary conditions 
 for j = e
 	i = 3*j;	
-  Ah(i,:) = 0;
-  Ah(:,i) = 0;
-  Ah(i,i) = 1;
+  K(i,:) = 0;
+  K(:,i) = 0;
+  K(i,i) = 1;
   fh(i) = 0;
 end
 
 %
-%
 
 % Solving 
-uh = Ah\fh;
+uh = K\fh;
 	
 %% Plotting the numerical solution
 figure(1);
