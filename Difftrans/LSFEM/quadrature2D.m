@@ -8,13 +8,12 @@ function I = quadrature2D(p1,p2,p3,Nq,g)
 % arguments:
 %		- p1,p2,p3 	coordinates to the corners of the triangular element
 %   - Nq 				Number of quadrature points
-%   - g 				Function handle to be evaluated
+%   - g 				Function to be evaluated
 % returns:
 %   - I 				The value of the integral
 %
 % author: Magnus Aa. Rud
 % last edit: March 2015
-
 j1 = p1-p3;
 j2 = p2-p3;
 Jacobi = [j1(1) j1(2); j2(1) j2(2)];

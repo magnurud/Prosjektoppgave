@@ -9,7 +9,7 @@
 N = 30; % Number of Nodes in each direction.
 dofs = N^2; % Number of degrees of freedom.
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
-f = @(x,y) x-y; % Loading function
+f = @(x,y) 1; % Loading function
 %f=@(x,y) -8*pi*cos(2*pi*(x^2+y^2))+16*pi^2*(x^2+y^2)*sin(2*pi*(x^2+y^2)); %Loading function
 
 % Assemble Matrices and loading function
