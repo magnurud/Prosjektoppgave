@@ -41,8 +41,8 @@ function [fh] = load_2D(dofs,p,tri,f,b,mu)
         delPhi(2,3) = p2(1)-p1(1);
 
 				M = 1/2*mu*[delPhi;0 0 0];
-        M(1,:) = M(1,:) - ones(1,3)*B(1)/6;
-        M(2,:) = M(2,:) - ones(1,3)*B(2)/6;
+        M(1,:) = M(1,:) + ones(1,3)*B(1)/6;
+        M(2,:) = M(2,:) + ones(1,3)*B(2)/6;
         
 				%I = quadrature2D(p1,p2,p3,Nq,f);
         % If f is const
