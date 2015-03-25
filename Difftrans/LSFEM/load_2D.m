@@ -47,8 +47,8 @@ function [fh] = load_2D(dofs,p,tri,f,b,mu)
         %CONST! 
         % If f is const
           M = mu*[delPhi;0 0 0];
-          M(1,:) = M(1,:) + ones(1,3)*B(1)/6;
-          M(2,:) = M(2,:) + ones(1,3)*B(2)/6;
+          M(1,:) = M(1,:) - ones(1,3)*B(1)/6;
+          M(2,:) = M(2,:) - ones(1,3)*B(2)/6;
           I = 1/2*A_k*f(0,0);
           fh(Map) = fh(Map) + I*reshape(M,9,1);       
     end

@@ -78,7 +78,7 @@ function [Dh] = stiffness_2D(dofs,p,tri,b,mu)
 				% Component 2,2
 				I2(n2,n2) = A_k/6*(kron(delPhi(2,:)',ones(1,3)*B(2))  +  kron(ones(3,1)*B(2),delPhi(2,:)));
 
-        Dh(Map,Map) = Dh(Map,Map) + mu*I2;  % Can do this directly as well.
+        Dh(Map,Map) = Dh(Map,Map) - mu*I2;  % Can do this directly as well.
 
 
     end
