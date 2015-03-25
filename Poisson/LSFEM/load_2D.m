@@ -37,6 +37,9 @@ function [fh] = load_2D(dofs,p,tri,f)
         delPhi(1,3) = p1(2)-p2(2);
         delPhi(2,3) = p2(1)-p1(1);
 
+        delPhi = (1/A_k)*delPhi;
+
+
 				M = [delPhi;0 0 0];	
         
 				I = quadrature2D(p1,p2,p3,Nq,f);

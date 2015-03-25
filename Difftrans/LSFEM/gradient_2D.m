@@ -42,6 +42,8 @@ function [Dh] = stiffness_2D(dofs,p,tri,b,mu)
         delPhi(1,3) = p1(2)-p2(2);
         delPhi(2,3) = p2(1)-p1(1);
 
+        delPhi = delPhi/A_k;
+
         I1 = zeros(9,9); % This will be the stiffness element matrix for this element! 
         I2 = zeros(9,9); % This will be the stiffness element matrix for this element! 
 				% to help out with numerating
@@ -77,12 +79,6 @@ function [Dh] = stiffness_2D(dofs,p,tri,b,mu)
 				I2(n2,n2) = A_k/6*(kron(delPhi(2,:)',ones(1,3)*B(2))  +  kron(ones(3,1)*B(2),delPhi(2,:)));
 
         Dh(Map,Map) = Dh(Map,Map) + mu*I2;  % Can do this directly as well.
-
-        if(i == -11) 
-          I2
-          A_k*1000
-          delPhi
-        end
 
 
     end

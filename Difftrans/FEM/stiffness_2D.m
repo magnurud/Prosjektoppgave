@@ -24,7 +24,7 @@ function [Ah] = stiffness_2D(dofs,p,tri)
         
         X = [p1(1) p2(1) p3(1)];
         Y = [p1(2) p2(2) p3(2)];
-        A_k = polyarea(X,Y); %Area of the element,(Jacobi determinant) 
+        A_k = 2*polyarea(X,Y); %Area of the element,(Jacobi determinant) 
         
         delPhi = zeros(2,3);
         delPhi(1,1) = p2(2)-p3(2);
@@ -34,9 +34,9 @@ function [Ah] = stiffness_2D(dofs,p,tri)
         delPhi(1,3) = p1(2)-p2(2);
         delPhi(2,3) = p2(1)-p1(1);
         
-        delPhi = (1/(2*A_k))*delPhi;
+        delPhi = delPhi/A_k;
         
-        Ah(pis,pis) = Ah(pis,pis) + A_k*delPhi'*delPhi;
+        Ah(pis,pis) = Ah(pis,pis) + 1/2*A_k*delPhi'*delPhi;
 
     end
 end

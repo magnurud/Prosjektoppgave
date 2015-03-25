@@ -39,11 +39,11 @@ function [Gh] = gradient_2D(dofs,p,tri,b)
         delPhi(1,3) = p1(2)-p2(2);
         delPhi(2,3) = p2(1)-p1(1);
         
-        delPhi = (1/(A_k))*delPhi; % Why should there be one half here ??? 
+        delPhi = delPhi/A_k; 
 
 				test = A_k*[1/6; 1/6; 1/6]; % Value of the integral of the three test functions over the element
 
-				I = kron(test',(b'*delPhi)'); % Total Integral, Check indexing! 
+				I = kron(test,(b'*delPhi)); % Total Integral, Check indexing! 
         
         Gh(pis,pis) = Gh(pis,pis) + I;
     end

@@ -12,8 +12,8 @@ function [Ah] = stiffness_2D(dofs,p,tri)
 % author: Magnus Aa. Rud
 % last edit: March 2015
 
-    Ah = sparse(dofs,dofs);
-		%Ah = spalloc(dofs,dofs,6*dofs); %Estimate number of nnz elements, saves a lot of memory!
+    %Ah = sparse(dofs,dofs);
+		Ah = spalloc(dofs,dofs,6*dofs); %Estimate number of nnz elements, saves a lot of memory!
     % Nq = 4; %number of integration points in quadrature2D
     Ne = length(tri(:,1)); %number of elements
     
@@ -39,6 +39,9 @@ function [Ah] = stiffness_2D(dofs,p,tri)
         delPhi(2,2) = p1(1)-p3(1);
         delPhi(1,3) = p1(2)-p2(2);
         delPhi(2,3) = p2(1)-p1(1);
+
+
+        delPhi = (1/A_k)*delPhi;
 
         I = zeros(9,9); % This will be the stiffness element matrix for this element! 
 				% to help out with numerating
@@ -66,7 +69,6 @@ function [Ah] = stiffness_2D(dofs,p,tri)
         % Correcting for the diagonal elements where i=j
         ndiag = [1 1 0 1 1 0 1 1 0];
         I = I + A_k/24*diag(ndiag);
-
 
         Ah(Map,Map) = Ah(Map,Map) + I;  % Can do this directly as well.
 

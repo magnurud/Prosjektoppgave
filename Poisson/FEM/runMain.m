@@ -1,23 +1,26 @@
-% main.m
+function uh_max = runMain(N)
+% function uh_max = runMain(N)
 %
 % description:
-%      Solving the Poisson problem on the square (0,1)^2;
+%      Solving the Poisson problem on the square (0,1)^2 with N discretization
+%      points in each direction;
 %
 % author: Magnus Aa. Rud
 % last edit: March 2015
 
-N = 40; % Number of Nodes in each direction.
 dofs = N^2; % Number of degrees of freedom.
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
 f = @(x,y) 5*pi^2*sin(pi*x)*sin(2*pi*y); % Loading function
-f = @(x,y) 1;
-%f=@(x,y) -8*pi*cos(2*pi*(x^2+y^2))+16*pi^2*(x^2+y^2)*sin(2*pi*(x^2+y^2)); %Loading function
+u = @(x,y) sin(pi*x)*sin(2*pi*y); % Analytical solution
+U = zeros(dofs,1);
+for I = 1:dofs
+    U(I) = u(p(I,1),p(I,2));
+end
 
 % Assemble Matrices and loading function
 	Ah = stiffness_2D(dofs,p,tri);
 	fh = load_2D(dofs,p,tri,f);
 % 
-
 
 % Imposing Homogenous boundary conditions
 for i = e
@@ -27,14 +30,13 @@ for i = e
   fh(i) = 0;
 end
 
-%
-%
-
 % Solving 
 uh = Ah\fh;
 	
 %% Plotting the numerical solution
-figure(1);
-trisurf(tri,p(:,1),p(:,2),uh);
-title('Numerical Solution');
+%figure(1);
+%trisurf(tri,p(:,1),p(:,2),uh);
+%title('Numerical Solution');
+
+uh_max = norm((uh-U))/norm(U);
 
