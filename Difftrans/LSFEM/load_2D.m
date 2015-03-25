@@ -42,14 +42,15 @@ function [fh] = load_2D(dofs,p,tri,f,b,mu)
 
         delPhi = delPhi/A_k;
 
-				M = mu*[delPhi;0 0 0];
-        M(1,:) = M(1,:) + ones(1,3)*B(1)/6;
-        M(2,:) = M(2,:) + ones(1,3)*B(2)/6;
         
-				%I = quadrature2D(p1,p2,p3,Nq,f);
+				%I = quadrature2D(p1,p2,p3,Nq,f) % NEED TO FIX AN ALTERNATIVE FOR F NOT
+        %CONST! 
         % If f is const
-        I = 1/2*A_k*f(0,0);
-				fh(Map) = fh(Map) + I*reshape(M,9,1);       
+          M = mu*[delPhi;0 0 0];
+          M(1,:) = M(1,:) + ones(1,3)*B(1)/6;
+          M(2,:) = M(2,:) + ones(1,3)*B(2)/6;
+          I = 1/2*A_k*f(0,0);
+          fh(Map) = fh(Map) + I*reshape(M,9,1);       
     end
 end
 

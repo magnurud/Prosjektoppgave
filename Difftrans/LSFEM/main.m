@@ -6,14 +6,14 @@
 % author: Magnus Aa. Rud
 % last edit: March 2015
 
-N = 20; % Number of Nodes in each direction.
+N = 30; % Number of Nodes in each direction.
 dofs = 3*N^2; % Number of degrees of freedom.
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
 f = @(x,y) 1; % Loading function
 %f=@(x,y) -8*pi*cos(2*pi*(x^2+y^2))+16*pi^2*(x^2+y^2)*sin(2*pi*(x^2+y^2)); %Loading function
 b = @(x,y) [1 ; 1]; % Vector field creating the transport
 %b = @(x,y) 0*[1 ; 1]; % Vector field creating the transport
-mu = 0.2*1E-1; %Viscosity
+mu = 1E-3; %Viscosity
 %mu = 1;
 
 % Assemble Matrices and loading function

@@ -26,7 +26,7 @@ function [fh] = load_2D(dofs,p,tri,f)
         p3 = p(pis(3),:);
 
         A_k = (1/2)*abs((p1(1)-p3(1))*(p2(2)-p1(2)) - (p1(1)-p2(1))*(p3(2)-p1(2)));
-       %A_k = polyarea(X,Y); %Area of the element,(Jacobi determinant) 
+       %A_k = 2*polyarea(X,Y); %Area of the element,(Jacobi determinant) 
         
         %f=@(x,y) -8*pi*cos(2*pi*(x^2+y^2))+16*pi^2*(x^2+y^2)*sin(2*pi*(x^2+y^2)); %As argument in function
         

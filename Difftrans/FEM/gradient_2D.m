@@ -14,7 +14,7 @@ function [Gh] = gradient_2D(dofs,p,tri,b)
 % last edit: March 2015
 
     %Gh = sparse(dofs,dofs);
-		Gh = spalloc(dofs,dofs,6*dofs); %Estimate number of nnz elements, saves a lot of memory!
+		Gh = spalloc(dofs,dofs,7*dofs); %Estimate number of nnz elements, saves a lot of memory!
     % Nq = 4; %number of integration points in quadrature2D
     Ne = length(tri(:,1)); %number of elements
     

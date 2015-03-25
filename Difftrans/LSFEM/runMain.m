@@ -9,12 +9,18 @@ function uh_max = runMain(N,mu)
 % last edit: March 2015
 
 dofs = 3*N^2; % Number of degrees of freedom.
+NN = N^2; %Number of nodes
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
-f = @(x,y) 1; % Loading function
-%f=@(x,y) -8*pi*cos(2*pi*(x^2+y^2))+16*pi^2*(x^2+y^2)*sin(2*pi*(x^2+y^2)); %Loading function
 b = @(x,y) [1 ; 1]; % Vector field creating the transport
-%b = @(x,y) 0*[1 ; 1]; % Vector field creating the transport
-%mu = 1;
+%f = @(x,y) 1; % Loading function
+f = @(x,y) mu*5*pi^2*sin(pi*x)*sin(2*pi*y)...
+          +b(1)*pi*cos(pi*x)*sin(2*pi*y)...
+          +b(2)*2*pi*sin(pi*x)*cos(2*pi*y);
+u = @(x,y) sin(pi*x)*sin(2*pi*y);
+U = zeros(NN,1);
+for I = 1:NN
+    U(I) = u(p(I,1),p(I,2));
+end
 
 % Assemble Matrices and loading function
 	Ah = stiffness_2D(dofs,p,tri,mu); % Now needs to include viscosity
@@ -43,5 +49,10 @@ figure(1);
 trisurf(tri,p(:,1),p(:,2),uh(3:3:dofs));
 title('Numerical Solution');
 
-uh_max = max(abs(uh(3:3:dofs)));
+%% Plotting the analytical solution
+figure(2);
+trisurf(tri,p(:,1),p(:,2),U);
+title('Analytical Solution');
+
+uh_max = norm(uh(3:3:dofs)-U)/norm(U);
 
