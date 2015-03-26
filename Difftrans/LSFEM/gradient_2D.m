@@ -70,15 +70,15 @@ function [Dh] = stiffness_2D(dofs,p,tri,b,mu)
         %%%% D2 - second and harder part of the matrix %%%%
 
 				% Component 1,1   
-				I2(n1,n1) = A_k/6*(kron(delPhi(1,:)',ones(1,3)*B(1))  +  kron(ones(3,1)*B(1),delPhi(1,:)));
+				I2(n1,n1) = (kron(delPhi(1,:)',ones(1,3)*B(1))  +  kron(ones(3,1)*B(1),delPhi(1,:)));
 				% Component 1,2
-				I2(n1,n2) = A_k/6*(kron(delPhi(1,:)',ones(1,3)*B(2))  +  kron(ones(3,1)*B(1),delPhi(2,:)));
+				I2(n1,n2) = (kron(delPhi(1,:)',ones(1,3)*B(2))  +  kron(ones(3,1)*B(1),delPhi(2,:)));
 				% Component 2,1
-				I2(n2,n1) = A_k/6*(kron(delPhi(2,:)',ones(1,3)*B(1))  +  kron(ones(3,1)*B(2),delPhi(1,:)));
+				I2(n2,n1) = (kron(delPhi(2,:)',ones(1,3)*B(1))  +  kron(ones(3,1)*B(2),delPhi(1,:)));
 				% Component 2,2
-				I2(n2,n2) = A_k/6*(kron(delPhi(2,:)',ones(1,3)*B(2))  +  kron(ones(3,1)*B(2),delPhi(2,:)));
+				I2(n2,n2) = (kron(delPhi(2,:)',ones(1,3)*B(2))  +  kron(ones(3,1)*B(2),delPhi(2,:)));
 
-        Dh(Map,Map) = Dh(Map,Map) - mu*I2;  % Can do this directly as well.
+        Dh(Map,Map) = Dh(Map,Map) - mu*A_k/6*I2;  % Can do this directly as well.
 
 
     end

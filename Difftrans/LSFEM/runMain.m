@@ -12,10 +12,13 @@ dofs = 3*N^2; % Number of degrees of freedom.
 NN = N^2; %Number of nodes
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
 b = @(x,y) [1 ; 1]; % Vector field creating the transport
+b(1,2)
+b(2)
 %f = @(x,y) 1; % Loading function
 f = @(x,y) mu*5*pi^2*sin(pi*x)*sin(2*pi*y)...
           +b(1)*pi*cos(pi*x)*sin(2*pi*y)...
           +b(2)*2*pi*sin(pi*x)*cos(2*pi*y);
+          f(0,0)
 u = @(x,y) sin(pi*x)*sin(2*pi*y);
 U = zeros(NN,1);
 for I = 1:NN
