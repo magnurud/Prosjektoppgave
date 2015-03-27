@@ -38,5 +38,5 @@ uh = Ah\fh;
 %trisurf(tri,p(:,1),p(:,2),uh);
 %title('Numerical Solution');
 
-uh_max = norm((uh-U))/norm(U);
+uh_max = norm((uh-U),'inf')/norm(U,'inf');
 

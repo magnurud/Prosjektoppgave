@@ -44,5 +44,5 @@ uh = Ah\fh;
 % trisurf(tri,p(:,1),p(:,2),U);
 % title('Analytical Solution');
 
-uh_max = norm((uh(3:3:dofs)-U))/norm(U);
+uh_max = norm((uh(3:3:dofs)-U),'inf')/norm(U,'inf');
 

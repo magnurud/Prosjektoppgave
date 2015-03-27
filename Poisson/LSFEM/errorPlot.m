@@ -8,6 +8,7 @@
 % last edit: March 2015
 
 N = [5:5:25];% number of discretization points 
+N = [2 4 8 16 32 64];
 h = ones(1,length(N))./N; %stepsize
 e = zeros(1,length(N));
 
@@ -18,7 +19,9 @@ end
 
 %e = abs((e-e(length(N)))/e(length(N)));
 
+figure(1);
 loglog(h,e,'r');
 refline(2,0);
+e
 
 

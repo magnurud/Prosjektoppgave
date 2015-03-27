@@ -42,7 +42,7 @@ function [fh] = load_2D(dofs,p,tri,f)
 
 				M = [delPhi;0 0 0];	
         
-				I = quadrature2D(p1,p2,p3,Nq,f)
+				I = quadrature2D(p1,p2,p3,Nq,f);
         % If f is const
         %I = A_k*f(0,0)/2;
 				fh(Map) = fh(Map) + I*reshape(M,9,1);       
