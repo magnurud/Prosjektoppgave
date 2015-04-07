@@ -1,0 +1,17 @@
+\contentsline {chapter}{Declaration of Authorship}{i}{dummy.1}
+\vspace {1em}
+\contentsline {chapter}{Abstract}{ii}{dummy.2}
+\vspace {1em}
+\contentsline {chapter}{Contents}{iii}{dummy.3}
+\contentsline {chapter}{List of Figures}{iv}{dummy.5}
+\contentsline {chapter}{List of Tables}{v}{dummy.7}
+\contentsline {chapter}{Notation}{vi}{dummy.9}
+\contentsline {chapter}{\numberline {1}Theory}{1}{chapter.12}
+\contentsline {section}{\numberline {1.1}LSFEM - Main idea}{1}{section.13}
+\contentsline {subsection}{\numberline {1.1.1}Difference from FEM}{1}{subsection.14}
+\contentsline {subsection}{\numberline {1.1.2}Subsection 2}{1}{subsection.15}
+\contentsline {section}{\numberline {1.2}Main Section 2}{2}{section.16}
+\vspace {2em}
+\contentsline {chapter}{\numberline {A}Appendix Title Here}{3}{appendix.17}
+\vspace {2em}
+\contentsline {chapter}{Bibliography}{4}{dummy.18}
