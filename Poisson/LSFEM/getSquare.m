@@ -28,6 +28,6 @@ end
 tri  = delaunay(p(:,1), p(:,2)); % Creating the elements
 edge = [      1:N];             % south edge
 edge = [edge, (2*N):N:(N^2-N)]; % east edge
-edge = [edge, N^2:-1:(N^2-N+1)];   % north edge
-edge = [edge, (N^2-N):-N:(N+1)]; % west edge
+edge = [edge, N^2:-1:(N^2-N+2)];   % north edge
+edge = [edge, (N^2-N+1):-N:(N+1)]; % west edge
 

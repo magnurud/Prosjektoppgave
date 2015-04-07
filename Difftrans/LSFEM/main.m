@@ -10,9 +10,9 @@ N = 30; % Number of Nodes in each direction.
 dofs = 3*N^2; % Number of degrees of freedom.
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
 f = @(x,y) 1; % Loading function
-b = @(x,y) [1 ; 1]; % Vector field creating the transport
+b = @(x,y) [1 ; 0]; % Vector field creating the transport
 %b = @(x,y) 0*[1 ; 1]; % Vector field creating the transport
-mu = 1E-3; %Viscosity
+mu = 5*1E-1; %Viscosity
 %mu = 1;
 
 % Assemble Matrices and loading function
@@ -37,7 +37,7 @@ end
 uh = K\fh;
 	
 %% Plotting the numerical solution
-figure(1);
+figure(2);
 trisurf(tri,p(:,1),p(:,2),uh(3:3:dofs));
 title('Numerical Solution');
 

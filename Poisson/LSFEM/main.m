@@ -6,11 +6,11 @@
 % author: Magnus Aa. Rud
 % last edit: March 2015
 
-N = 30; % Number of Nodes in each direction.
+N = 28; % Number of Nodes in each direction.
 dofs = 3*N^2; % Number of degrees of freedom.
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
 NN = length(e); %Number of boundary elements
-f = @(x,y) x-y; % Loading function
+f = @(x,y) 1; % Loading function
 %f=@(x,y) -8*pi*cos(2*pi*(x^2+y^2))+16*pi^2*(x^2+y^2)*sin(2*pi*(x^2+y^2)); %Loading function
 
 % Assemble Matrices and loading function
@@ -38,10 +38,11 @@ for j = 1:NN
 	h_bef = norm(p1-p2); % The length before 
 	h_aft= norm(p1-p3); % The length after
 	h_tot = norm(p3-p2); % The total length 
+	h_tot = h_bef+h_aft;% The total length 
 	mid = 3*mid; bef = 3*bef; aft = 3*aft; % Adjusting so that the coordinates correspond to the LSFEM setting
-	A(bef,mid) = A(bef,mid)+1/6*h_bef;
-	A(mid,mid) = A(mid,mid)+1/3*h_tot;
-	A(aft,mid) = A(aft,mid)+1/6*h_aft;
+	Ah(bef,mid) = Ah(bef,mid)+1/6*h_bef;
+	Ah(mid,mid) = Ah(mid,mid)+1/3*h_tot;
+	Ah(aft,mid) = Ah(aft,mid)+1/6*h_aft;
 end
 
 %
