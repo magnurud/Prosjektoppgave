@@ -1,0 +1,40 @@
+% Chapter 1 - THEORY
+
+\chapter{Theory} % Main chapter title
+
+\label{chap:theory} % For referencing the chapter elsewhere, use \ref{Chapter1} 
+
+\lhead{Chapter 1. \emph{Established theory}} % This is for the header on each page - perhaps a shortened title
+
+%----------------------------------------------------------------------------------------
+\section{Basis of LSFEM}
+
+The Least Squares Finite Element Method is a numerical method which transforms a partial differential equation into a minimization problem. It is similar to the galerkin method but it assures a symmetric problem. Let us look at a system of first order differential equation on the form 
+\begin{align}
+	Au &= f \text{ in } \Omega \\
+	Bu &= g \text{ on } \partial \Omega.
+	\label{eq:PDE}
+\end{align}
+Where $A$ is a partial differential operator defined as 
+\begin{align}
+	A = \sum_{i = 1}^{n} A_i\frac{\partial}{\partial x_i} + A_0.
+	\label{def:operatorA}
+\end{align}
+$n$ beeing the number of dimensions. Note that $A_i \in \mathbb{C}^{m \times n}$ for some $m>n$. In the beginning let us assume $g=0$. Further we require $f \in L_2(\Omega)$ and choose $V = \left\{ v\in L_2(\Omega) | v = 0 \text{ on } \partial \Omega \right\}$. The residual $R(v) = Av-f$ is defined, and $J(v) = \frac{1}{2}||R(v)||^2_0 $ will be the functional to be minimized. The solution $u$ is restricted to the space $H^1_0(\Omega)$. By minimizing $J$ we obtain 
+\begin{align}
+	\lim_{t\rightarrow 0} \frac{d}{dt}I(u+tv) = \int_{\Omega}(Av)^T(Au-f)d\Omega = 0 \text{    ,   } \forall v \in V.
+	\label{eq:minProb}
+\end{align}
+We can now write a variational formulation of the least-squares method: Find $u \in V$ such that 
+\begin{align}
+	B(u,v) = F(v) \; \; \; , \; \; \; \forall v \in V,
+	\label{def:varForm}
+\end{align}
+where
+\begin{align}
+	B(u,v) = (Au,Av), \\
+	F(v) = (f,Av).
+	\label{def:bilin}
+\end{align}
+Notice that the bilinear form $B$ is symmetric. Also notice that the Bilinear form that surged from a first-order problem by the LSFEM leads us to a variational formulation similar to the one obtained from a second order problem by FEM. Generally the bilinear form from LSFEM will correspond to a bilinear form of a problem of twice the order obtained using FEM. In order to avoid problems of large complexity a higher order PDE should therefore be transformed to a system of first order PDE's before applying the LSFEM-method. 
+
