@@ -8,7 +8,7 @@
 % last edit: March 2015
 
 N = [5:5:25];% number of discretization points 
-N = [2 4 8 16 32 64];
+%N = [2 4 8 16 32 64];
 h = ones(1,length(N))./N; %stepsize
 e = zeros(1,length(N));
 
@@ -19,9 +19,12 @@ end
 
 %e = abs((e-e(length(N)))/e(length(N)));
 
-figure(1);
+figure;
+x = logspace(log(h(end)),log(h(1)));
+y = x.^2;
 loglog(h,e,'r');
-refline(2,0);
-e
-
+hold on;
+loglog(x,y,'b');
+legend('loglog of error','reference line with slope = 2')
+grid on;
 

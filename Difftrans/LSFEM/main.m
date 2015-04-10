@@ -6,7 +6,7 @@
 % author: Magnus Aa. Rud
 % last edit: March 2015
 
-N = 30; % Number of Nodes in each direction.
+N = 20; % Number of Nodes in each direction.
 dofs = 3*N^2; % Number of degrees of freedom.
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
 f = @(x,y) 1; % Loading function
@@ -32,6 +32,9 @@ for j = e
   fh(i) = 0;
 end
 %
+
+%Printing the estimated condition number
+condest(K)
 
 % Solving 
 uh = K\fh;

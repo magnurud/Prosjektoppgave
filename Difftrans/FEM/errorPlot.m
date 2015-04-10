@@ -19,7 +19,13 @@ end
 
 %e = abs((e-e(length(N)))/e(length(N)));
 
+figure;
+x = logspace(log(h(end)),log(h(1)));
+y = x.^2;
 loglog(h,e,'r');
-refline(2,0);
+hold on;
+loglog(x,y,'b');
+legend('loglog of error','reference line with slope = 2')
+grid on;
 
 
