@@ -1,4 +1,4 @@
-function [Dh] = stiffness_2D(dofs,p,tri,b,mu)
+function [Dh] = gradient_2D(dofs,p,tri,b,mu)
 % description:
 %      generate the gradient matrix Dh;
 %
@@ -62,9 +62,9 @@ function [Dh] = stiffness_2D(dofs,p,tri,b,mu)
 
         % Correcting for the diagonal elements where i=j, doubling the
         % blockdiagonal elements
-        I1 = I1 + diag(diag(I1,-1),-1);
-        I1 = I1 + diag(diag(I1,0),0);
-        I1 = I1 + diag(diag(I1,1),1);
+        for k = 1:3
+         I1(n1(k):n1(k)+1,n1(k):n1(k)+1) = 2*I1(n1(k):n1(k)+1,n1(k):n1(k)+1);
+        end
         Dh(Map,Map) = Dh(Map,Map) + I1;  % Can do this directly as well.
 
         %%%% D2 - second and harder part of the matrix %%%%
