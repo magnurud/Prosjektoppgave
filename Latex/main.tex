@@ -92,35 +92,34 @@
 \end{center}
 
 \end{titlepage}
-
+%%fakesection - Declaration of Authorship
 %----------------------------------------------------------------------------------------
 %	DECLARATION PAGE
 %	Your institution may give you a different text to place here
 %----------------------------------------------------------------------------------------
+%\Declaration{
 
-\Declaration{
+%\addtocontents{toc}{\vspace{1em}} % Add a gap in the Contents, for aesthetics
 
-\addtocontents{toc}{\vspace{1em}} % Add a gap in the Contents, for aesthetics
+%I, \authornames, declare that this thesis titled, '\ttitle' and the work presented in it are my own. I confirm that:
 
-I, \authornames, declare that this thesis titled, '\ttitle' and the work presented in it are my own. I confirm that:
-
-\begin{itemize} 
-\item[\tiny{$\blacksquare$}] This work was done wholly or mainly while in candidature for a research degree at this University.
-\item[\tiny{$\blacksquare$}] Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
-\item[\tiny{$\blacksquare$}] Where I have consulted the published work of others, this is always clearly attributed.
-\item[\tiny{$\blacksquare$}] Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
-\item[\tiny{$\blacksquare$}] I have acknowledged all main sources of help.
-\item[\tiny{$\blacksquare$}] Where the thesis is based on work done by myself jointly with others, I have made clear exactly what was done by others and what I have contributed myself.\\
-\end{itemize}
+%\begin{itemize} 
+%\item[\tiny{$\blacksquare$}] This work was done wholly or mainly while in candidature for a research degree at this University.
+%\item[\tiny{$\blacksquare$}] Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
+%\item[\tiny{$\blacksquare$}] Where I have consulted the published work of others, this is always clearly attributed.
+%\item[\tiny{$\blacksquare$}] Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
+%\item[\tiny{$\blacksquare$}] I have acknowledged all main sources of help.
+%\item[\tiny{$\blacksquare$}] Where the thesis is based on work done by myself jointly with others, I have made clear exactly what was done by others and what I have contributed myself.\\
+%\end{itemize}
  
-Signed:\\
-\rule[1em]{25em}{0.5pt} % This prints a line for the signature
+%Signed:\\
+%\rule[1em]{25em}{0.5pt} % This prints a line for the signature
  
-Date:\\
-\rule[1em]{25em}{0.5pt} % This prints a line to write the date
-}
+%Date:\\
+%\rule[1em]{25em}{0.5pt} % This prints a line to write the date
+%}
 
-\clearpage % Start a new page
+%\clearpage % Start a new page
 %%fakesection - Quotation page
 %----------------------------------------------------------------------------------------
 %	QUOTATION PAGE
@@ -171,16 +170,16 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 %	LIST OF CONTENTS/FIGURES/TABLES PAGES
 %----------------------------------------------------------------------------------------
 
-\pagestyle{fancy} % The page style headers have been "empty" all this time, now use the "fancy" headers as defined before to bring them back
+%\pagestyle{fancy} % The page style headers have been "empty" all this time, now use the "fancy" headers as defined before to bring them back
 
-\lhead{\emph{Contents}} % Set the left side page header to "Contents"
-\tableofcontents % Write out the Table of Contents
+%\lhead{\emph{Contents}} % Set the left side page header to "Contents"
+%\tableofcontents % Write out the Table of Contents
 
-\lhead{\emph{List of Figures}} % Set the left side page header to "List of Figures"
-\listoffigures % Write out the List of Figures
+%\lhead{\emph{List of Figures}} % Set the left side page header to "List of Figures"
+%\listoffigures % Write out the List of Figures
 
-\lhead{\emph{List of Tables}} % Set the left side page header to "List of Tables"
-\listoftables % Write out the List of Tables
+%\lhead{\emph{List of Tables}} % Set the left side page header to "List of Tables"
+%\listoftables % Write out the List of Tables
 
 %%fakesection - Abbreviations
 %----------------------------------------------------------------------------------------
@@ -275,7 +274,7 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 % Uncomment the lines as you write the chapters
 
 %\input{Chapters/Chapter1}
-\input{Chapters/Chapter2} 
+\include{Chapters/theory.tex} 
 %\input{Chapters/Chapter3}
 %\input{Chapters/Chapter4} 
 %\input{Chapters/Chapter5} 

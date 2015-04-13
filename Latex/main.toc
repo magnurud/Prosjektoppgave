@@ -1,17 +1,15 @@
-\contentsline {chapter}{Declaration of Authorship}{i}{dummy.1}
+\contentsline {chapter}{Abstract}{i}{dummy.1}
 \vspace {1em}
-\contentsline {chapter}{Abstract}{ii}{dummy.2}
-\vspace {1em}
-\contentsline {chapter}{Contents}{iii}{dummy.3}
-\contentsline {chapter}{List of Figures}{iv}{dummy.5}
-\contentsline {chapter}{List of Tables}{v}{dummy.7}
-\contentsline {chapter}{Notation}{vi}{dummy.9}
-\contentsline {chapter}{\numberline {1}Theory}{1}{chapter.12}
-\contentsline {section}{\numberline {1.1}LSFEM - Main idea}{1}{section.13}
-\contentsline {subsection}{\numberline {1.1.1}Difference from FEM}{1}{subsection.14}
-\contentsline {subsection}{\numberline {1.1.2}Subsection 2}{1}{subsection.15}
-\contentsline {section}{\numberline {1.2}Main Section 2}{2}{section.16}
+\contentsline {chapter}{Contents}{ii}{dummy.2}
+\contentsline {chapter}{List of Figures}{iii}{dummy.4}
+\contentsline {chapter}{List of Tables}{iv}{dummy.6}
+\contentsline {chapter}{Notation}{v}{dummy.8}
+\contentsline {chapter}{\numberline {1}Theory}{1}{chapter.11}
+\contentsline {section}{\numberline {1.1}LSFEM - Main idea}{1}{section.12}
+\contentsline {subsection}{\numberline {1.1.1}Difference from FEM}{1}{subsection.13}
+\contentsline {subsection}{\numberline {1.1.2}Subsection 2}{1}{subsection.14}
+\contentsline {section}{\numberline {1.2}Main Section 2}{2}{section.15}
 \vspace {2em}
-\contentsline {chapter}{\numberline {A}Appendix Title Here}{3}{appendix.17}
+\contentsline {chapter}{\numberline {A}Appendix Title Here}{3}{appendix.16}
 \vspace {2em}
-\contentsline {chapter}{Bibliography}{4}{dummy.18}
+\contentsline {chapter}{Bibliography}{4}{dummy.17}

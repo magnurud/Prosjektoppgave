@@ -9,7 +9,7 @@
 %----------------------------------------------------------------------------------------
 \section{Basis of LSFEM}
 
-The Least Squares Finite Element Method is a numerical method which transforms a partial differential equation into a minimization problem. It is similar to the galerkin method but it assures a symmetric problem. Let us look at a system of first order differential equation on the form 
+The Least Squares Finite Element Method is a numerical method similar to mixed galerkin, however it assures a symmetric problem. Let us look at a system of first order differential equations on the form 
 \begin{align}
 	Au &= f \text{ in } \Omega \\
 	Bu &= g \text{ on } \partial \Omega.
@@ -20,7 +20,17 @@ Where $A$ is a partial differential operator defined as
 	A = \sum_{i = 1}^{n} A_i\frac{\partial}{\partial x_i} + A_0.
 	\label{def:operatorA}
 \end{align}
-$n$ beeing the number of dimensions. Note that $A_i \in \mathbb{C}^{m \times n}$ for some $m>n$. In the beginning let us assume $g=0$. Further we require $f \in L_2(\Omega)$ and choose $V = \left\{ v\in L_2(\Omega) | v = 0 \text{ on } \partial \Omega \right\}$. The residual $R(v) = Av-f$ is defined, and $J(v) = \frac{1}{2}||R(v)||^2_0 $ will be the functional to be minimized. The solution $u$ is restricted to the space $H^1_0(\Omega)$. By minimizing $J$ we obtain 
+$n$ beeing the number of dimensions of the domain $\Omega$. Let us initially assume that $g=0$. Further we require $f \in L_2(\Omega)$ and choose $V = \left\{ v\in L_2(\Omega) | v = 0 \text{ on } \partial \Omega \right\}$. A residual is defined
+\begin{align}
+	R(v) = Av-f,
+	\label{eq:Residual}
+\end{align}
+and a functional
+\begin{align}
+	 J(v) = \frac{1}{2}||R(v)||^2_0.
+	\label{eq:Functional}
+\end{align} 
+The solution $u$ is restricted to the space $H^1_0(\Omega)$. By minimizing $J$ we obtain 
 \begin{align}
 	\lim_{t\rightarrow 0} \frac{d}{dt}I(u+tv) = \int_{\Omega}(Av)^T(Au-f)d\Omega = 0 \text{    ,   } \forall v \in V.
 	\label{eq:minProb}
@@ -36,5 +46,74 @@ where
 	F(v) = (f,Av).
 	\label{def:bilin}
 \end{align}
-Notice that the bilinear form $B$ is symmetric. Also notice that the Bilinear form that surged from a first-order problem by the LSFEM leads us to a variational formulation similar to the one obtained from a second order problem by FEM. Generally the bilinear form from LSFEM will correspond to a bilinear form of a problem of twice the order obtained using FEM. In order to avoid problems of large complexity a higher order PDE should therefore be transformed to a system of first order PDE's before applying the LSFEM-method. 
+~\cite{Jiang}
+Notice that the bilinear form $B$ is symmetric. The bilinear form that surged from a first-order problem by the LSFEM leads us to a variational formulation similar to the one obtained from a second order problem by regular FEM. Generally the bilinear form from LSFEM will correspond to a bilinear form of a problem of twice the order obtained using FEM. In order to avoid problems of large complexity a higher order PDE should therefore be transformed to a system of first order PDE's before applying the LSFEM-method. 
 
+In order to apply a numerical algorithm the domain $\Omega$ needs to be discretized, we name this discretization $\Omega_h$. A set of basis functions $ \left\{ N \right\}_i $ is defined for $V_h = H^1_0(\Omega_h)$ such that the discrete variational formulation can be stated. Find $u_h \in V_h$ such that 
+\begin{align}
+	B(u_h,v_h) = F(v_h) \; \; \; , \; \; \; \forall v_h \in V_h,
+	\label{def:varForm}
+\end{align}
+\section{Example - Poisson problem}
+
+The poisson problem is defined as 
+\begin{align}
+	-\Delta u = f \text{ in } \Omega \\
+	u = g \text{ on } \partial \Omega
+	\label{eq:Poisson}
+\end{align}
+The straight forward LSFEM approach is to define $w = -\nabla u$ and solve the system of equations 
+\begin{align}
+	w + \nabla u = 0 \text{ in } \Omega \\
+	\nabla w = f \text{ in } \Omega \\
+	u = 0 \text{ on } \partial \Omega.
+	\label{eq:PoissonSystem}
+\end{align}
+which can be written in the same form as ~\ref{eq:PDE} with $ z = w \oplus u $, $f = (0,0,f)$, $B = (0,0,1)^T $ and A given as 
+\begin{align}
+	A =
+	\begin{bmatrix}
+		1 & 0 & \partial / \partial x  \\
+		0 & 1 & \partial / \partial y  \\
+		\partial / \partial x & \partial/ \partial y  & 0
+	\end{bmatrix}
+	\label{eq:Amatrix}
+\end{align}
+By defining the residual and functional as in ~\ref{eq:Residual} and ~\ref{eq:Functional} the variational formulation of the problem can be stated. Find $ z \in W \times H_0^1$ s.t.
+\begin{align}
+	B(z,\phi) = (F,\phi) \;\; \forall \;\; \phi \in W \times H_0^1.
+	\label{eq:VariationalFormulationPoisson}
+\end{align}
+With $W := \left\{ w \in \left[L_2(\Omega)\right]^{n_d}\right\}$.
+%
+\section{Example - Diffusion convection problem}
+%
+The diffusion convection problem to be analyzed is given as 
+\begin{align}
+	-\Delta u + b \cdot \nabla u = f \text{ in } \Omega \\
+	u = g \text{ on } \partial \Omega
+	\label{eq:DiffTrans}
+\end{align}
+The straight forward LSFEM approach is to define $w = -\nabla u$ and solve the system of equations 
+\begin{align}
+	w + \nabla u = 0 \text{ in } \Omega \\
+	\nabla \cdot w - b \cdot w = f \text{ in } \Omega \\
+	u = 0 \text{ on } \partial \Omega.
+	\label{eq:DiffTransSystem}
+\end{align}
+which can be written in the same form as ~\ref{eq:PDE} with $ z = w \oplus u $, $f = (0,0,f)$, $B = (0,0,1)^T $ and A given as 
+\begin{align}
+	A =
+	\begin{bmatrix}
+		1 & 0 & \partial / \partial x  \\
+		0 & 1 & \partial / \partial y  \\
+		\partial / \partial x - b_1 & \partial/ \partial y -b_2 & 0
+	\end{bmatrix}
+	\label{eq:AmatrixDiff}
+\end{align}
+By defining the residual and functional as in ~\ref{eq:Residual} and ~\ref{eq:Functional} the variational formulation of the problem can be stated. Find $ z \in W \times H_0^1$ s.t.
+\begin{align}
+	B(z,\phi) = (F,\phi) \;\; \forall \;\; \phi \in W \times H_0^1.
+	\label{eq:VariationalFormulation}
+\end{align}
+With $W := \left\{ w \in \left[L_2(\Omega)\right]^{n_d}\right\}$.

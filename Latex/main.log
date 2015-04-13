@@ -1,9 +1,8 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.26)  4 APR 2015 18:51
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.26)  12 APR 2015 22:56
 entering extended mode
  restricted \write18 enabled.
- file:line:error style messages enabled.
  %&-line parsing enabled.
-**main.tex
+**./main.tex
 (./main.tex
 LaTeX2e <2011/06/27>
 Babel <3.9h> and hyphenation patterns for 26 languages loaded.
@@ -677,7 +676,11 @@ LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count133
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 33.
- (./main.aux)
+ (./main.aux
+
+LaTeX Warning: Label `def:varForm' multiply defined.
+
+)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
@@ -700,8 +703,7 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: longtable package is loaded.
-
-(/usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty
+ (/usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2013/02/03 v1.3-62 longtable captions (AR)
 )
 Package caption Info: rotating package is loaded.
@@ -764,118 +766,98 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 ------------------------------------------------------------------------------
- Declaration of Authorship
-------------------------------------------------------------------------------
-
-Underfull \hbox (badness 10000) in paragraph at lines 121--121
-
- []
-
-[1]
-------------------------------------------------------------------------------
  Abstract Page
 ------------------------------------------------------------------------------
-[2
-
-]
-------------------------------------------------------------------------------
- Table of Contents
-------------------------------------------------------------------------------
-(./main.toc)
-\tf@toc=\write4
-\openout4 = `main.toc'.
-
- [3
-
-
-]
-------------------------------------------------------------------------------
- List of Figures
-------------------------------------------------------------------------------
-(./main.lof)
-\tf@lof=\write5
-\openout5 = `main.lof'.
-
- [4
-
-
-]
-------------------------------------------------------------------------------
- List of Tables
-------------------------------------------------------------------------------
-(./main.lot)
-\tf@lot=\write6
-\openout6 = `main.lot'.
-
- [5
-
-
-]
+[1]
 ------------------------------------------------------------------------------
  Notation
 ------------------------------------------------------------------------------
-[6
+[2
 
 
 
-] (./Chapters/Chapter2.tex
-Chapter 1.
-------------------------------------------------------------------------------
- 1 Theory
-------------------------------------------------------------------------------
-[1
+]
+\openout2 = `Chapters/theory.tex.aux'.
 
 
-
-]) (./Appendices/AppendixA.tex [2]
+No file Chapters/theory.tex.tex.
+(./Appendices/AppendixA.tex
 Appendix A.
 ------------------------------------------------------------------------------
  A Appendix Title Here
 ------------------------------------------------------------------------------
-) [3
+) [1
+
+
+
+
 
 ]
 ------------------------------------------------------------------------------
  Bibliography
 ------------------------------------------------------------------------------
-(./main.bbl
-
-Package natbib Warning: Empty `thebibliography' environment on input line 8.
-
-)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 316.
- [4
+(./main.bbl)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 315.
+ [2
 
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 316.
- (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 316.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 316.
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 05D72C138F88BD866A377A17876AA618;1674.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 316.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 315.
+ (./main.aux (./Chapters/theory.tex.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 315.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 315.
+
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: A69D7C519A7F2DAA306DFADAE5DD3622;1148
+(rerunfilecheck)             After:  CA1679187DE7F6A386CE8F039CC43D0C;421.
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 315.
  ) 
 Here is how much of TeX's memory you used:
- 12975 strings out of 494465
- 181251 string characters out of 6166360
- 248070 words of memory out of 5000000
- 16006 multiletter control sequences out of 15000+600000
- 13907 words of font info for 51 fonts, out of 8000000 for 9000
+ 12962 strings out of 494465
+ 181259 string characters out of 6166360
+ 246894 words of memory out of 5000000
+ 16014 multiletter control sequences out of 15000+600000
+ 12518 words of font info for 46 fonts, out of 8000000 for 9000
  350 hyphenation exceptions out of 8191
- 49i,11n,45p,857b,393s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/amsfonts/symbols/msam7.pfb>
-Output written on main.pdf (11 pages, 110098 bytes).
+ 49i,5n,45p,322b,349s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{dummy.34} has been referenced but does not exist,
+ replaced by a fixed one
+
+pdfTeX warning (dest): name{appendix.33} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.25} has been referenced but does not exist,
+ replaced by a fixed one
+
+pdfTeX warning (dest): name{section.17} has been referenced but does not exist,
+ replaced by a fixed one
+
+pdfTeX warning (dest): name{section.6} has been referenced but does not exist, 
+replaced by a fixed one
+
+pdfTeX warning (dest): name{chapter.5} has been referenced but does not exist, 
+replaced by a fixed one
+
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmtt10.pfb>
+Output written on main.pdf (5 pages, 107729 bytes).
 PDF statistics:
- 174 PDF objects out of 1000 (max. 8388607)
- 151 compressed objects within 2 object streams
- 31 named destinations out of 1000 (max. 500000)
- 105 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 113 PDF objects out of 1000 (max. 8388607)
+ 97 compressed objects within 1 object stream
+ 20 named destinations out of 1000 (max. 500000)
+ 65 words of extra memory for PDF output out of 10000 (max. 10000000)
 
