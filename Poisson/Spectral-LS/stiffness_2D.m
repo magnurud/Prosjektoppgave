@@ -18,7 +18,7 @@ function [Ah] = stiffness_2D(N,x,y,wX,wY,LDM);
 
 NLS = 3*N; 
 dofs = N^2;
-LSdofs = NLS^2;
+LSdofs = 3*dofs;
 Ah = zeros(LSdofs);
 Aloc = zeros(3,3);
 
@@ -26,22 +26,23 @@ for I = 1:dofs
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
   for J = 1:dofs
-    l = mod(J-1,N)+1;
-    k = fix((J-1)/N)+1;
+    Aloc = zeros(3,3);
+    k = mod(J-1,N)+1;
+    l = fix((J-1)/N)+1;
 		% (1,1)
     if(I==J) 
 			Aloc(1,1) = Aloc(1,1) + wX(i)*wY(j);
 		end
     if(j==l) 
 			for alpha = 1:N
-			Aloc(1,1) = Aloc(1,1) + wX(alpha)*wY(j)*LDM(alpha,i)*LDM(alpha,k);
+        Aloc(1,1) = Aloc(1,1) + wX(alpha)*wY(j)*LDM(alpha,i)*LDM(alpha,k);
 			end
 		end
 		% (1,2)
 		Aloc(1,2) = Aloc(1,2) + wX(j)*wY(k)*LDM(k,i)*LDM(j,l);
 		% (1,3)
 		if(j==l) 
-		Aloc(1,3) = Aloc(1,3) +	wX(i)*wY(j)*LDM(i,k);
+      Aloc(1,3) = Aloc(1,3) +	wX(i)*wY(j)*LDM(i,k);
 		end
 		% (2,1)
 		Aloc(2,1) = Aloc(2,1) + wX(i)*wY(l)*LDM(l,j)*LDM(i,k);
@@ -51,20 +52,20 @@ for I = 1:dofs
 		end
     if(i==k) 
 			for beta = 1:N
-				Aloc(2,2) = Aloc(2,2) + wX(beta)*wY(j)*LDM(beta,j)*LDM(beta,l);
+				Aloc(2,2) = Aloc(2,2) + wX(beta)*wY(i)*LDM(beta,j)*LDM(beta,l);
 			end
 		end
 		% (2,3)
 		if(i==k) 
-		Aloc(2,3) = Aloc(2,3) +	wX(i)*wY(j)*LDM(j,l);
+      Aloc(2,3) = Aloc(2,3) +	wX(i)*wY(j)*LDM(j,l);
 		end
 		% (3,1)
 		if(j==l) 
-		Aloc(3,1) = Aloc(3,1) +	wX(k)*wY(l)*LDM(k,i);
+      Aloc(3,1) = Aloc(3,1) +	wX(k)*wY(l)*LDM(k,i);
 		end
-		% (2,3)
+		% (3,2)
 		if(i==k) 
-		Aloc(3,2) = Aloc(3,2) +	wX(k)*wY(l)*LDM(l,j);
+      Aloc(3,2) = Aloc(3,2) +	wX(k)*wY(l)*LDM(l,j);
 		end
 		% (3,3)
 		if(j==l)
@@ -77,6 +78,7 @@ for I = 1:dofs
 				Aloc(3,3) = Aloc(3,3) + wX(i)*wY(beta)*LDM(beta,j)*LDM(beta,l);
 			end
 		end
-		Ah((3*I-2):(3*I),(3*J-2):(3*J)) = Ah((3*I-2):(3*I),(3*J-2):(3*J))+Aloc;
+		%Ah((3*I-2):(3*I),(3*J-2):(3*J)) = Ah((3*I-2):(3*I),(3*J-2):(3*J))+Aloc;
+		Ah((3*I-2):(3*I),(3*J-2):(3*J)) = Aloc;
 	end
 end

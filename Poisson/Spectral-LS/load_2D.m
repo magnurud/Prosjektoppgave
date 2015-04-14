@@ -22,13 +22,14 @@ function [fh] = load_2D(N,x,y,wX,wY,f,LDM)
 
 NLS = 3*N; 
 dofs = N^2;
-LSdofs = NLS^2;
+LSdofs = 3*dofs;
 fh = zeros(LSdofs,1);
-for I = 1:N^2
+for I = 1:dofs
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
 	for gamma = 1:N
   fh(3*I-2) = fh(3*I-2) + wX(gamma)*wY(j)*LDM(gamma,i)*f(x(gamma),y(j));
   fh(3*I-1) = fh(3*I-1) + wX(i)*wY(gamma)*LDM(gamma,j)*f(x(i),y(gamma));
+  end
 end
 
