@@ -1,6 +1,7 @@
-function [Ah , P] = stiffness_2D(N,x,y,wX,wY,LDM);
+function [Ah] = stiffness_2D(N,x,y,wX,wY,LDM);
 % description:
 %      generate the stiffness matrix Ah;
+%      This will be organized differently!! 
 %
 % arguments:
 %   - N     Number of points in each direction  
@@ -21,8 +22,7 @@ dofs = N^2;
 LSdofs = 3*dofs;
 Ah = zeros(LSdofs);
 Aloc = zeros(3,3);
-P = spalloc(LSdofs,LSdofs,LSdofs^2*2/9);
-Ploc = zeros(3,3);
+n = [0 dofs 2*dofs];
 
 for I = 1:dofs
   i = mod(I-1,N)+1;
@@ -80,13 +80,6 @@ for I = 1:dofs
 				Aloc(3,3) = Aloc(3,3) + wX(i)*wY(beta)*LDM(beta,j)*LDM(beta,l);
 			end
 		end
-    if(I==J)
-      P((3*I-2:3*I),(3*I-2:3*I)) = Ploc;
-      Aloc = eye(3);
-    end
-		%Ah((3*I-2):(3*I),(3*J-2):(3*J)) = Ah((3*I-2):(3*I),(3*J-2):(3*J))+Aloc;
-    Ploc = [0 Aloc(1,2) 0 ; Aloc(2,1) 0 0; 0 0 1]/(Aloc(1,2)*Aloc(2,1));
-		Ah((3*I-2):(3*I),(3*J-2):(3*J)) = Ploc*Aloc;
-    P((3*I-2):(3*I),(3*J-2):(3*J)) = Ploc;
+		Ah(n+I,n+J) = Aloc;
 	end
 end
