@@ -8,6 +8,7 @@
 % last edit: April 2015
 
 N = 10; %Number of points in each direction
+h = 1/(N-1);
 NLS = 3*N; % Number of unknowns in each direction
 dofs = N^2;
 LSdofs = 3*dofs;
@@ -38,24 +39,66 @@ fh2 = load_2D_precond(N,x,y,wX,wY,f,LDM);
 %%% The components of the block-diagonal matrix calculated in stif_fast;
 %%% Only included here for test-purposes
 A11 = kron(W,LDM'*W*LDM)+kron(W,W);
-
 A12 = kron((W*LDM),(W*LDM)');
-
 A13 = kron(W,W*LDM);
-
 A22 = kron(LDM'*W*LDM,W)+kron(W,W);
-
 A23 = kron(W*LDM,W);
-
 A33 = kron(LDM'*W*LDM,W)+kron(W,LDM'*W*LDM);
 
 %%% A preconditioner ... %%%
-Ploc = kron(inv(W),eye(N));
-P = blkdiag(Ploc,Ploc,Ploc);
-Ah2 = P*Ah2;
-fh2 = P*fh2;
+
+W_sq = sqrt(W);
+Wt_sq = diag(1./sqrt(diag(W)));
+I = eye(N);
+phi = inv(LDM'*LDM'+I);
+% FIRST - CHOL DECOMP OF A 
+L11 = kron(W_sq,complex(LDM'*W_sq,W_sq));
+L22 = kron(W_sq,W_sq);
+L33 = kron(I,I);
+L21 = kron(LDM'*W_sq,W_sq);
+L31 = kron(W_sq,complex(0,LDM'*W_sq));
+L32 = kron(LDM'*W_sq,W_sq);
+ZERO = zeros(dofs);
+ONE = eye(dofs);
+L = [L11 ZERO ZERO; L21 L22 ZERO ; L31 L32 ZERO]; % Cholesky decomp of A! 
+A = L*L';
+max(max(abs(A-Ah2)))
+
+% NEXT - THE INVERSE %
+Lt11 = kron(Wt_sq,Wt_sq*phi*complex(LDM',-I));
+Lt22 = kron(Wt_sq,Wt_sq);
+Lt33 = kron(I,I);
+Lt21 = -kron(Wt_sq*LDM',Wt_sq*phi*complex(LDM',-I));
+Lt31 = kron(LDM'*LDM',phi*complex(LDM',-I)) - kron(I,LDM'*phi*complex(I,LDM'));
+Lt32 = -kron(LDM',I);
+ZERO = zeros(dofs);
+
+Lt = [Lt11 ZERO ZERO; Lt21 Lt22 ZERO ; Lt31 Lt32 ONE]; % inverse of L!  
+Lt2 = [Lt11 ZERO ZERO; Lt21 Lt22 ZERO ; Lt31 Lt32 ZERO]; % inverse of L!  
+II = real(L'*Lt');
+LLinv= real(Lt'*Lt);
+
+max(max(abs(eye(LSdofs)-II)))
+
+% HOW DOES IT WORK ON A 
+%cond(A)
+A = real(Lt2*L*L'*Lt2');
+
+%cond(A)
+%A = real(A*Lt');
+%cond(A)
+
+
+
+%max(abs(A11-real(L11*L11')))
+%max(abs(A12-real(L11*L21')))
+%max(abs(A13-real(L11*L31')))
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%% In order to approximate the H^-1 norm %%%
+%Ah = h^2*Ah;
+%fh = h^2*fh;
 
 % Boundary conditions
 for I = 1:dofs
@@ -88,10 +131,9 @@ for I = 1:dofs
     fh2(J) = 0;
   end
 end
+
 uh = Ah\fh;
 uh2 = Ah2\fh2;
-
-
 
 
 % Plotting
@@ -103,7 +145,7 @@ uh2 = Ah2\fh2;
 %surf(x,y,reshape(U,N,N));
 %title('Analytical Solution');
 
-error1 = norm(uh(3:3:LSdofs)-U,'inf')/norm(U,'inf')
-error2 = norm(uh2(2*dofs+1:LSdofs)-U,'inf')/norm(U,'inf')
-conditionNumber1 = cond(Ah)
-conditionNumber2 = cond(Ah2)
+%error1 = norm(uh(3:3:LSdofs)-U,'inf')/norm(U,'inf')
+%error2 = norm(uh2(2*dofs+1:LSdofs)-U,'inf')/norm(U,'inf')
+%conditionNumber1 = cond(Ah)
+%conditionNumber2 = cond(Ah2)
