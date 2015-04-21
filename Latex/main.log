@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.26)  20 APR 2015 11:37
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.26)  21 APR 2015 08:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -678,6 +678,9 @@ LaTeX Info: Redefining \cite on input line 694.
 Package hyperref Info: Option `colorlinks' set `true' on input line 33.
  (./main.aux
 
+LaTeX Warning: Label `eq:VariationalFormulationPoisson' multiply defined.
+
+
 LaTeX Warning: Label `def:varForm' multiply defined.
 
 )
@@ -781,16 +784,35 @@ Chapter 1.
 ------------------------------------------------------------------------------
  1 Theory
 ------------------------------------------------------------------------------
+
+Overfull \hbox (10.69109pt too wide) in paragraph at lines 11--12
+\OT1/cmr/m/n/10.95 Let us look at a gen-eral bound-ary value prob-lem where $\O
+ML/cmm/m/it/10.95 f \OMS/cmsy/m/n/10.95 2 \OML/cmm/m/it/10.95 Y\OT1/cmr/m/n/10.
+95 (
+)$, $\OML/cmm/m/it/10.95 g \OMS/cmsy/m/n/10.95 2 \OML/cmm/m/it/10.95 B\OT1/cmr/
+m/n/10.95 (\OML/cmm/m/it/10.95 @\OT1/cmr/m/n/10.95 
+)$, $\OML/cmm/m/it/10.95 B [] [] X\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 @\OT1
+/cmr/m/n/10.95 
+) \OMS/cmsy/m/n/10.95 !
+ []
+
 [1
 
 
 
-] [2] [3] [4]) (./Appendices/AppendixA.tex [5]
+] [2] [3] [4]) (./Chapters/implementation.tex [5]
+Chapter 2.
+------------------------------------------------------------------------------
+ 2 Implementation
+------------------------------------------------------------------------------
+[6
+
+]) (./Appendices/AppendixA.tex [7]
 Appendix A.
 ------------------------------------------------------------------------------
  A Appendix Title Here
 ------------------------------------------------------------------------------
-) [6
+) [8
 
 ]
 ------------------------------------------------------------------------------
@@ -798,7 +820,7 @@ Appendix A.
 ------------------------------------------------------------------------------
 (./main.bbl)
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 315.
- [7
+ [9
 
 
 ]
@@ -807,7 +829,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 315.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 315.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 315.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 7BA23130651176567BAD38B98342C42B;1323.
+(rerunfilecheck)             Checksum: 84B22AE759FC56D80226DA169BCBCA18;1860.
 
 
 LaTeX Warning: There were multiply-defined labels.
@@ -815,10 +837,10 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 315.
  ) 
 Here is how much of TeX's memory you used:
- 13004 strings out of 494465
- 181711 string characters out of 6166360
- 253132 words of memory out of 5000000
- 16022 multiletter control sequences out of 15000+600000
+ 13031 strings out of 494465
+ 182053 string characters out of 6166360
+ 253315 words of memory out of 5000000
+ 16032 multiletter control sequences out of 15000+600000
  13123 words of font info for 48 fonts, out of 8000000 for 9000
  350 hyphenation exceptions out of 8191
  49i,14n,45p,560b,356s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -827,19 +849,18 @@ r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
-msy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.p
-fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on main.pdf (10 pages, 188224 bytes).
+ist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></
+usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on main.pdf (12 pages, 187192 bytes).
 PDF statistics:
- 211 PDF objects out of 1000 (max. 8388607)
- 182 compressed objects within 2 object streams
- 54 named destinations out of 1000 (max. 500000)
- 73 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 244 PDF objects out of 1000 (max. 8388607)
+ 213 compressed objects within 3 object streams
+ 68 named destinations out of 1000 (max. 500000)
+ 97 words of extra memory for PDF output out of 10000 (max. 10000000)
 

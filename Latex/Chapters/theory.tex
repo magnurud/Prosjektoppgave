@@ -8,7 +8,7 @@
 
 %----------------------------------------------------------------------------------------
 \section{Basis of LSFEM}
-Let us look at a general boundary value problem where $f \in Y(\Omega)$, $g \in B(\partial \Omega)$, $B:X(\partial \Omega) \rightarrow B(\partial\Omega) $ and $L:X(\Omega)\rightarrow Y(\Omega)$. Find $u \in X(\Omega) $ such that 
+Let us look at a general boundary value problem where $f \in Y(\Omega)$, $g \in B(\partial \Omega)$, $B\colon X(\partial \Omega) \to B(\partial\Omega) $ and $L\colon X(\Omega)\to Y(\Omega)$. Find $u \in X(\Omega) $ such that 
 \begin{align}
 	Lu &= f \; \; \; \text{ in } \Omega \\
 	Bu &= g \; \; \; \text{ on } \partial \Omega.
@@ -35,7 +35,7 @@ Minimizing this functional is equivalent to solving the Euler-lagrange equations
 	\text{find } u \in X \text{  such that  } Q(u,v) = F(v) \; \; \forall v\in X
 	\label{eq:varFormGen}
 \end{align}
-Where $Q(u,v)$ is the continous bilinear form given as $(Lu,Lv)_Y$ and $F(v)$ is the bounded linear functional given as $(Lv,f)_Y$.
+Where $Q(u,v)$ is the continous bilinear form given as $(Lu,Lv)_Y$ and $F(v)$ is the bounded linear functional given as $(Lv,f)_Y$. ~\cite{Bochev}
 
 \section{Example - Poisson problem}
 
@@ -86,9 +86,9 @@ The straight forward LSFEM approach is to define $w = -\nabla u$ and solve the s
 	u = 0 \text{ on } \partial \Omega.
 	\label{eq:DiffTransSystem}
 \end{align}
-which can be written in the same form as ~\ref{eq:BVP} with $ z = w \oplus u $, $f = (0,0,f)$, $B = (0,0,1)^T $ and A given as 
+which can be written in the same form as ~\ref{eq:BVP} with $ u = w \oplus u $, $f = (0,0,f)$, g = 0, $B = (0,0,1)^T $ and L given as 
 \begin{align}
-	A =
+	L =
 	\begin{bmatrix}
 		1 & 0 & \partial / \partial x  \\
 		0 & 1 & \partial / \partial y  \\
@@ -96,12 +96,14 @@ which can be written in the same form as ~\ref{eq:BVP} with $ z = w \oplus u $, 
 	\end{bmatrix}
 	\label{eq:AmatrixDiff}
 \end{align}
-By defining the residual and functional as in ~\ref{eq:Residual} and ~\ref{eq:Functional} the variational formulation of the problem can be stated. Find $ z \in W \times H_0^1$ s.t.
+We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\ref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ u \in X $ s.t.
 \begin{align}
-	B(z,\phi) = (F,\phi) \;\; \forall \;\; \phi \in W \times H_0^1.
-	\label{eq:VariationalFormulation}
+	Q(u,\phi) = F(\phi) \;\; \forall \;\; \phi \in X.
+	\label{eq:VariationalFormulationPoisson}
 \end{align}
-With $W := \left\{ w \in \left[L_2(\Omega)\right]^{n_d}\right\}$.
+We require that $f \in Y$.
+Notice that the spaces $X$ and $Y$ chosen as described above fullfill the condition ~\ref{eq:normEq}. 
+
 
 \section{basis due to jiang}
 \cite{Jiang}
