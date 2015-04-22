@@ -1,4 +1,4 @@
-function uh_max = runMain(N,mu)
+function cn = runMain(N,mu)
 % runMain.m
 %
 % description:
@@ -46,6 +46,7 @@ zlabel('z')
 %figure(2);
 %trisurf(tri,p(:,1),p(:,2),U);
 %title('Analytical Solution');
+cn = condest(K);
 
 uh_max = uh;
 xlabel('x')

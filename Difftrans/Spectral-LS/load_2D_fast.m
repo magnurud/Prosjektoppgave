@@ -28,7 +28,7 @@ for I = 1:dofs
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
 	for gamma = 1:N
-  fh(I) = fh(I) + wX(gamma)*wY(j)*LDM(gamma,i)*f(x(gamma),y(j));
+  fh(I) = fh(I)           + wX(gamma)*wY(j)*LDM(gamma,i)*f(x(gamma),y(j));
   fh(I+dofs) = fh(I+dofs) + wX(i)*wY(gamma)*LDM(gamma,j)*f(x(i),y(gamma));
   end
 end

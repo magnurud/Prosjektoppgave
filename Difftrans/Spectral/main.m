@@ -7,9 +7,10 @@
 % last edit: April 2015
 
 N = 30; %Number of points in each direction
+alpha = 1;
 dofs = N^2;
 f = @(x,y) 1; % Loading function
-b = @(x,y) [1,0]; % vector field
+b = @(x,y) alpha*[1,0]; % vector field
 mu = 1*1E-2;
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
 [y,wY] = GLL_(N,0,1); % getting the GLL-points for the unit square

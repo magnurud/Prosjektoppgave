@@ -1,4 +1,4 @@
-function uh_max = runMain(N,mu)
+function cn = runMain(N,mu)
 % function uh = runMain(N,mu)
 % runMain.m
 %
@@ -46,5 +46,6 @@ ylabel('y')
 zlabel('z')
 
 uh_max = uh(3:3:dofs);
+cn = condest(K);
 %norm(uh(3:3:dofs)-U)/norm(U);
 
