@@ -1,0 +1,54 @@
+% Chapter 2 - IMPLEMENTATION 
+
+\chapter{Implementation} % Main chapter title
+
+\label{chap:Implementation} % For referencing the chapter elsewhere, use \ref{Chapter1} 
+
+\lhead{Chapter 2. \emph{Implementation details}} % This is for the header on each page - perhaps a shortened title
+
+%----------------------------------------------------------------------------------------
+
+ For the general problem ~\ref{eq:BVP} the functional $Q$ will take the form 
+\begin{align}
+	Q(u,v)=\int_{\Omega}(\mathcal{L}v)^T(\mathcal{L}u)d\Omega.
+	\label{eq:functionalInt}
+\end{align}
+Implementing $Q$ requires two sets of basis functions $\{N_i\}$ that describes the search and solution space. In this project assignment the search and solution space will be described by the the same set of basis functions which will depend on the method applied. $u$ is discretized as 
+\begin{align}
+	u_h = \sum_{I=0}^{K}a_IN_I.
+	\label{eq:uDisc}
+\end{align}
+Since equation ~\ref{eq:varFormGen} requires equality for all test functions in the search space we simply solve the equation for each basis function. We are therefore left with a system of $K$ equations. Equation ~\ref{eq:functionalInt} can then be written for each test function as  
+\begin{align}
+	Q(u_h,N_I) &= \int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}u_h)d\Omega \\
+	&= \int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}\sum_{J=1}^Ka_JN_J)d\Omega \\
+	&= \sum_{J=1}^K\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}a_JN_J)d\Omega \\
+	&= \sum_{J=1}^K\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}a_JN_J)d\Omega \\
+	&= \sum_{J=1}^K\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega \;\cdot a_J.
+	\label{eq:varFormDisc}
+\end{align}
+The total system of equation for all test functions can then be written as a matrix equation 
+\begin{align}
+	Au = F.
+	\label{eq:matrixEq}
+\end{align}
+Where $A_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$.
+For the poisson equation $A_{I,J}$ will be a 3-by-3 block matrix on the form 
+
+$A_{I,J} = \int_{\Omega}
+\begin{bmatrix}
+	N_IN_J + N_{I,x}N_{J,x} & N_{I,x}N_{J,y} & N_IN_{J,x} \\ 	
+	N_{I,y}N_{J,x} &N_IN_J + N_{I,y}N_{J,y} &  N_IN_{J,y} \\ 	
+	N_{I,x}N_J & N_{I,y}N_J & N_{I,x}N_{J,x} + N_{I,y}N_{J,y} \\ 	
+\end{bmatrix}
+d\Omega$
+
+Notice that by doing the splitting of variables we obtain a system of equations three times as big as if we were to solve the equation directly. 
+
+\section{LSFEM for poisson}
+\section{LS spectral method for poisson}
+
+
+
+The spectral implementation is done using Gauss Lobatto nodes and quadrature and the lagrange functions based on the GL nodes as basis functions. 
+The final system of equations can be written as 
