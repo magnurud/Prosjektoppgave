@@ -38,6 +38,9 @@ uh = K\fh;
 figure(1);
 trisurf(tri,p(:,1),p(:,2),uh);
 title('Numerical Solution');
+xlabel('x')
+ylabel('y')
+zlabel('z')
 
 %% Plotting the analytical solution
 %figure(2);
@@ -45,3 +48,6 @@ title('Numerical Solution');
 %title('Analytical Solution');
 
 uh_max = uh;
+xlabel('x')
+ylabel('y')
+zlabel('z')

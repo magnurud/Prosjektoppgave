@@ -1,4 +1,4 @@
-% main.m
+% main2.m
 %
 % description:
 %      Solving the Poisson problem on the square (0,1)^2
@@ -51,38 +51,30 @@ alpha = 10;
 W_sq = sqrt(W);
 Wt_sq = diag(1./sqrt(diag(W)));
 I = eye(N);
-%phi = inv(LDM'*LDM'+I);
-phi = inv(LDM'*LDM'+alpha*I);
-% Test of phi !  HERE IS THE BIG PROBLEM
-'test of phi'
-max(max(abs(phi*(LDM'*LDM'+alpha*I)-eye(N))))
 
 % FIRST - CHOL DECOMP OF A 
-L11 = kron(W_sq,complex(LDM'*W_sq,W_sq));
+L11 = kron(W_sq,LDM'*W_sq);
 L22 = kron(W_sq,W_sq);
 L33 = kron(I,I);
-L21 = kron(LDM'*W_sq,W_sq);
-L31 = kron(W_sq,complex(0,LDM'*W_sq));
-L32 = kron(LDM'*W_sq,W_sq);
+L21 = kron(W_sq,W_sq);
+L31 = -kron(W_sq,W_sq);
+L32 = -kron(W_sq,W_sq);
 ZERO = zeros(dofs);
 ONE = eye(dofs);
 L = [L11 ZERO ZERO; L21 L22 ZERO ; L31 L32 ONE]; % Cholesky decomp of A! 
-A = real(L*L');
-B = imag(L*L');
+A = L*L';
 
 % NEXT - THE INVERSE %
-Lt11 = kron(Wt_sq,Wt_sq*phi*complex(LDM',-I));
+Lt11 = kron(Wt_sq,Wt_sq);
 Lt22 = kron(Wt_sq,Wt_sq);
 Lt33 = kron(I,I);
-Lt21 = -kron(Wt_sq*LDM',Wt_sq*phi*complex(LDM',-I));
-Lt31 = kron(LDM'*LDM',phi*complex(LDM',-I)) - kron(I,LDM'*phi*complex(I,LDM'));
-Lt32 = -kron(LDM',I);
+Lt21 = kron(Wt_sq,Wt_sq);
+Lt31 = -kron(Wt_sq,Wt_sq);
+Lt32 = -kron(Wt_sq,Wt_sq);
 ZERO = zeros(dofs);
 
 Lt = [Lt11 ZERO ZERO; Lt21 Lt22 ZERO ; Lt31 Lt32 ONE]; % inverse of L!  
 Lt2 = [Lt11 ZERO ZERO; Lt21 Lt22 ZERO ; Lt31 Lt32 ZERO]; % inverse of L!  
-II = real(L'*Lt');
-LLinv= real(Lt'*Lt);
 
 
 max(max(abs(eye(LSdofs)-II)));
@@ -93,11 +85,11 @@ max(max(abs(eye(LSdofs)-II)));
 max(max(abs(A-Ah2)))
 'Constructing the inverse complex, applying it to the complex total and subtracting Id matr.'
 max(max(abs(eye(LSdofs)-(Lt*L))))
-spy(Lt*L)
+spy(L*Lt)
 
 % HOW DOES IT WORK ON A 
-%cond(A)
-%A = real(Lt2*L*L'*Lt2');
+%cond(Ah2)
+%A = Ah2*Lt'*Lt;
 
 %cond(A)
 %A = real(A*Lt');
@@ -189,8 +181,9 @@ surf(x,y,reshape(fh2(dofs+1:2*dofs),N,N));
 title('loading function f part 2 transformed');
 end
 
-error1 = norm(uh(3:3:LSdofs)-U,'inf')/norm(U,'inf')
-error2 = norm(uh2(2*dofs+1:LSdofs)-U,'inf')/norm(U,'inf')
-error3 = norm(uh3(2*dofs+1:LSdofs)-U,'inf')/norm(U,'inf')
+%error1 = norm(uh(3:3:LSdofs)-U,'inf')/norm(U,'inf')
+%error2 = norm(uh2(2*dofs+1:LSdofs)-U,'inf')/norm(U,'inf')
+%error3 = norm(uh3(2*dofs+1:LSdofs)-U,'inf')/norm(U,'inf')
 %conditionNumber1 = cond(Ah)
 %conditionNumber2 = cond(Ah2)
+

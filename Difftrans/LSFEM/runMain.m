@@ -41,6 +41,9 @@ uh = K\fh;
 figure(1);
 trisurf(tri,p(:,1),p(:,2),uh(3:3:dofs));
 title('Numerical Solution');
+xlabel('x')
+ylabel('y')
+zlabel('z')
 
 uh_max = uh(3:3:dofs);
 %norm(uh(3:3:dofs)-U)/norm(U);

@@ -7,7 +7,7 @@
 % author: Magnus Aa. Rud
 % last edit: April 2015
 
-N = [10:1:30];% number of discretization points 
+N = [10:1:24];% number of discretization points 
 h = ones(1,length(N))./N; %stepsize
 eFEM = zeros(1,length(N));
 eLSFEM = zeros(1,length(N));
@@ -16,16 +16,64 @@ eLSFEM = zeros(1,length(N));
   eFEM = ans; 
   run LSFEM/errorFunc.m
   eLSFEM = ans; 
+  run Spectral/errorFunc.m
+  eSpec = ans; 
+  run Spectral-LS/errorFunc.m
+  eSpecLS = ans; 
 
 %e = abs((e-e(length(N)))/e(length(N)));
 figure;
 x = logspace(log(h(end)),log(h(1)));
 y = x.^2;
-loglog(h,eFEM,'r');
+loglog(h,eFEM(1,:),'r');
 hold on;
-loglog(h,eLSFEM,'b');
+loglog(h,eLSFEM(1,:),'b');
 %hold on;
 %loglog(x,y,'b');
 legend('FEM','LSFEM')
 grid on;
+fig1 = gcf;
+
+figure;
+loglog(N,eFEM(2,:),'r');
+hold on;
+loglog(N,eLSFEM(2,:),'b');
+legend('FEM','LSFEM')
+title('condition number');
+grid on;
+fig2 = gcf;
+
+figure;
+loglog(h,eSpec(1,:),'r');
+hold on;
+loglog(h,eSpecLS(1,:),'b');
+legend('Spectral','Spectral LS')
+grid on;
+fig3 = gcf;
+
+figure;
+loglog(N,eSpec(2,:),'r');
+hold on;
+loglog(N,eSpecLS(2,:),'b');
+legend('Spectral','Spectral LS')
+title('condition number');
+grid on;
+fig4 = gcf;
+
+
+set(fig1, 'PaperPosition', [0 0 5 5]); %Position plot at left hand corner with width 5 and height 5.
+set(fig1, 'PaperSize', [5.5 5]); %Set the paper to have width 5 and height 5.
+saveas(fig1, 'errorFEM-LSFEM', 'pdf') %Save figure
+
+set(fig2, 'PaperPosition', [0 0 5 5]); %Position plot at left hand corner with width 5 and height 5.
+set(fig2, 'PaperSize', [5.5 5]); %Set the paper to have width 5 and height 5.
+saveas(fig2, 'condFEM-LSFEM', 'pdf') %Save figure
+
+set(fig3, 'PaperPosition', [0 0 5 5]); %Position plot at left hand corner with width 5 and height 5.
+set(fig3, 'PaperSize', [5.5 5]); %Set the paper to have width 5 and height 5.
+saveas(fig3, 'errorSpec-SpecLS', 'pdf') %Save figure
+
+set(fig4, 'PaperPosition', [0 0 5 5]); %Position plot at left hand corner with width 5 and height 5.
+set(fig4, 'PaperSize', [5.5 5]); %Set the paper to have width 5 and height 5.
+saveas(fig4, 'condSpec-SpecLS', 'pdf') %Save figure
 

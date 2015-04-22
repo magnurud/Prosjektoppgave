@@ -10,13 +10,11 @@ function eh = errorFunc();
 
 N = [10:1:24];% number of discretization points 
 h = ones(1,length(N))./N; %stepsize
-eh = zeros(2,length(N));
+eh = zeros(2,length(N)); % One row for error, another for condition number
 
 for i = 1:length(N)
   n = N(i);
-  [a b] = runMain(n);
-  eh(1,i) = a;
-  eh(2,i) = b;
+  [eh(1,i) eh(2,i)] = runMain(n);
 end
 
 

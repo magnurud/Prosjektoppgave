@@ -1,4 +1,4 @@
-function uh_max = runMain(N)
+function [eh cn] = runMain(N)
 % function uh_max = runMain(N)
 %
 % description:
@@ -44,5 +44,5 @@ uh = Ah\fh;
 % trisurf(tri,p(:,1),p(:,2),U);
 % title('Analytical Solution');
 
-uh_max = norm((uh(3:3:dofs)-U),'inf')/norm(U,'inf');
-
+eh = norm((uh(3:3:dofs)-U),'inf')/norm(U,'inf');
+cn = condest(Ah);

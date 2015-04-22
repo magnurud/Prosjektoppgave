@@ -14,9 +14,6 @@ eh = zeros(2,length(N));
 
 for i = 1:length(N)
   n = N(i);
-  [a b] = runMain(n);
-  eh(1,i) = a;
-  eh(2,i) = b;
+    [eh(1,i) eh(2,i)] = runMain(n);
 end
-
 
