@@ -90,10 +90,10 @@ max(max(abs(eye(LSdofs)-II)));
 % Testing %
 
 'The maxnorm of the difference between the real part of the generated LU factorization and the stifMatr'
-max(max(abs(A-Ah2)))
+max(max(abs(A-Ah2)));
 'Constructing the inverse complex, applying it to the complex total and subtracting Id matr.'
-max(max(abs(eye(LSdofs)-(Lt*L))))
-spy(Lt*L)
+max(max(abs(eye(LSdofs)-(Lt*L))));
+spy(Lt*L);
 
 % HOW DOES IT WORK ON A 
 %cond(A)
@@ -122,10 +122,12 @@ for I = 1:dofs
   j = fix((I-1)/N)+1;
   if(i==1 || i==N)
     Ah(J,:) = 0;
+    Ah(:,J) = 0;
     Ah(J,J) = 1;
     fh(J) = 0;
   elseif(j==1 || j==N)
     Ah(J,:) = 0;
+    Ah(:,J) = 0;
     Ah(J,J) = 1;
     fh(J) = 0;
   end
@@ -136,16 +138,12 @@ for I = 1:dofs
 	J = I+2*dofs;
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
-  if(i==1 || i==N)
+  if(i==1 || i==N||j==1 || j==N)
     Ah2(J,:) = 0;
+    Ah2(:,J) = 0;
     Ah2(J,J) = 1;
     A(J,:) = 0;
-    A(J,J) = 1;
-    fh2(J) = 0;
-  elseif(j==1 || j==N)
-    Ah2(J,:) = 0;
-    Ah2(J,J) = 1;
-    A(J,:) = 0;
+    A(:,J) = 0;
     A(J,J) = 1;
     fh2(J) = 0;
   end

@@ -1,28 +1,23 @@
-function cn = runMain(N,mu,alpha)
-% runMain.m
+% main.m
 %
 % description:
-%      Solving the diffusion transport problem on the square (0,1)^2;
-%
-% arguments:
-%   - N     number of grid points in each direction
-%   - mu    diffusion coeffisient
-%   - alpha vector field constant
-% returns:
-%		- cn    Condition number of the stiffness matrix
+%      Solving the Poisson problem on the square (0,1)^2 using LSFEM;
 %
 % author: Magnus Aa. Rud
 % last edit: March 2015
 
+N = 20; % Number of Nodes in each direction.
 dofs = 3*N^2; % Number of degrees of freedom.
-NN = N^2; %Number of nodes
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
 f = @(x,y) 1; % Loading function
-b = @(x,y) alpha*[1 ; 1]; % Vector field creating the transport
+b = @(x,y) [1 ; 0]; % Vector field creating the transport
+%b = @(x,y) 0*[1 ; 1]; % Vector field creating the transport
+mu = 5*1E-1; %Viscosity
+%mu = 1;
 
-% Assemble Matrices and loading function for LSFEM 
+% Assemble Matrices and loading function
 	Ah = stiffness_2D(dofs,p,tri,mu); % Now needs to include viscosity
-	fh= load_2D(dofs,p,tri,f,b,mu);
+	fh = load_2D(dofs,p,tri,f,b,mu);
 	Dh = gradient_2D(dofs,p,tri,b,mu);
 	K = Ah+Dh; % Total matrix
 	%K = Ah; % Total matrix
@@ -36,20 +31,17 @@ for j = e
   K(i,i) = 1;
   fh(i) = 0;
 end
-
 %
+
+%Printing the estimated condition number
+condest(K)
+
 % Solving 
 uh = K\fh;
 	
 %% Plotting the numerical solution
-figure(1);
+figure(2);
 trisurf(tri,p(:,1),p(:,2),uh(3:3:dofs));
 title('Numerical Solution');
-xlabel('x')
-ylabel('y')
-zlabel('z')
 
-uh_max = uh(3:3:dofs);
-cn = condest(K);
-%norm(uh(3:3:dofs)-U)/norm(U);
-
+max(abs(uh(3:3:dofs)))

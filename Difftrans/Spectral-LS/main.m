@@ -40,6 +40,7 @@ for I = 1:dofs
   j = fix((I-1)/N)+1;
   if(i==1 || i==N || j==1 || j==N)
     Ah(J,:) = 0;
+    Ah(:,J) = 0;
     Ah(J,J) = 1;
     fh(J) = 0;
   end

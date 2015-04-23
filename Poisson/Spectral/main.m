@@ -30,12 +30,9 @@ fh = load_2D(N,x,y,wX,wY,f);
 for I = 1:dofs
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
-  if(i==1 || i==N)
+  if(i==1 || i==N || j==1 || j==N)
     Ah(I,:) = 0;
-    Ah(I,I) = 1;
-    fh(I) = 0;
-  elseif(j==1 || j==N)
-    Ah(I,:) = 0;
+    Ah(:,I) = 0;
     Ah(I,I) = 1;
     fh(I) = 0;
   end

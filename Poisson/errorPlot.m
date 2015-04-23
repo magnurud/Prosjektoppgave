@@ -39,7 +39,6 @@ loglog(N,eFEM(2,:),'r');
 hold on;
 loglog(N,eLSFEM(2,:),'b');
 legend('FEM','LSFEM')
-title('condition number');
 grid on;
 fig2 = gcf;
 
@@ -56,24 +55,23 @@ loglog(N,eSpec(2,:),'r');
 hold on;
 loglog(N,eSpecLS(2,:),'b');
 legend('Spectral','Spectral LS')
-title('condition number');
 grid on;
 fig4 = gcf;
 
 
 set(fig1, 'PaperPosition', [0 0 5 5]); %Position plot at left hand corner with width 5 and height 5.
 set(fig1, 'PaperSize', [5.5 5]); %Set the paper to have width 5 and height 5.
-saveas(fig1, 'errorFEM-LSFEM', 'pdf') %Save figure
+saveas(fig1, '../Latex/Figures/errorFEM-LSFEM', 'pdf') %Save figure
 
 set(fig2, 'PaperPosition', [0 0 5 5]); %Position plot at left hand corner with width 5 and height 5.
 set(fig2, 'PaperSize', [5.5 5]); %Set the paper to have width 5 and height 5.
-saveas(fig2, 'condFEM-LSFEM', 'pdf') %Save figure
+saveas(fig2, '../Latex/Figures/condFEM-LSFEM', 'pdf') %Save figure
 
 set(fig3, 'PaperPosition', [0 0 5 5]); %Position plot at left hand corner with width 5 and height 5.
 set(fig3, 'PaperSize', [5.5 5]); %Set the paper to have width 5 and height 5.
-saveas(fig3, 'errorSpec-SpecLS', 'pdf') %Save figure
+saveas(fig3, '../Latex/Figures/errorSpec-SpecLS', 'pdf') %Save figure
 
 set(fig4, 'PaperPosition', [0 0 5 5]); %Position plot at left hand corner with width 5 and height 5.
 set(fig4, 'PaperSize', [5.5 5]); %Set the paper to have width 5 and height 5.
-saveas(fig4, 'condSpec-SpecLS', 'pdf') %Save figure
+saveas(fig4, '../Latex/Figures/condSpec-SpecLS', 'pdf') %Save figure
 
