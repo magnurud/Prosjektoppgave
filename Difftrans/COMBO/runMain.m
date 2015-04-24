@@ -1,4 +1,4 @@
-function cn = runMain(N,mu,alpha)
+function cn = runMain(N,mu,alpha,delta)
 % runMain.m
 %
 % description:
@@ -8,12 +8,14 @@ function cn = runMain(N,mu,alpha)
 %   - N     number of grid points in each direction
 %   - mu    diffusion coeffisient
 %   - alpha vector field constant
+%   - delta the weight of the spectral part
 % returns:
 %		- cn    Condition number of the stiffness matrix
 %
 % author: Magnus Aa. Rud
 % last edit: March 2015
 
+h = 1/(N-1);
 dofs = 3*N^2; % Number of degrees of freedom.
 NN = N^2; %Number of nodes
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
@@ -34,7 +36,8 @@ b = @(x,y) alpha*[1 ; 1]; % Vector field creating the transport
 	Gh = gradient_2D_FEM(dofs/3,p,tri,b(0,0));
 	K_FEM = mu*Ah+Gh; % Total matrix
 % 
-
+K_LS = delta*K_LS;
+fh_LS = delta*fh_LS;
 
 % Imposing Dirchlet homogenous boundary conditions
 for i = e
@@ -72,4 +75,4 @@ zlabel('z')
 uh_max = uh(3:3:dofs);
 cn = condest(K);
 %norm(uh(3:3:dofs)-U)/norm(U);
-
+Peclet = norm(b(0,0))*h/(2*mu)

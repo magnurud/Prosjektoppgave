@@ -1,4 +1,4 @@
-function cn = runMain(N,mu,alpha)
+function cn = runMain(N,mu,alpha,delta)
 % runMain.m
 %
 % description:
@@ -9,20 +9,19 @@ function cn = runMain(N,mu,alpha)
 %   - N     number of discretization points in each direction
 %   - mu    the diffusion constant
 %   - alpha The size of the vector field b 
-%          
+%   - delta the weight of the spectral part
 % returns:
 %		- cn  Condition number for the matrix
 %
 % author: Magnus Aa. Rud
 % last edit: April 2015
 
-delta = 0.1;
 h = 1/(N-1);
 NLS = 3*N; % Number of unknowns in each direction
 dofs = N^2;
 LSdofs = 3*dofs;
 f = @(x,y) 1; % Loading function
-b = @(x,y) alpha*[1,0]; % vector field
+b = @(x,y) alpha*[1,1]; % vector field
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
 [y,wY] = GLL_(N,0,1); % getting the GLL-points for the unit square
 W = diag(wX);
@@ -47,7 +46,7 @@ f_LS = load_LS(N,x,y,wX,wY,f,LDM);
 A_Sp = stiffness_Spec(W,LDM);
 G_Sp = gradient_Spec(LDM,B1,B2,W,dofs);
 f_Sp = load_Spec(N,x,y,wX,wY,f);
-A_Sp = mu*Ah+Gh2;
+A_Sp = mu*A_Sp+G_Sp;
 
 %%%%% COMBINING %%%%%
 A_LS = delta*A_LS;

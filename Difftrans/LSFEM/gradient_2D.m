@@ -80,7 +80,6 @@ function [Dh] = gradient_2D(dofs,p,tri,b,mu)
 
         Dh(Map,Map) = Dh(Map,Map) - mu*A_k/6*I2;  % Can do this directly as well.
 
-
     end
 end
 
