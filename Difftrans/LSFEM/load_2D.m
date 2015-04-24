@@ -43,14 +43,23 @@ function [fh] = load_2D(dofs,p,tri,f,b,mu)
 
         delPhi = delPhi/A_k;
 
-        
-				%I = quadrature2D(p1,p2,p3,Nq,f) % NEED TO FIX AN ALTERNATIVE FOR F NOT
-        %CONST! 
+        % for a non-const f 
+        %Basis functions
+        phi1 = @(x,y) (1/(A_k))*((p2(1)*p3(2) - p3(1)*p2(2)) + (p2(2)-p3(2))*x + (p3(1)-p2(1))*y);
+        phi2 = @(x,y) (1/(A_k))*((p3(1)*p1(2) - p1(1)*p3(2)) + (p3(2)-p1(2))*x + (p1(1)-p3(1))*y);
+        phi3 = @(x,y) (1/(A_k))*((p1(1)*p2(2) - p2(1)*p1(2)) + (p1(2)-p2(2))*x + (p2(1)-p1(1))*y); 
+
+        PHI = @(x,y) [phi1(x,y) phi2(x,y) phi3(x,y)];
+        M = mu*[delPhi;0 0 0];
+        F = @(x,y) (M-[B(1)*PHI(x,y) ; B(2)*PHI(x,y); 0 0 0])*f(x,y);
+				I_2 = quadrature2D(p1,p2,p3,Nq,F); 
+        fh(Map) = fh(Map) + reshape(I_2,9,1);       
+
         % If f is const
-          M = 1/2*mu*[delPhi;0 0 0];
-          M(1,:) = M(1,:) - ones(1,3)*B(1)/6;
-          M(2,:) = M(2,:) - ones(1,3)*B(2)/6;
-          I = A_k*f(0,0);
-          fh(Map) = fh(Map) + I*reshape(M,9,1);       
+         %M = 1/2*mu*[delPhi;0 0 0];
+         %M(1,:) = M(1,:) - ones(1,3)*B(1)/6;
+         %M(2,:) = M(2,:) - ones(1,3)*B(2)/6;
+         %I = A_k*f(0,0);
+         %fh(Map) = fh(Map) + I*reshape(M,9,1);       
     end
 end
