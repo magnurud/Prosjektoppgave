@@ -32,7 +32,6 @@ end
 
 % Solving 
 uh = Ah\fh;
-	
 %% Plotting the numerical solution
 %figure(1);
 %trisurf(tri,p(:,1),p(:,2),uh);

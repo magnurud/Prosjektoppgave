@@ -5,11 +5,6 @@
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[Pavel B.~Bochev(2009)]{Bochev}
-Max D.~Gunzburger Pavel B.~Bochev.
-\newblock \emph{Least-Squares Finite Element Methods}.
-\newblock Springer, 2009.
-
 \bibitem[Jiang(1998)]{Jiang}
 Bo-nan Jiang.
 \newblock \emph{The Least-Squares Finite Element Method}.
@@ -17,5 +12,10 @@ Bo-nan Jiang.
 \newblock ISBN http://id.crossref.org/isbn/978-3-662-03740-9.
 \newblock \doi{10.1007/978-3-662-03740-9}.
 \newblock URL \url{http://dx.doi.org/10.1007/978-3-662-03740-9}.
+
+\bibitem[Pavel B.~Bochev(2009)]{Bochev}
+Max D.~Gunzburger Pavel B.~Bochev.
+\newblock \emph{Least-Squares Finite Element Methods}.
+\newblock Springer, 2009.
 
 \end{thebibliography}

@@ -33,22 +33,57 @@ The total system of equation for all test functions can then be written as a mat
 	\label{eq:matrixEq}
 \end{align}
 Where $A_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$.
-For the poisson equation $A_{I,J}$ will be a 3-by-3 block matrix on the form 
+For the poisson equation $A_{I,J}$ will be a 3-by-3 matrix on the form 
 
 $A_{I,J} = \int_{\Omega}
 \begin{bmatrix}
 	N_IN_J + N_{I,x}N_{J,x} & N_{I,x}N_{J,y} & N_IN_{J,x} \\ 	
 	N_{I,y}N_{J,x} &N_IN_J + N_{I,y}N_{J,y} &  N_IN_{J,y} \\ 	
 	N_{I,x}N_J & N_{I,y}N_J & N_{I,x}N_{J,x} + N_{I,y}N_{J,y} \\ 	
+	\label{mat:basicPoisson}
 \end{bmatrix}
 d\Omega$
 
 Notice that by doing the splitting of variables we obtain a system of equations three times as big as if we were to solve the equation directly. 
 
 \section{LSFEM for poisson}
+\colorbox{yellow}{finite element space $X_h^1$ ? quadrature\ldots  }
 \section{LS spectral method for poisson}
 
-
-
 The spectral implementation is done using Gauss Lobatto nodes and quadrature and the lagrange functions based on the GL nodes as basis functions. 
-The final system of equations can be written as 
+Notice that the discrete solution $u_h$ consist of the discretizations of both $u \text{ and } w = \nabla u$. $u_h$ can be structured blockwise such that or nodewise. By choosing a blockwise representation the final system of equations can be written as 
+
+$
+\begin{bmatrix}
+	A_{1,1} & A_{1,2} &	A_{1,3} \\ 	
+	A_{2,1} & A_{2,2} & A_{2,3} \\ 	
+	A_{3,1} & A_{3,2} & A_{3,3} \\ 	
+\end{bmatrix}
+\begin{bmatrix}
+ u^h \\ 	
+ w^h_1\\ 	
+ w^h_2\\ 	
+\end{bmatrix}
+=
+\begin{bmatrix}
+ 0 \\ 	
+ 0\\ 	
+ F^h\\ 	
+\end{bmatrix}
+$.
+
+Where each block $A_{i,j}$ corresponds to  calculating element $i,j$ in the matrix ~\ref{mat:basicPoisson} for all the indices $I,J$. In order to implement this matrix it is convenient to write it in a compact form using the kronecker tensor product. The components needed for this formulation is the $n \times n$ diagonal matrix $ W $ with the GLL-weigths along the diagonal and the $n \times n$ matrix $(L)_{i,j}= l_j'(x_i)$ where $l_j$ is the jth lagrange polynomial and $x_i$ is the ith node in either x or y direction. Note that the formulation is based on a grid of GLL-nodes in both x and y direction. 
+
+$
+A = 
+\begin{bmatrix}
+	W \otimes (L^TWL+W) & WL \otimes L^TW 		 &	W \otimes WL  \\ 	
+	L^TW \otimes WL     & (L^TWL+W) \otimes W  &	WL \otimes W  \\ 	
+	W \otimes L^TW		  & L^TW \otimes W       &  L^TWL \otimes W +	W\otimes L^TWL  \\ 	
+\end{bmatrix}
+$
+
+\colorbox{yellow}{do I need to show how this is derivated?}
+
+Similarly without the reformulation of the PDE and with regular galerkin formulation the stiffness matrix will simply be 
+$A_{3,3} = W \otimes L^TWL+ L^TWL \otimes W$

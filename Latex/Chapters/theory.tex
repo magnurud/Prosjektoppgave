@@ -7,7 +7,57 @@
 \lhead{Chapter 1. \emph{Established theory}} % This is for the header on each page - perhaps a shortened title
 
 %----------------------------------------------------------------------------------------
-\section{Basis of LSFEM}
+
+\section{Informal introduction to LSFEM}
+The Least Squares Finite Element Method is a numerical method similar to mixed galerkin. But with a different approach regarding defining the bilinear functional. Let us look at a system of first order differential equations on the form 
+\begin{align}
+	Au &= f \text{ in } \Omega \\
+	Bu &= g \text{ on } \partial \Omega.
+	\label{eq:PDE}
+\end{align}
+Where $A$ is a partial differential operator defined as 
+\begin{align}
+	A = \sum_{i = 1}^{n} A_i\frac{\partial}{\partial x_i} + A_0.
+	\label{def:operatorA}
+\end{align}
+	$n$ beeing the number of dimensions of the domain $\Omega$. Let us initially assume without loss of generality that $g=0$ . Further we require $f \in L_2(\Omega)$ and choose $V = \left\{ v\in L_2(\Omega) | v = 0 \text{ on } \partial \Omega \right\}$. A residual is defined
+\begin{align}
+	R(v) = Av-f,
+	\label{eq:Residual}
+\end{align}
+and a functional
+\begin{align}
+	 J(v) = \frac{1}{2}||R(v)||^2_0.
+	\label{eq:Functional}
+\end{align} 
+The solution $u$ and it's gradient needs to be in $L^2$ for the functional to make sence, hence $u$ is restricted to the space $H^1(\Omega)$. By minimizing $J$ we obtain 
+\begin{align}
+	\lim_{t\rightarrow 0} \frac{d}{dt}J(u+tv) = \int_{\Omega}(Av)^T(Au-f)d\Omega = 0 \text{    ,   } \forall v \in V.
+	\label{eq:minProb}
+\end{align}
+We can now write a variational formulation of the least-squares method: Find $u \in V$ such that 
+\begin{align}
+	Q(u,v) = F(v) \; \; \; , \; \; \; \forall v \in V,
+	\label{def:varForm}
+\end{align}
+where
+\begin{align}
+	Q(u,v) = (Au,Av), \\
+	F(v) = (f,Av).
+	\label{def:bilin}
+\end{align}
+~\cite{Jiang}
+Notice that the bilinear form $Q$ is symmetric, this is an important advantage LSFEM has over regular galerkin methods. The bilinear form that surged from a first-order problem by the LSFEM leads us to a variational formulation similar to the one obtained from a second order problem by regular FEM. Generally the bilinear form from LSFEM will correspond to a bilinear form of a problem of twice the order obtained using FEM. In order to avoid problems of large complexity a higher order PDE should therefore be transformed to a system of first order PDE's (similar to a mixed galerkin approach) before defining the least squares functional.
+
+%In order to apply a numerical algorithm the domain $\Omega$ needs to be discretized, we name this discretization $\Omega_h$. A set of basis functions $ \left\{ N \right\}_i $ is defined for $V_h = H^1_0(\Omega_h)$ such that the discrete variational formulation can be stated. Find $u_h \in V_h$ such that 
+%\begin{align}
+	%Q(u_h,v_h) = F(v_h) \; \; \; , \; \; \; \forall v_h \in V_h,
+	%\label{def:varForm}
+%\end{align}
+
+\cite{Jiang}
+
+\section{ Formal formulation of LSFEM}
 Let us look at a general boundary value problem where $f \in Y(\Omega)$, $g \in B(\partial \Omega)$, $\mathcal{B}\colon X(\partial \Omega) \to B(\partial\Omega) $ and $\mathcal{L}\colon X(\Omega)\to Y(\Omega)$. Find $u \in X(\Omega) $ such that 
 \begin{align}
 	\mathcal{L} u &= f \; \; \; \text{ in } \Omega \\
@@ -26,16 +76,39 @@ and the corresponding minimization problem is then given as
 \end{align}
 For any well-posed problem $\exists \alpha,\beta > 0$ such that 
 \begin{align}
-	\beta||u||_X \leq J(u;0,0) \leq \alpha||u||_X.
+	\alpha||u||_X^2 \leq J(u;0,0) = (\mathcal{L}u,\mathcal{L}u)_Y \leq \beta||u||_X^2.
 	\label{eq:normEq}
 \end{align}
-The fact that our functional is norm-equivalent is of crucial importance to a successfull LS-method.\colorbox{yellow}{Need to show this ? }
+The fact that our functional is norm-equivalent is of crucial importance to a successfull LS-method. It is therefore important that the spaces $X,Y \text{ and } B$ is chosen such that the LS-functional defines a norm is equivalent to $|| \cdot ||_X$.\colorbox{yellow}{Need to show this ? }
 Minimizing this functional is equivalent to solving the Euler-lagrange equations formulated as 
 \begin{align}
 	\text{find } u \in X \text{  such that  } Q(u,v) = F(v) \; \; \forall v\in X
 	\label{eq:varFormGen}
 \end{align}
-Where $Q(u,v)$ is the continous bilinear form given as $(\mathcal{L}u,\mathcal{L}v)_Y$ and $F(v)$ is the bounded linear functional given as $(\mathcal{L}v,f)_Y$. ~\cite{Bochev}
+Where $Q(u,v)$ is the continous bilinear form given as $(\mathcal{L}u,\mathcal{L}v)_Y$ and $F(v)$ is the bounded linear functional given as $(\mathcal{L}v,f)_Y$. Notice that $Q(u,v)$ defines an inner product and $Q(u,u)^{1/2}$ defines the corresponding norm. 
+
+In order to solve this numerically we define the function spaces $X^h, Y^h \text{ and } B^h$ and the corresponding variational formulation is then written as 
+\begin{align}
+	\text{find } u^h \in X^h \text{  such that  } Q(u^h,v^h) = F(v^h) \; \; \forall v^h\in X^h.
+	\label{eq:varFormGenDisc}
+\end{align}
+~\cite{Bochev}
+%
+\subsection{Error analysis}
+Let $u$ be the analytical solution of a problem of the type ~\ref{eq:BVP}, $u^h$ is our numerical solution to ~\ref{eq:varFormGenDisc} and $u^h_{\perp} $ is the orthogonal projection of $u$ in $X_h$. 
+\begin{align}
+	Q(u-u^h,u-u^h) &= Q(u-u^h,u-u^h_{\perp}) + Q(u-u^h,u^h_{\perp}-u^h) \\
+							   &= Q(u-u^h,u-u^h_{\perp}) \\
+							 	 &\leq \beta ||u-u^h||_{X_h} \; ||u-u^h_{\perp}||_{X_h}.
+	\label{eq:error1}
+\end{align}
+The first equality is due to adding and subtracting $u^h_{\perp}$, because both $u^h$ and $u^h_{\perp}$ solves the variatonal formulation we can cancel the last term, and by using the norm-equivalency from ~\ref{eq:normEq} and schwartz inequality we get the last  expression. Now by applying the first inequality of ~\ref{eq:normEq} we end up with 
+\begin{align}
+	||u-u^h||_{X_h}\leq \frac{\beta}{\alpha}||u-u^h_{\perp}||_{X_h} = \min_{w^h \in X_h}\frac{\beta}{\alpha}||u-w^h||_{X_h}.
+	\label{error_final}
+\end{align}
+Hence we can show that the Least squares method provides a convergence result of similar order as the Finite element method.
+
 
 \section{Example - Poisson problem}
 
@@ -45,7 +118,7 @@ The poisson problem is defined as
 	u = g \text{ on } \partial \Omega
 	\label{eq:Poisson}
 \end{align}
-The straight forward LSFEM approach is to define $w = -\nabla u$ and solve the system of equations 
+Let us first consider the homogenous case. The straight forward LSFEM approach is to define $w = -\nabla u$ and solve the system of equations 
 \begin{align}
 	w + \nabla u = 0 \text{ in } \Omega \\
 	\nabla w = f \text{ in } \Omega \\
@@ -69,7 +142,16 @@ We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ an
 \end{align}
 We require that $f \in Y$.
 Notice that the spaces $X$ and $Y$ chosen as described above fullfill the condition ~\ref{eq:normEq}. 
-
+%
+\subsubsection{non-homogenous boundary conditions}
+If $g \neq 0$ then we simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{u}=u-R_g$ we can replace $u$ in the variation formulation and get 
+\begin{align}
+	Q(\tilde{u}+R_g,\phi) &= F(\phi) \\
+	Q(\tilde{u},\phi)+Q(R_g,\phi) &= F(\phi) \\
+	Q(\tilde{u},\phi) &= F(\phi) - Q(R_g,\phi)\\
+	Q(\tilde{u},\phi) &= \tilde{F}(\phi) 
+	\label{eq:liftingFunc}
+\end{align}
 %
 \section{Example - Diffusion convection problem}
 %
@@ -105,50 +187,3 @@ We require that $f \in Y$.
 Notice that the spaces $X$ and $Y$ chosen as described above fullfill the condition ~\ref{eq:normEq}. 
 
 
-\section{basis due to jiang}
-\cite{Jiang}
-The Least Squares Finite Element Method is a numerical method similar to mixed galerkin, however it assures a symmetric problem. Let us look at a system of first order differential equations on the form 
-\begin{align}
-	Au &= f \text{ in } \Omega \\
-	Bu &= g \text{ on } \partial \Omega.
-	\label{eq:PDE}
-\end{align}
-Where $A$ is a partial differential operator defined as 
-\begin{align}
-	A = \sum_{i = 1}^{n} A_i\frac{\partial}{\partial x_i} + A_0.
-	\label{def:operatorA}
-\end{align}
-$n$ beeing the number of dimensions of the domain $\Omega$. Let us initially assume that $g=0$. Further we require $f \in L_2(\Omega)$ and choose $V = \left\{ v\in L_2(\Omega) | v = 0 \text{ on } \partial \Omega \right\}$. A residual is defined
-\begin{align}
-	R(v) = Av-f,
-	\label{eq:Residual}
-\end{align}
-and a functional
-\begin{align}
-	 J(v) = \frac{1}{2}||R(v)||^2_0.
-	\label{eq:Functional}
-\end{align} 
-The solution $u$ is restricted to the space $H^1_0(\Omega)$. By minimizing $J$ we obtain 
-\begin{align}
-	\lim_{t\rightarrow 0} \frac{d}{dt}I(u+tv) = \int_{\Omega}(Av)^T(Au-f)d\Omega = 0 \text{    ,   } \forall v \in V.
-	\label{eq:minProb}
-\end{align}
-We can now write a variational formulation of the least-squares method: Find $u \in V$ such that 
-\begin{align}
-	B(u,v) = F(v) \; \; \; , \; \; \; \forall v \in V,
-	\label{def:varForm}
-\end{align}
-where
-\begin{align}
-	B(u,v) = (Au,Av), \\
-	F(v) = (f,Av).
-	\label{def:bilin}
-\end{align}
-~\cite{Jiang}
-Notice that the bilinear form $B$ is symmetric. The bilinear form that surged from a first-order problem by the LSFEM leads us to a variational formulation similar to the one obtained from a second order problem by regular FEM. Generally the bilinear form from LSFEM will correspond to a bilinear form of a problem of twice the order obtained using FEM. In order to avoid problems of large complexity a higher order PDE should therefore be transformed to a system of first order PDE's before applying the LSFEM-method. 
-
-In order to apply a numerical algorithm the domain $\Omega$ needs to be discretized, we name this discretization $\Omega_h$. A set of basis functions $ \left\{ N \right\}_i $ is defined for $V_h = H^1_0(\Omega_h)$ such that the discrete variational formulation can be stated. Find $u_h \in V_h$ such that 
-\begin{align}
-	B(u_h,v_h) = F(v_h) \; \; \; , \; \; \; \forall v_h \in V_h,
-	\label{def:varForm}
-\end{align}
