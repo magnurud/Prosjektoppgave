@@ -15,9 +15,11 @@ function [eh cn] = runMain(N,mu,alpha)
 % last edit: March 2015
 
 dofs = N^2; % Number of degrees of freedom.
+NN = 4*(N-1);
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
-b = alpha*[1 ; 0]; % Vector field creating the transport
-f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)+exp(x)*(b(1)*sin(pi*y)+pi*b(2)*cos(pi*y)); % Loading function
+b = alpha*[1 ; 1]; % Vector field creating the transport
+f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
+    +exp(x)*(b(1)*sin(pi*y)+pi*b(2)*cos(pi*y)); % Loading function
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
 U = zeros(dofs,1);
 for I = 1:dofs
@@ -75,12 +77,12 @@ ylabel('y')
 zlabel('z')
 
 %% Plotting the analytical solution
-%figure(2);
-%trisurf(tri,p(:,1),p(:,2),U);
-%title('Analytical Solution');
-%xlabel('x')
-%ylabel('y')
-%zlabel('z')
+figure(2);
+trisurf(tri,p(:,1),p(:,2),U);
+title('Analytical Solution');
+xlabel('x')
+ylabel('y')
+zlabel('z')
 
 eh = norm((uh-U),'inf')/norm(U,'inf');
 cn = condest(K);

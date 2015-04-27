@@ -18,7 +18,7 @@ function [Dh] = gradient_2D(dofs,p,tri,b,mu)
 		Dh = spalloc(dofs,dofs,14*dofs); %Estimate number of nnz elements, saves a lot of memory!
     % Nq = 4; %number of integration points in quadrature2D
     Ne = length(tri(:,1)); %number of elements
-    B = b(0,0);
+    B = b; % Assuming constant vector field
     
     for i = 1:Ne %iterates over all elements
         

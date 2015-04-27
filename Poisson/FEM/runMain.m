@@ -59,9 +59,12 @@ end
 uh = Ah\fh;
 uh = uh+Rg;
 %% Plotting the numerical solution
-%figure(1);
-%trisurf(tri,p(:,1),p(:,2),uh);
-%title('Numerical Solution');
+figure(1);
+trisurf(tri,p(:,1),p(:,2),uh);
+title('Numerical Solution');
+figure(2);
+trisurf(tri,p(:,1),p(:,2),U);
+title('Analytical Solution');
 
 eh = norm((uh-U),'inf')/norm(U,'inf');
 cn = condest(Ah);

@@ -56,13 +56,13 @@ for j = e
 end
 % Solving 
 uh = Ah\fh;
-uh = uh(3:3:dofs)+Rg;
+uh = uh+Rg;
 %% Plotting the numerical solution
-% figure(1);
-% trisurf(tri,p(:,1),p(:,2),uh(3:3:dofs));
-% title('Numerical Solution');
-% figure(2);
-% trisurf(tri,p(:,1),p(:,2),U);
-% title('Analytical Solution');
+ figure(1);
+ trisurf(tri,p(:,1),p(:,2),uh(3:3:dofs));
+ title('Numerical Solution');
+ figure(2);
+ trisurf(tri,p(:,1),p(:,2),U);
+ title('Analytical Solution');
 eh = norm((uh(3:3:dofs)-U),'inf')/norm(U,'inf');
 cn = condest(Ah);

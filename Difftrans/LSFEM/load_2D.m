@@ -20,7 +20,7 @@ function [fh] = load_2D(dofs,p,tri,f,b,mu)
     fh = zeros(dofs,1);
     Nq = 4;
     Ne = length(tri(:,1)); %Number of elements
-    B = b(0,0); % Assuming b is constant
+    B = b; % Assuming constant vector field
     I = 0;
     
     for i = 1:Ne
