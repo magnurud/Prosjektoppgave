@@ -1,4 +1,4 @@
-function cn = runMain(N,mu,alpha)
+function [eh cn] = runMain(N,mu,alpha)
 % runMain.m
 %
 % description:
@@ -18,11 +18,8 @@ dofs = 3*N^2; % Number of degrees of freedom.
 Nodes = N^2;
 NN = N^2; %Number of nodes
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
-%f = @(x,y) 1; % Loading function
-f = @(x,y) 5*pi^2*sin(pi*x)*sin(2*pi*y); % Loading function
-b = @(x,y) alpha*[1 ; 1]; % Vector field creating the transport
-
-u = @(x,y) sin(pi*x)*sin(2*pi*y); % Analytical solution
+f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)+exp(x)*(b(1)*sin(pi*y)+pi*b(2)*cos(pi*y)); % Loading function
+u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
 U = zeros(Nodes,1);
 for I = 1:Nodes
     U(I) = u(p(I,1),p(I,2));
@@ -36,6 +33,30 @@ end
 	%K = Ah; % Total matrix
 % 
 
+%% Dirchlet boundary conditions %%
+g1 = @(x,y) u(x,y); % South side boundary function
+g2 = @(x,y) u(x,y); % East side boundary function
+g3 = @(x,y) u(x,y); % West side boundary function
+g4 = @(x,y) u(x,y); % North side boundary function
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%% Vectorized BC's %% 
+Rg = zeros(dofs,1);
+for i = 1:NN
+  E = fix(i/N); % Which edge
+  j = e(i);
+  if(E==0) 
+    Rg(3*j) = g1(p(j,1),p(j,2));
+  elseif(E==1) 
+    Rg(3*j) = g2(p(j,1),p(j,2));
+  elseif(E==2) 
+    Rg(3*j) = g3(p(j,1),p(j,2));
+  elseif(E==3) 
+    Rg(3*j) = g4(p(j,1),p(j,2));
+  end
+end
+
+fh = fh - K*Rg;
+
 % Imposing Homogenous boundary conditions 
 for j = e
 	i = 3*j;	
@@ -48,6 +69,7 @@ end
 %
 % Solving 
 uh = K\fh;
+uh = uh(3:3:dofs)+Rg;
 	
 %% Plotting the numerical solution
 figure(1);
@@ -66,6 +88,7 @@ zlabel('z')
 %zlabel('z')
 
 uh_max = uh(3:3:dofs);
+eh = norm((uh(3:3:dofs)-U),'inf')/norm(U,'inf');
 cn = condest(K);
 %norm(uh(3:3:dofs)-U)/norm(U);
 

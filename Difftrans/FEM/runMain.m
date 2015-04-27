@@ -1,4 +1,4 @@
-function cn = runMain(N,mu,alpha)
+function [eh cn] = runMain(N,mu,alpha)
 % runMain.m
 %
 % description:
@@ -16,8 +16,13 @@ function cn = runMain(N,mu,alpha)
 
 dofs = N^2; % Number of degrees of freedom.
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
-f = @(x,y) 1; % Loading function
 b = alpha*[1 ; 0]; % Vector field creating the transport
+f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)+exp(x)*(b(1)*sin(pi*y)+pi*b(2)*cos(pi*y)); % Loading function
+u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
+U = zeros(dofs,1);
+for I = 1:dofs
+    U(I) = u(p(I,1),p(I,2));
+end
 
 % Assemble Matrices and loading function
 	Ah = stiffness_2D(dofs,p,tri);
@@ -26,20 +31,40 @@ b = alpha*[1 ; 0]; % Vector field creating the transport
 	K = mu*Ah+Gh; % Total matrix
 % 
 
+%% Dirchlet boundary conditions %%
+g1 = @(x,y) u(x,y); % South side boundary function
+g2 = @(x,y) u(x,y); % East side boundary function
+g3 = @(x,y) u(x,y); % West side boundary function
+g4 = @(x,y) u(x,y); % North side boundary function
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%% Vectorized BC's %% 
+Rg = zeros(dofs,1);
+for i = 1:NN
+  E = fix(i/N); % Which edge
+  j = e(i);
+  if(E==0) 
+    Rg(j) = g1(p(j,1),p(j,2));
+  elseif(E==1) 
+    Rg(j) = g2(p(j,1),p(j,2));
+  elseif(E==2) 
+    Rg(j) = g3(p(j,1),p(j,2));
+  elseif(E==3) 
+    Rg(j) = g4(p(j,1),p(j,2));
+  end
+end
+fh = fh - Ah*Rg;
 
-% Imposing Dirchlet homogenous boundary conditions
+% Imposing Dirchlet homogenous boundary conditions to the non-homogenized system
 for i = e
   K(i,:) = 0;
   K(:,i) = 0;
   K(i,i) = 1;
   fh(i) = 0;
 end
-
 %
-%
-
 % Solving 
 uh = K\fh;
+uh = uh+Rg;
 	
 %% Plotting the numerical solution
 figure(1);
@@ -53,9 +78,9 @@ zlabel('z')
 %figure(2);
 %trisurf(tri,p(:,1),p(:,2),U);
 %title('Analytical Solution');
-cn = condest(K);
+%xlabel('x')
+%ylabel('y')
+%zlabel('z')
 
-uh_max = uh;
-xlabel('x')
-ylabel('y')
-zlabel('z')
+eh = norm((uh-U),'inf')/norm(U,'inf');
+cn = condest(K);

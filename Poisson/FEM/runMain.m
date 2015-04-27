@@ -1,6 +1,5 @@
 function [eh cn] = runMain(N)
 % function uh_max = runMain(N)
-%
 % description:
 %      Solving the Poisson problem on the square (0,1)^2 with N discretization
 %      points in each direction;
@@ -9,6 +8,7 @@ function [eh cn] = runMain(N)
 % last edit: March 2015
 
 dofs = N^2; % Number of degrees of freedom.
+
 NN = 4*(N-1);
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
 f = @(x,y) exp(x)*(pi^2-1)*sin(pi*y);
