@@ -10,10 +10,13 @@ N = 20; % Number of Nodes in each direction.
 NN = 4*(N-1);
 dofs = N^2; % Number of degrees of freedom.
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
-f = @(x,y) 5*pi^2*sin(pi*x)*sin(2*pi*y); % Loading function
-%f = @(x,y) 3;
-%f = @(x,y) cos(2*pi*x)*y;
-%f=@(x,y) -8*pi*cos(2*pi*(x^2+y^2))+16*pi^2*(x^2+y^2)*sin(2*pi*(x^2+y^2)); %Loading function
+%f = @(x,y) 5*pi^2*sin(pi*x)*sin(2*pi*y); % Loading function
+f = @(x,y) exp(x)*(pi^2-1)*sin(pi*y);
+u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
+U = zeros(dofs,1);
+for I = 1:dofs
+    U(I) = u(p(I,1),p(I,2));
+end
 
 % Assemble Matrices and loading function
 	Ah = stiffness_2D(dofs,p,tri);
@@ -21,10 +24,10 @@ f = @(x,y) 5*pi^2*sin(pi*x)*sin(2*pi*y); % Loading function
 % 
 
 %% Dirchlet boundary conditions %%
-g1 = @(x,y) 0; % South side boundary function
-g2 = @(x,y) y; % East side boundary function
-g3 = @(x,y) y; % West side boundary function
-g4 = @(x,y) 1; % North side boundary function
+g1 = @(x,y) u(x,y); % South side boundary function
+g2 = @(x,y) u(x,y); % East side boundary function
+g3 = @(x,y) u(x,y); % West side boundary function
+g4 = @(x,y) u(x,y); % North side boundary function
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %% Vectorized BC's %% 
 Rg = zeros(dofs,1);
