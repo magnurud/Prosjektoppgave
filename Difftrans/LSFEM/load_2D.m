@@ -20,10 +20,11 @@ function [fh] = load_2D(dofs,p,tri,f,b,mu)
     fh = zeros(dofs,1);
     Nq = 4;
     Ne = length(tri(:,1)); %Number of elements
-    B = b; % Assuming constant vector field
     I = 0;
     
     for i = 1:Ne
+        F_loc = zeros(9,1);
+        coords = [1 2 4 5 7 8];
         pis = tri(i,:);
         p1 = p(pis(1),:);
         p2 = p(pis(2),:);
@@ -50,10 +51,12 @@ function [fh] = load_2D(dofs,p,tri,f,b,mu)
         phi3 = @(x,y) (1/(A_k))*((p1(1)*p2(2) - p2(1)*p1(2)) + (p1(2)-p2(2))*x + (p2(1)-p1(1))*y); 
 
         PHI = @(x,y) [phi1(x,y) phi2(x,y) phi3(x,y)];
-        M = mu*[delPhi;0 0 0];
-        F = @(x,y) (M-[B(1)*PHI(x,y) ; B(2)*PHI(x,y); 0 0 0])*f(x,y);
+
+        F = @(x,y) (mu*delPhi-kron(b(x,y),PHI(x,y)))*f(x,y);
 				I_2 = quadrature2D(p1,p2,p3,Nq,F); 
-        fh(Map) = fh(Map) + reshape(I_2,9,1);       
+        F_loc(coords) = I_2;
+
+        fh(Map) = fh(Map) + F_loc;       
 
         % If f is const
          %M = 1/2*mu*[delPhi;0 0 0];

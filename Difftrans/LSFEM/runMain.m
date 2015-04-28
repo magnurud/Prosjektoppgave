@@ -32,55 +32,55 @@ end
 % Assemble Matrices and loading function for LSFEM 
 	Ah = stiffness_2D(dofs,p,tri,mu); % Now needs to include viscosity
 	Dh = gradient_2D(dofs,p,tri,b,mu);
-	Ah2 = stiffness(dofs,p,tri,mu); % Now needs to include viscosity
-	Dh2 = gradient(dofs,p,tri,B,mu);
-	K = Ah2+Dh2; % Total matrix
-	%K = Ah; % Total matrix
+    Ah2 = stiffness(dofs,p,tri,mu); % Now needs to include viscosity
+    Dh2 = gradient(dofs,p,tri,B,mu);
+    K = Ah2+Dh2; % Total matrix
+    %K = Ah; % Total matrix
 
-	fh= load_2D(dofs,p,tri,f,b,mu);
-% 
+    fh= load_2D(dofs,p,tri,f,B,mu);
+  % 
 
-%% Dirchlet boundary conditions %%
-g1 = @(x,y) u(x,y); % South side boundary function
-g2 = @(x,y) u(x,y); % East side boundary function
-g3 = @(x,y) u(x,y); % West side boundary function
-g4 = @(x,y) u(x,y); % North side boundary function
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%% Vectorized BC's %% 
-Rg = zeros(dofs,1);
-for i = 1:NN
-  E = fix(i/N); % Which edge
-  j = e(i);
-  if(E==0) 
-    Rg(3*j) = g1(p(j,1),p(j,2));
-  elseif(E==1) 
-    Rg(3*j) = g2(p(j,1),p(j,2));
-  elseif(E==2) 
-    Rg(3*j) = g3(p(j,1),p(j,2));
-  elseif(E==3) 
-    Rg(3*j) = g4(p(j,1),p(j,2));
+  %% Dirchlet boundary conditions %%
+  g1 = @(x,y) u(x,y); % South side boundary function
+  g2 = @(x,y) u(x,y); % East side boundary function
+  g3 = @(x,y) u(x,y); % West side boundary function
+  g4 = @(x,y) u(x,y); % North side boundary function
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+  %% Vectorized BC's %% 
+  Rg = zeros(dofs,1);
+  for i = 1:NN
+    E = fix(i/N); % Which edge
+    j = e(i);
+    if(E==0) 
+      Rg(3*j) = g1(p(j,1),p(j,2));
+    elseif(E==1) 
+      Rg(3*j) = g2(p(j,1),p(j,2));
+    elseif(E==2) 
+      Rg(3*j) = g3(p(j,1),p(j,2));
+    elseif(E==3) 
+      Rg(3*j) = g4(p(j,1),p(j,2));
+    end
   end
-end
 
-fh = fh - K*Rg;
+  fh = fh - K*Rg;
 
-% Imposing Homogenous boundary conditions 
-for j = e
-	i = 3*j;	
-  K(i,:) = 0;
-  K(:,i) = 0;
-  K(i,i) = 1;
-  fh(i) = 0;
-end
+  % Imposing Homogenous boundary conditions 
+  for j = e
+    i = 3*j;	
+    K(i,:) = 0;
+    K(:,i) = 0;
+    K(i,i) = 1;
+    fh(i) = 0;
+  end
 
-%
-% Solving 
-uh = K\fh;
-uh = uh+Rg;
-	
-%% Plotting the numerical solution
-figure(1);
-trisurf(tri,p(:,1),p(:,2),uh(3:3:dofs));
+  %
+  % Solving 
+  uh = K\fh;
+  uh = uh+Rg;
+    
+  %% Plotting the numerical solution
+  figure(1);
+  trisurf(tri,p(:,1),p(:,2),uh(3:3:dofs));
 title('Numerical Solution');
 xlabel('x')
 ylabel('y')
