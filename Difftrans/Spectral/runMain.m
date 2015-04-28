@@ -17,7 +17,7 @@ function [eh cn] = runMain(N,mu,alpha)
 % last edit: April 2015
 
 dofs = N^2;
-NN = 4*(N-1); B = @(x,y) alpha*[1;1]; %Vector Field
+B = @(x,y) alpha*[2*x;y]; %Vector Field
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
     +exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
@@ -29,8 +29,8 @@ B1 = zeros(N,N);
 B2 = zeros(N,N);
 U = zeros(dofs,1);
 for I = 1:dofs
-  j = mod(I-1,N)+1;
-  i = fix((I-1)/N)+1;
+  i = mod(I-1,N)+1;
+  j = fix((I-1)/N)+1;
   bloc = B(x(i),y(j));
   B1(i,j) = bloc(1);
   B2(i,j) = bloc(2); 
@@ -54,8 +54,8 @@ g4 = @(x,y) u(x,y); % North side boundary function
 %% Vectorized BC's %% 
 Rg = zeros(dofs,1);
 for I = 1:dofs
-  i = fix((I-1)/N)+1;
-  j = mod(I-1,N)+1;
+  i = mod(I-1,N)+1;
+  j = fix((I-1)/N)+1;
   if(j==1) 
     Rg(I) = g1(x(i),y(j)); % South side
   elseif(i == N) 
@@ -70,8 +70,8 @@ fh = fh - Ah*Rg;
 
 % Boundary conditions
 for I = 1:dofs
-  i = fix((I-1)/N)+1;
-  j = mod(I-1,N)+1;
+  i = mod(I-1,N)+1;
+  j = fix((I-1)/N)+1;
   if(i==1 || i==N || j==1 || j==N)
     Ah(I,:) = 0;
     Ah(:,I) = 0;
@@ -87,7 +87,7 @@ cn = condest(Ah);
 % Plotting
 figure;
 subplot(1,2,1) % first subplot
-surf(x,y,reshape(Rg,N,N));
+surf(x,y,reshape(uh,N,N)');
 title('Numerical Solution');
 xlabel('x')
 ylabel('y')
@@ -95,7 +95,7 @@ zlabel('z')
 
 %% Plotting the analytical solution
 subplot(1,2,2) % second subplot
-surf(x,y,reshape(U,N,N));
+surf(x,y,reshape(U,N,N)');
 title('Analytical Solution');
 xlabel('x')
 ylabel('y')
