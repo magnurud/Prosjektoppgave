@@ -30,28 +30,44 @@ We can define a new norm from this functional in the following manner
 	- \frac{1}{2}\int_{\Omega} u^2  (\nabla \cdot b)  d \Omega \\
 	\label{eq:bilinearFunctional}
 \end{align}
-Let $\gamma_0 \leq \nabla \cdot b \leq \gamma_1 $, we can now make a lower and upper bound for the bilinear form 
+Let $\gamma_0 \leq - \frac{1}{2}\nabla \cdot b \leq \gamma_1 $, we can now make a lower and upper bound for the bilinear form 
 \begin{align}
-	\mu||\nabla u||^2_0 - \frac{\gamma_1}{2}||u||^2_0 \leq a(u,u) \leq \mu||\nabla u||^2_0 - \frac{\gamma_0}{2}||u||^2_0
+	\mu||\nabla u||^2_0 + \gamma_0||u||^2_0 \leq a(u,u) \leq \mu||\nabla u||^2_0 + \gamma_1||u||^2_0
 	\label{eq:bilinearOperatorBounds}
 \end{align}
 
 \colorbox{yellow}{should I change signs in the equation?? } 
 
-It is clear that for small $\mu$ and large $\gamma_1$ the bilinear form is no longer coercive and thus our convergence requirements are no longer valid. 
+It is clear that for small $\mu$ and large $\gamma_1$ the bilinear form is no longer coercive and thus our convergence requirements are no longer valid.Remember that the functional in the LSFEM-formulation is chosen such that it is norm-equivalent with $|| \cdot ||_1 $, hence we can find $\alpha,\beta$ such that $\alpha||u||_1^2 \leq Q(u,u) \leq \beta||u||_1^2 $.
 Now, let us explore what happens if we add the variational formulation obtained from the LSFEM to the standard FEM formulation
 \begin{align}
-	a(u,v) + Q(u,v) &= (f,v) + F(v) \\
+	a(u,v) + \delta Q(u,v) &= (f,v) + \delta F(v) \\
 	\mathring{a}(u,v) &= \mathring{f}(v)
 	\label{eq:GLS}
 \end{align}
-Let us derive an upper bound for the norm created by the combined bilinear form $\mathring{a(\cdot,\cdot}$. 
+Let us study the coerciveness of this functional,
 \begin{align}
-	\mathring{a}(u,u) &= \mathring{f}(u) \\
-	&= (f,u)+(\mathcal{L}u,f)\\
-	&\leq ||f||^2_0 ||u||^2_0 + ||\mathcal{L}u||^2_0 ||f||^2_0\\
-	&= (||u||^2_0 + ||\mathcal{L}u||^2_0) ||f||^2_0
-	\label{eq:GLS}
+	\mathring{a}(u,u) &\geq \mu ||\nabla u||_0^2+\gamma_0||u||_0^2+\delta \alpha ||u||^2_1 \\
+	&\geq \mu ||\nabla u||_0^2+\gamma_0||u||_0^2+\delta \alpha ||u||^2_0 \\
+	&\geq \mu ||\nabla u||_0^2+\mu ||u||_0^2 \\
+	&= \mu ||u||^2_1
+	\label{eq:coercivity}
 \end{align}
+In the third inequality we make the assumption that $\gamma_0+\delta \alpha \geq \mu $ in other words $\delta$, (the amount of smoothing from LS) has to be chosen such that $\delta \geq (\mu-\gamma_0)/\alpha$.
+We can also prove stability for a discrete solution of the variatonal formulation, 
+\begin{align}
+	\mathring{a}(u_h,u_h)_h \leq C ||f||_0
+	\label{eq:stabilityResult}
+\end{align}
+The proof for a similar method can be found in ~\cite{Quarteroni} Ch.12. 
+
+%Let us derive an upper bound for the norm created by the combined bilinear form $\mathring{a}(\cdot,\cdot)$. 
+%\begin{align}
+	%\mathring{a}(u,u) &= \mathring{f}(u) \\
+	%&= (f,u)+(\mathcal{L}u,f)\\
+	%&\leq ||f||^2_0 ||u||^2_0 + ||\mathcal{L}u||^2_0 ||f||^2_0\\
+	%&= (||u||^2_0 + ||\mathcal{L}u||^2_0) ||f||^2_0
+	%\label{eq:GLS}
+%\end{align}
 
 

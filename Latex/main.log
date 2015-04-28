@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.26)  28 APR 2015 09:20
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.26)  28 APR 2015 20:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -683,9 +683,6 @@ LaTeX Warning: Label `eq:VariationalFormulationPoisson' multiply defined.
 
 LaTeX Warning: Label `eq:bilinearFunctional' multiply defined.
 
-
-LaTeX Warning: Label `eq:GLS' multiply defined.
-
 )
 \openout1 = `main.aux'.
 
@@ -792,13 +789,6 @@ Chapter 1.
 
 
 ]
-
-Package natbib Warning: Citation `Jiang' on page 2 undefined on input line 49.
-
-
-Package natbib Warning: Citation `Jiang' on page 2 undefined on input line 58.
-
-
 Overfull \hbox (9.36111pt too wide) in paragraph at lines 61--62
 \OT1/cmr/m/n/10.95 Let us look at a gen-eral bound-ary value prob-lem where $\O
 ML/cmm/m/it/10.95 f \OMS/cmsy/m/n/10.95 2 \OML/cmm/m/it/10.95 Y\OT1/cmr/m/n/10.
@@ -810,12 +800,7 @@ cmm/m/it/10.95 @\OT1/cmr/m/n/10.95
 ) \OMS/cmsy/m/n/10.95 !
  []
 
-[2] [3]
-
-Package natbib Warning: Citation `Bochev' on page 4 undefined on input line 102
-.
-
-[4]
+[2] [3] [4]
 
 ! Package amsmath Error: \vec allowed only in math mode.
 
@@ -854,28 +839,28 @@ Chapter 4.
 LaTeX Warning: Reference `fig:convergence' on page 12 undefined on input line 1
 1.
 
-<Figures/errorFEM-LSFEM.pdf, id=231, 397.485pt x 361.35pt>
+<Figures/errorFEM-LSFEM.pdf, id=243, 397.485pt x 361.35pt>
 File: Figures/errorFEM-LSFEM.pdf Graphic file (type pdf)
 
 <use Figures/errorFEM-LSFEM.pdf>
 Package pdftex.def Info: Figures/errorFEM-LSFEM.pdf used on input line 15.
 (pdftex.def)             Requested size: 397.48402pt x 361.34912pt.
 
-<Figures/errorSpec-SpecLS.pdf, id=232, 397.485pt x 361.35pt>
+<Figures/errorSpec-SpecLS.pdf, id=244, 397.485pt x 361.35pt>
 File: Figures/errorSpec-SpecLS.pdf Graphic file (type pdf)
 
 <use Figures/errorSpec-SpecLS.pdf>
 Package pdftex.def Info: Figures/errorSpec-SpecLS.pdf used on input line 24.
 (pdftex.def)             Requested size: 397.48402pt x 361.34912pt.
 
-<Figures/condFEM-LSFEM.pdf, id=233, 397.485pt x 361.35pt>
+<Figures/condFEM-LSFEM.pdf, id=245, 397.485pt x 361.35pt>
 File: Figures/condFEM-LSFEM.pdf Graphic file (type pdf)
 
 <use Figures/condFEM-LSFEM.pdf>
 Package pdftex.def Info: Figures/condFEM-LSFEM.pdf used on input line 32.
 (pdftex.def)             Requested size: 397.48402pt x 361.34912pt.
 
-<Figures/condSpec-SpecLS.pdf, id=234, 397.485pt x 361.35pt>
+<Figures/condSpec-SpecLS.pdf, id=246, 397.485pt x 361.35pt>
 File: Figures/condSpec-SpecLS.pdf Graphic file (type pdf)
 
 <use Figures/condSpec-SpecLS.pdf>
@@ -909,16 +894,17 @@ Appendix A.
  Bibliography
 ------------------------------------------------------------------------------
 (./main.bbl)
-
-Package natbib Warning: There were undefined citations.
-
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 316.
+ [18
+
+
+]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 316.
-(./main.aux)
+ (./main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 316.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 316.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 73A0DF893EEFB803E1491C459C3591F5;3117.
+(rerunfilecheck)             Checksum: 76C45A5CD4FDF70E9862E88A893CD868;3220.
 
 
 LaTeX Warning: There were undefined references.
@@ -929,11 +915,11 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 316.
  ) 
 Here is how much of TeX's memory you used:
- 13118 strings out of 494465
- 183528 string characters out of 6166360
- 255338 words of memory out of 5000000
- 16070 multiletter control sequences out of 15000+600000
- 14184 words of font info for 51 fonts, out of 8000000 for 9000
+ 13139 strings out of 494465
+ 183808 string characters out of 6166360
+ 256618 words of memory out of 5000000
+ 16083 multiletter control sequences out of 15000+600000
+ 14352 words of font info for 52 fonts, out of 8000000 for 9000
  350 hyphenation exceptions out of 8191
  49i,14n,45p,905b,367s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
@@ -948,11 +934,12 @@ c/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
 nts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
 msy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.p
 fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on main.pdf (20 pages, 216781 bytes).
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on main.pdf (21 pages, 235294 bytes).
 PDF statistics:
- 543 PDF objects out of 1000 (max. 8388607)
- 498 compressed objects within 5 object streams
- 105 named destinations out of 1000 (max. 500000)
- 157 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 568 PDF objects out of 1000 (max. 8388607)
+ 520 compressed objects within 6 object streams
+ 112 named destinations out of 1000 (max. 500000)
+ 165 words of extra memory for PDF output out of 10000 (max. 10000000)
 

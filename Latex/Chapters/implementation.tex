@@ -32,17 +32,17 @@ The total system of equation for all test functions can then be written as a mat
 	Au = F.
 	\label{eq:matrixEq}
 \end{align}
-Where $A_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$.
-For the poisson equation $A_{I,J}$ will be a 3-by-3 matrix on the form 
+Where $A_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$, written explicitly it will be a 3-by-3 matrix on the form 
 
 $A_{I,J} = \int_{\Omega}
 \begin{bmatrix}
-	N_IN_J + N_{I,x}N_{J,x} & N_{I,x}N_{J,y} & N_IN_{J,x} \\ 	
-	N_{I,y}N_{J,x} &N_IN_J + N_{I,y}N_{J,y} &  N_IN_{J,y} \\ 	
+	N_IN_J + \partial_x N_{I} \partial_xN_{J} & \partial_x N_{I}\partial_y N_{J} & N_IN_{J,x} \\ 	
+	\partial_yN_{I}\partial_xN_{J} &N_IN_J + \partial_yN_{I}\partial_yN_{J} &  N_IN_{J,y} \\ 	
 	N_{I,x}N_J & N_{I,y}N_J & N_{I,x}N_{J,x} + N_{I,y}N_{J,y} \\ 	
 	\label{mat:basicPoisson}
 \end{bmatrix}
 d\Omega$
+where $\partial_x = \partial / \partial x $ for the poisson problem and $\mu \partial / \partial x - b_1$ for the diffusion transport problem 
 
 Notice that by doing the splitting of variables we obtain a system of equations three times as big as if we were to solve the equation directly. 
 
