@@ -1,6 +1,5 @@
 function Gh = gradient_2D_fast(mu,B1,B2,W,LDM,dofs)
 
-
 Bd1 = diag(reshape(B1,dofs,1)); 
 Bd2 = diag(reshape(B2,dofs,1)); 
 

@@ -18,7 +18,7 @@ dofs = N^2; % Number of degrees of freedom.
 NN = 4*(N-1);
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
 b = alpha*[2 ; 1]; % Vector field creating the transport
-B = @(x,y) alpha*[2*x^2;y];
+B = @(x,y) alpha*[2;1];
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
     +exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution

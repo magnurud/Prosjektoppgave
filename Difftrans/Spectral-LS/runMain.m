@@ -43,7 +43,7 @@ end
 Ah = stiffness_2D_fast(W,LDM,mu);
 Gh = gradient_2D_fast(mu,B1,B2,W,LDM,dofs);
 Ah = Ah+Gh;
-fh = load_2D_fast(N,x,y,wX,wY,f,LDM,B1,B2);
+fh = load_2D_fast(N,x,y,wX,wY,f,LDM,B1,B2,mu);
 
 %% Dirchlet boundary conditions %%
 g1 = @(x,y) u(x,y); % South side boundary function

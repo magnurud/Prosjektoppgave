@@ -17,7 +17,7 @@ function [eh cn] = runMain(N,mu,alpha)
 % last edit: April 2015
 
 dofs = N^2;
-B = @(x,y) alpha*[2*x;y]; %Vector Field
+B = @(x,y) alpha*[2;1]; %Vector Field
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
     +exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
@@ -36,9 +36,6 @@ for I = 1:dofs
   B2(i,j) = bloc(2); 
   U(I) = u(x(i),y(j));
 end
-% Assembling stiffness matrix
-%Ah = stiffness_2D(N,x,y,wX,wY,LDM);
-%Gh = gradient_2D(LDM,B1,B2,N,wX,wY);
 Ah = stiffness_2D_fast(wX,LDM);
 Gh = gradient_2D_fast(LDM,B1,B2,W,dofs);
 fh = load_2D(N,x,y,wX,wY,f);
@@ -82,7 +79,6 @@ end
     
 uh = Ah\fh;
 uh = uh + Rg;
-cn = condest(Ah);
 
 % Plotting
 figure;
@@ -101,4 +97,6 @@ xlabel('x')
 ylabel('y')
 zlabel('z')
 
-eh = norm((uh-U),'inf')/norm(U,'inf');
+cn = condest(Ah);
+%eh = norm((uh-U),'inf')/norm(U,'inf');
+eh = norm((uh-U))/norm(U);

@@ -88,16 +88,29 @@ end
 
 uh = K\fh;
 uh = uh+Rg;
-	
-%% Plotting the numerical solution
-figure(1);
+
+% Plotting
+figure;
+subplot(1,2,1)
 trisurf(tri,p(:,1),p(:,2),uh(3:3:dofs));
 title('Numerical Solution');
 xlabel('x')
 ylabel('y')
 zlabel('z')
 
-uh_max = uh(3:3:dofs);
+%% Plotting the analytical solution
+subplot(1,2,2) % second subplot
+trisurf(tri,p(:,1),p(:,2),U);
+title('Analytical Solution');
+xlabel('x')
+ylabel('y')
+zlabel('z')
+
+	
+%% Plotting the numerical solution
+figure(1);
+
 cn = condest(K);
 eh = norm(uh(3:3:dofs)-U)/norm(U);
+%eh = norm((uh(2*dofs+1:end)-U),'inf')/norm(U,'inf');
 Peclet = norm(alpha*h/(2*mu))
