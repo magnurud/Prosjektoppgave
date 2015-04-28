@@ -44,6 +44,7 @@ function [Gh] = gradient_2D(dofs,p,tri,b)
 				test = A_k*[1/6; 1/6; 1/6]; % Value of the integral of the three test functions over the element
 
 				I = kron(test,(b'*delPhi)); % Total Integral, Check indexing! 
+				%% Evaluate with a non-constant b
         
         Gh(pis,pis) = Gh(pis,pis) + I;
     end

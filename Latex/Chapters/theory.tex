@@ -12,7 +12,7 @@
 The Least Squares Finite Element Method is a numerical method similar to mixed galerkin. But with a different approach regarding defining the bilinear functional. Let us look at a system of first order differential equations on the form 
 \begin{align}
 	Au &= f \text{ in } \Omega \\
-	Bu &= g \text{ on } \partial \Omega.
+	u &= g \text{ on } \partial \Omega.
 	\label{eq:PDE}
 \end{align}
 Where $A$ is a partial differential operator defined as 
@@ -20,7 +20,7 @@ Where $A$ is a partial differential operator defined as
 	A = \sum_{i = 1}^{n} A_i\frac{\partial}{\partial x_i} + A_0.
 	\label{def:operatorA}
 \end{align}
-	$n$ beeing the number of dimensions of the domain $\Omega$. Let us initially assume without loss of generality that $g=0$ . Further we require $f \in L_2(\Omega)$ and choose $V = \left\{ v\in L_2(\Omega) | v = 0 \text{ on } \partial \Omega \right\}$. A residual is defined
+	$n$ beeing the number of dimensions of the domain $\Omega$. If $u$ happens to be a vector function of say $k$ dimensions then $A_i$ will be a matrix with $k$ columns and $k$ or more rows. Let us initially assume without loss of generality that $g=0$ . Further we require $f \in L_2(\Omega)$ and choose $V = \left\{ v\in L_2(\Omega) | v = 0 \text{ on } \partial \Omega \right\}$. A residual is defined
 \begin{align}
 	R(v) = Av-f,
 	\label{eq:Residual}
@@ -30,7 +30,7 @@ and a functional
 	 J(v) = \frac{1}{2}||R(v)||^2_0.
 	\label{eq:Functional}
 \end{align} 
-The solution $u$ and it's gradient needs to be in $L^2$ for the functional to make sence, hence $u$ is restricted to the space $H^1(\Omega)$. By minimizing $J$ we obtain 
+The solution $u$ and it's gradient needs to be in $L^2$ for the functional to make sence, hence $u$ is restricted to the space $H^1_0(\Omega)$. The homogenous boundary condition is now baked into the definition of the search space. By minimizing $J$ we obtain 
 \begin{align}
 	\lim_{t\rightarrow 0} \frac{d}{dt}J(u+tv) = \int_{\Omega}(Av)^T(Au-f)d\Omega = 0 \text{    ,   } \forall v \in V.
 	\label{eq:minProb}
@@ -76,7 +76,7 @@ and the corresponding minimization problem is then given as
 \end{align}
 For any well-posed problem $\exists \alpha,\beta > 0$ such that 
 \begin{align}
-	\alpha||u||_X^2 \leq J(u;0,0) = (\mathcal{L}u,\mathcal{L}u)_Y \leq \beta||u||_X^2.
+	\alpha||u||_X^2 \leq J(u;0,0) = (\mathcal{L}u,\mathcal{L}u)_Y+(\mathcal{B}u,\mathcal{B}u)_B \leq \beta||u||_X^2.
 	\label{eq:normEq}
 \end{align}
 The fact that our functional is norm-equivalent is of crucial importance to a successfull LS-method. It is therefore important that the spaces $X,Y \text{ and } B$ is chosen such that the LS-functional defines a norm is equivalent to $|| \cdot ||_X$.\colorbox{yellow}{Need to show this ? }
@@ -85,7 +85,14 @@ Minimizing this functional is equivalent to solving the Euler-lagrange equations
 	\text{find } u \in X \text{  such that  } Q(u,v) = F(v) \; \; \forall v\in X
 	\label{eq:varFormGen}
 \end{align}
-Where $Q(u,v)$ is the continous bilinear form given as $(\mathcal{L}u,\mathcal{L}v)_Y$ and $F(v)$ is the bounded linear functional given as $(\mathcal{L}v,f)_Y$. Notice that $Q(u,v)$ defines an inner product and $Q(u,u)^{1/2}$ defines the corresponding norm. 
+Where $Q(u,v)$ and $F(v)$ are defined as 
+\begin{align}
+	Q(u,v) &= (\mathcal{L}u,\mathcal{L}v)_Y+(\mathcal{B}u,\mathcal{B}v)_B, \\
+	F(v) &= (f,v)_Y+(g,v)_B.
+	\label{VarFormLinForms}
+\end{align}
+%
+Notice that $Q(u,v)$ defines an inner product and $Q(u,u)^{1/2}=J(u;0,0)^{1/2}$ defines the corresponding norm. 
 
 In order to solve this numerically we define the function spaces $X^h, Y^h \text{ and } B^h$ and the corresponding variational formulation is then written as 
 \begin{align}
@@ -118,14 +125,14 @@ The poisson problem is defined as
 	u = g \text{ on } \partial \Omega
 	\label{eq:Poisson}
 \end{align}
-Let us first consider the homogenous case. The straight forward LSFEM approach is to define $w = -\nabla u$ and solve the system of equations 
+Let us first consider the homogenous case. The straight forward LSFEM approach is to define $\vec{w} = -\nabla u$ and solve the system of equations 
 \begin{align}
-	w + \nabla u = 0 \text{ in } \Omega \\
-	\nabla w = f \text{ in } \Omega \\
+	\vec{w} + \nabla u = 0 \text{ in } \Omega \\
+	\nabla \cdot \vec{w} = f \text{ in } \Omega \\
 	u = 0 \text{ on } \partial \Omega.
 	\label{eq:PoissonSystem}
 \end{align}
-which can be written in the same form as ~\ref{eq:BVP} with $ u = w \oplus u $, $f = (0,0,f)$, $g=0$, $\mathcal{B} = (0,0,1)^T $ and $\mathcal{L}$ given as 
+which can be written in the same form as ~\ref{eq:BVP} with $ \mathbf{u} = \vec{w} \oplus u $, $\vec{f} = (0,0,f)$, $g=0$, $\mathcal{B} = (0,0,1)^T $ and $\mathcal{L}$ given as 
 \begin{align}
 	\mathcal{L} =
 	\begin{bmatrix}
@@ -135,21 +142,21 @@ which can be written in the same form as ~\ref{eq:BVP} with $ u = w \oplus u $, 
 	\end{bmatrix}
 	\label{eq:Amatrix}
 \end{align}
-We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\ref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ u \in X $ s.t.
+We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\ref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ \mathbf{u} \in X $ s.t.
 \begin{align}
-	Q(u,\phi) = F(\phi) \;\; \forall \;\; \phi \in X.
+	Q(\mathbf{u},\phi) = F(\phi) \;\; \forall \;\; \phi \in X.
 	\label{eq:VariationalFormulationPoisson}
 \end{align}
-We require that $f \in Y$.
-Notice that the spaces $X$ and $Y$ chosen as described above fullfill the condition ~\ref{eq:normEq}. 
+We require that $\vec{f} \in Y$.
+Notice that the spaces $X$ and $Y$ chosen as described above \vec{f}ullfill the condition ~\ref{eq:normEq}. 
 %
-\subsubsection{non-homogenous boundary conditions}
-If $g \neq 0$ then we simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{u}=u-R_g$ we can replace $u$ in the variation formulation and get 
+\subsubsection{non-homogenous Dirichlet boundary conditions}
+If $g \neq 0$ then we simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{\mathbf{u}}=\mathbf{u}-R_g$ we can replace $\mathbf{u}$ in the variation formulation and get 
 \begin{align}
-	Q(\tilde{u}+R_g,\phi) &= F(\phi) \\
-	Q(\tilde{u},\phi)+Q(R_g,\phi) &= F(\phi) \\
-	Q(\tilde{u},\phi) &= F(\phi) - Q(R_g,\phi)\\
-	Q(\tilde{u},\phi) &= \tilde{F}(\phi) 
+	Q(\tilde{\mathbf{u}}+R_g,\phi) &= F(\phi) \\
+	Q(\tilde{\mathbf{u}},\phi)+Q(R_g,\phi) &= F(\phi) \\
+	Q(\tilde{\mathbf{u}},\phi) &= F(\phi) - Q(R_g,\phi)\\
+	Q(\tilde{\mathbf{u}},\phi) &= \tilde{F}(\phi) 
 	\label{eq:liftingFunc}
 \end{align}
 %
@@ -161,14 +168,14 @@ The diffusion convection problem to be analyzed is given as
 	u = g \text{ on } \partial \Omega
 	\label{eq:DiffTrans}
 \end{align}
-The straight forward LSFEM approach is to define $w = -\nabla u$ and solve the system of equations 
+The straight forward LSFEM approach is to define $\vec{w} = -\nabla u$ and solve the system of equations 
 \begin{align}
-	w + \nabla u = 0 \text{ in } \Omega \\
-	\nabla \cdot w - b \cdot w = f \text{ in } \Omega \\
+	\vec{w} + \nabla u = 0 \text{ in } \Omega \\
+	\nabla \cdot \vec{w} - b \cdot \vec{w} = f \text{ in } \Omega \\
 	u = 0 \text{ on } \partial \Omega.
 	\label{eq:DiffTransSystem}
 \end{align}
-which can be written in the same form as ~\ref{eq:BVP} with $ u = w \oplus u $, $f = (0,0,f)$, g = 0, $\mathcal{B} = (0,0,1)^T $ and L given as 
+which can be written in the same form as ~\ref{eq:BVP} with $ \mathbf{u} = \vec{w} \oplus u $, $\vec{f} = (0,0,f)$, g = 0, $\mathcal{B} = (0,0,1)^T $ and L given as 
 \begin{align}
 	\mathcal{L} =
 	\begin{bmatrix}
@@ -178,12 +185,12 @@ which can be written in the same form as ~\ref{eq:BVP} with $ u = w \oplus u $, 
 	\end{bmatrix}
 	\label{eq:AmatrixDiff}
 \end{align}
-We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\ref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ u \in X $ s.t.
+We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\ref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ \mathbf{u} \in X $ s.t.
 \begin{align}
-	Q(u,\phi) = F(\phi) \;\; \forall \;\; \phi \in X.
+	Q(\mathbf{u},\phi) = F(\phi) \;\; \forall \;\; \phi \in X.
 	\label{eq:VariationalFormulationPoisson}
 \end{align}
-We require that $f \in Y$.
+We require that $\vec{f} \in Y$.
 Notice that the spaces $X$ and $Y$ chosen as described above fullfill the condition ~\ref{eq:normEq}. 
 
 
