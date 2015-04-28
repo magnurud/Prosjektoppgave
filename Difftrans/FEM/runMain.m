@@ -18,6 +18,7 @@ dofs = N^2; % Number of degrees of freedom.
 NN = 4*(N-1);
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
 b = alpha*[1 ; 1]; % Vector field creating the transport
+B = @(x,y) alpha[1;1];
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
     +exp(x)*(b(1)*sin(pi*y)+pi*b(2)*cos(pi*y)); % Loading function
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
@@ -30,6 +31,7 @@ end
 	Ah = stiffness_2D(dofs,p,tri);
 	fh = load_2D(dofs,p,tri,f);
 	Gh = gradient_2D(dofs,p,tri,b);
+	Gh2 = gradient(dofs,p,tri,B);
 	K = mu*Ah+Gh; % Total matrix
 % 
 
