@@ -1,4 +1,4 @@
-function [fh] = load_2D_fast(N,x,y,wX,wY,f,LDM)
+function [fh] = load_2D_fast(N,x,y,wX,wY,f,LDM,B1,B2)
 %function [fh] = load_2D_fast(N,x,y,wX,wY,f,LDM)
 %
 % description:
@@ -31,5 +31,7 @@ for I = 1:dofs
   fh(I) = fh(I)           + wX(gamma)*wY(j)*LDM(gamma,i)*f(x(gamma),y(j));
   fh(I+dofs) = fh(I+dofs) + wX(i)*wY(gamma)*LDM(gamma,j)*f(x(i),y(gamma));
   end
+  fh(I) = fh(I)           - wX(i)*wY(j)*B1(i,j)*f(x(i),y(j));
+  fh(I+dofs) = fh(I+dofs) - wX(i)*wY(j)*B2(i,j)*f(x(i),y(j));
 end
 

@@ -20,7 +20,7 @@ h = 1/(N-1);
 NLS = 3*N; % Number of unknowns in each direction
 dofs = N^2;
 LSdofs = 3*dofs;
-B = @(x,y) alpha*[1;1]; %Vector Field
+B = @(x,y) alpha*[2*x;y]; %Vector Field
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
     +exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
@@ -43,7 +43,7 @@ end
 Ah = stiffness_2D_fast(W,LDM,mu);
 Gh = gradient_2D_fast(mu,B1,B2,W,LDM,dofs);
 Ah = Ah+Gh;
-fh = load_2D_fast(N,x,y,wX,wY,f,LDM);
+fh = load_2D_fast(N,x,y,wX,wY,f,LDM,B1,B2);
 
 %% Dirchlet boundary conditions %%
 g1 = @(x,y) u(x,y); % South side boundary function
