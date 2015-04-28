@@ -17,10 +17,10 @@ function [eh cn] = runMain(N,mu,alpha)
 dofs = N^2; % Number of degrees of freedom.
 NN = 4*(N-1);
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
-b = alpha*[1 ; 1]; % Vector field creating the transport
-B = @(x,y) alpha[1;1];
+b = alpha*[2 ; 1]; % Vector field creating the transport
+B = @(x,y) alpha*[2*x^2;y];
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
-    +exp(x)*(b(1)*sin(pi*y)+pi*b(2)*cos(pi*y)); % Loading function
+    +exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
 U = zeros(dofs,1);
 for I = 1:dofs
@@ -30,8 +30,8 @@ end
 % Assemble Matrices and loading function
 	Ah = stiffness_2D(dofs,p,tri);
 	fh = load_2D(dofs,p,tri,f);
-	Gh = gradient_2D(dofs,p,tri,b);
-	Gh2 = gradient(dofs,p,tri,B);
+	%Gh = gradient_2D(dofs,p,tri,b); % If the vector field is constant
+	Gh = gradient(dofs,p,tri,B);
 	K = mu*Ah+Gh; % Total matrix
 % 
 
