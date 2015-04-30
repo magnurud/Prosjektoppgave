@@ -20,7 +20,7 @@ h = 1/(N-1);
 NLS = 3*N; % Number of unknowns in each direction
 dofs = N^2;
 LSdofs = 3*dofs;
-B = @(x,y) -alpha*[2;1]; %Vector Field
+B = @(x,y) alpha*[2;1]; %Vector Field
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
     +exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
@@ -63,36 +63,45 @@ f_LS(2*dofs+1:end) = f_LS(2*dofs+1:end) + f_Sp;
 Ah = sparse(A_LS);
 fh = sparse(f_LS);
 
-%% Dirchlet boundary conditions %%
-g1 = @(x,y) u(x,y); % South side boundary function
-g2 = @(x,y) u(x,y); % East side boundary function
-g3 = @(x,y) u(x,y); % West side boundary function
-g4 = @(x,y) u(x,y); % North side boundary function
+%% Neumann boundary conditions %%
+g1 = @(x,y) -pi*exp(x)*cos(pi*y) ; % South side boundary function
+g2 = @(x,y) -exp(x)*sin(pi*y) ; % East side boundary function
+g3 = @(x,y) -exp(x)*sin(pi*y) ; % West side boundary function
+g4 = @(x,y) -pi*exp(x)*cos(pi*y) ; % North side boundary function
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %% Vectorized BC's %% 
 Rg = zeros(LSdofs,1);
 for I = 1:dofs
-	J = I+2*dofs;
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
   if(j==1) 
+    J = I+dofs;
     Rg(J) = g1(x(i),y(j)); % South side
   elseif(i == N) 
+    J = I;
     Rg(J) = g2(x(i),y(j)); % East side
   elseif(i == 1) 
+    J = I;
     Rg(J) = g3(x(i),y(j)); % West side
   elseif(j == N) 
+    J = I+dofs;
     Rg(J) = g4(x(i),y(j)); % North side
   end
 end
 fh = fh - Ah*Rg;
 
-% Homogenous Boundary conditions
+% Homogenous Neumann Boundary conditions
 for I = 1:dofs
-	J = I+2*dofs;
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
-  if(i==1 || i==N || j==1 || j==N)
+  if(i==1 || i==N ) % Dirichlet on the x-comp of w
+	  J = I;
+    Ah(J,:) = 0;
+    Ah(:,J) = 0;
+    Ah(J,J) = 1;
+    fh(J) = 0;
+  elseif(j==1 || j==N) % Dirichlet on the y-comp of w 
+	  J = I+dofs;
     Ah(J,:) = 0;
     Ah(:,J) = 0;
     Ah(J,J) = 1;
@@ -105,23 +114,16 @@ uh = uh+Rg;
 
 % Plotting
 figure;
-subplot(1,2,1)
-surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
+%surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
+surf(x,y,reshape(uh(dofs+1:2*dofs),N,N)');
+%surf(x,y,reshape(Rg(1:dofs),N,N)');
 title('Numerical Solution');
 xlabel('x')
 ylabel('y')
-zlabel('z')
-
-%% Plotting the analytical solution
-subplot(1,2,2) % second subplot
-surf(x,y,reshape(U,N,N)');
-title('Analytical Solution');
-xlabel('x')
-ylabel('y')
-zlabel('z')
 
 eh = norm((uh(2*dofs+1:end)-U),'inf')/norm(U,'inf');
 cn = condest(Ah);
 
 %Peclet number
 Peclet = max(max(sqrt(B1.^2+B2.^2)))*h/(2*mu)
+
