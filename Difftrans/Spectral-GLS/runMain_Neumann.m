@@ -2,7 +2,7 @@ function [eh cn] = runMain(N,mu,alpha,delta)
 % runMain.m
 %
 % description:
-%      Solving the Poisson problem on the square (0,1)^2
+%      Solving the Diffusion transport problem on the square (0,1)^2
 % 		 using spectral-least squares methods;
 %
 % arguments:

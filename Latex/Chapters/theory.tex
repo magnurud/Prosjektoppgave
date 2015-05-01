@@ -160,6 +160,20 @@ If $g \neq 0$ then we simply define a lifting function $R_g \in X$ such that $R_
 	\label{eq:liftingFunc}
 \end{align}
 %
+\subsubsection{non-homogenous Neumann boundary conditions}
+Because of the geometry of our problem and the fact that we define the flux as an extra variable we can trasform the neumann conditions to a dirichlet condition on the flux. 
+\begin{align}
+	\frac{\partial u}{\partial \vec{n}} &= h \text{  on   } \partial \Omega \\
+	\nabla u \cdot \vec{n} &= h \\
+	 \vec{w} \cdot \vec{n} &= -h. 
+	\label{eq:neumann}
+\end{align}
+Let us define $\hat{x}$ and $\hat{y}$ as the unit vectors in each direction. Notice that for the west ($x=0$) and east ($x=1$) edges the normal vector $\vec{n}= \pm\hat{x}$, and at the north ($y=1$) and south($y=0$) edges $\vec{n}=\pm \hat{y}$. This way we can write the Neumann conditions as a dirichlet condition on the first and second component of $\vec{w}= [ w_1 \:\: w_2]$. 
+\begin{align}
+	w_1 = \pm h \text{    for $y = 0$ and $y=1$ }\\
+	w_2 = \pm h \text{    for $x = 0$ and $x=1$ }
+	\label{eq:neumannAsDirichlet}
+\end{align}
 \section{Example - Diffusion convection problem}
 %
 The diffusion convection problem to be analyzed is given as 
