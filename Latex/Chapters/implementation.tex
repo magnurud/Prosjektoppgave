@@ -87,3 +87,23 @@ $
 
 Similarly without the reformulation of the PDE and with regular galerkin formulation the stiffness matrix will simply be 
 $A_{3,3} = W \otimes L^TWL+ L^TWL \otimes W$
+\section{LS spectral method for Diffusion transport}
+The A matrix will be divided into the following matrices;
+
+$
+A = 
+\begin{bmatrix}
+	W \otimes (\mu L^TWL+W) & \mu WL \otimes L^TW 		 &	W \otimes WL  \\ 	
+	\mu L^TW \otimes WL     & (\mu L^TWL+W) \otimes W  &	WL \otimes W  \\ 	
+	W \otimes L^TW		  & L^TW \otimes W       &  L^TWL \otimes W +	W\otimes L^TWL  \\ 	
+\end{bmatrix}
+$
+in addition it will be added some extra terms dependent on $b$ to the upper left 2-by-2 block matrix. 
+
+\begin{align}
+	G_{1,1} &= -\mu B_1 (W \otimes WL) -\mu( W \otimes L^TW) B_1 + B_1( W\otimes W) B_1 \\ 	
+	G_{1,2} &= -\mu B_2 (W \otimes WL) -\mu (L^TW \otimes W) B_1 + B_1 (W\otimes W) B_2 \\
+	G_{2,1} &= G_{1,2}^T \\
+	G_{2,2} &= -\mu B_2 (WL \otimes W) -\mu (L^TW \otimes W) B_2 + B_2 (W\otimes W) B_2. 
+	\label{eq:additionalMatrixDiffTrans}
+\end{align}
