@@ -88,7 +88,7 @@ Minimizing this functional is equivalent to solving the Euler-lagrange equations
 Where $Q(u,v)$ and $F(v)$ are defined as 
 \begin{align}
 	Q(u,v) &= (\mathcal{L}u,\mathcal{L}v)_Y+(\mathcal{B}u,\mathcal{B}v)_B, \\
-	F(v) &= (f,v)_Y+(g,v)_B.
+	F(v) &= (f,\mathcal{L}v)_Y+(g,\mathcal{L}v)_B.
 	\label{VarFormLinForms}
 \end{align}
 %
@@ -148,9 +148,55 @@ We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ an
 	\label{eq:VariationalFormulationPoisson}
 \end{align}
 We require that $\vec{f} \in Y$.
+\colorbox{yellow}{Should I state the numerical variational formulation instead??}
 Notice that the spaces $X$ and $Y$ chosen as described above \vec{f}ullfill the condition ~\ref{eq:normEq}. 
 %
-\subsubsection{non-homogenous Dirichlet boundary conditions}
+\section{Example - Diffusion convection reaction problem}
+%
+The diffusion convection problem to be analyzed is given as 
+\begin{align}
+	-\Delta u + \vec{b} \cdot \nabla u +\sigma u = f \text{ in } \Omega \\
+	u = g \text{ on } \partial \Omega
+	\label{eq:DiffTrans}
+\end{align}
+where $\vec{b} = [b_1 , b_2]$ is a vector field, and $\sigma$ is some reaction constant. By following the same approach as for the poisson problem we end up with $\mathcal{L}$ on the form
+\begin{align}
+	\mathcal{L} =
+	\begin{bmatrix}
+		1 & 0 & \partial / \partial x  \\
+		0 & 1 & \partial / \partial y  \\
+		\partial / \partial x - b_1 & \partial/ \partial y -b_2 & \sigma
+	\end{bmatrix}
+	\label{eq:AmatrixDiff}
+\end{align}
+which leads to a similar but slightly different linear system than the one created by the poisson problem.
+
+%The straight forward LSFEM approach is to define $\vec{w} = -\nabla u$ and solve the system of equations \begin{align}
+	%\vec{w} + \nabla u = 0 \text{ in } \Omega \\
+	%\nabla \cdot \vec{w} - b \cdot \vec{w} = f \text{ in } \Omega \\
+	%u = 0 \text{ on } \partial \Omega.
+	%\label{eq:DiffTransSystem}
+%\end{align}
+%which can be written in the same form as ~\ref{eq:BVP} with $ \mathbf{u} = \vec{w} \oplus u $, $\vec{f} = (0,0,f)$, g = 0, $\mathcal{B} = (0,0,1)^T $ and L given as 
+%\begin{align}
+	%\mathcal{L} =
+	%\begin{bmatrix}
+		%1 & 0 & \partial / \partial x  \\
+		%0 & 1 & \partial / \partial y  \\
+		%\partial / \partial x - b_1 & \partial/ \partial y -b_2 & 0
+	%\end{bmatrix}
+	%\label{eq:AmatrixDiff}
+%\end{align}
+%We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\ref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ \mathbf{u} \in X $ s.t.
+%\begin{align}
+	%Q(\mathbf{u},\phi) = F(\phi) \;\; \forall \;\; \phi \in X.
+	%\label{eq:VariationalFormulationPoisson}
+%\end{align}
+%We require that $\vec{f} \in Y$.
+%Notice that the spaces $X$ and $Y$ chosen as described above fullfill the condition ~\ref{eq:normEq}. 
+
+\section{Boundary conditions}
+\subsection{non-homogenous Dirichlet boundary conditions}
 If $g \neq 0$ then we simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{\mathbf{u}}=\mathbf{u}-R_g$ we can replace $\mathbf{u}$ in the variation formulation and get 
 \begin{align}
 	Q(\tilde{\mathbf{u}}+R_g,\phi) &= F(\phi) \\
@@ -160,7 +206,7 @@ If $g \neq 0$ then we simply define a lifting function $R_g \in X$ such that $R_
 	\label{eq:liftingFunc}
 \end{align}
 %
-\subsubsection{non-homogenous Neumann boundary conditions}
+\subsection{non-homogenous Neumann boundary conditions}
 Because of the geometry of our problem and the fact that we define the flux as an extra variable we can trasform the neumann conditions to a dirichlet condition on the flux. 
 \begin{align}
 	\frac{\partial u}{\partial \vec{n}} &= h \text{  on   } \partial \Omega \\
@@ -174,37 +220,3 @@ Let us define $\hat{x}$ and $\hat{y}$ as the unit vectors in each direction. Not
 	w_2 = \pm h \text{    for $x = 0$ and $x=1$ }
 	\label{eq:neumannAsDirichlet}
 \end{align}
-\section{Example - Diffusion convection problem}
-%
-The diffusion convection problem to be analyzed is given as 
-\begin{align}
-	-\Delta u + b \cdot \nabla u = f \text{ in } \Omega \\
-	u = g \text{ on } \partial \Omega
-	\label{eq:DiffTrans}
-\end{align}
-The straight forward LSFEM approach is to define $\vec{w} = -\nabla u$ and solve the system of equations 
-\begin{align}
-	\vec{w} + \nabla u = 0 \text{ in } \Omega \\
-	\nabla \cdot \vec{w} - b \cdot \vec{w} = f \text{ in } \Omega \\
-	u = 0 \text{ on } \partial \Omega.
-	\label{eq:DiffTransSystem}
-\end{align}
-which can be written in the same form as ~\ref{eq:BVP} with $ \mathbf{u} = \vec{w} \oplus u $, $\vec{f} = (0,0,f)$, g = 0, $\mathcal{B} = (0,0,1)^T $ and L given as 
-\begin{align}
-	\mathcal{L} =
-	\begin{bmatrix}
-		1 & 0 & \partial / \partial x  \\
-		0 & 1 & \partial / \partial y  \\
-		\partial / \partial x - b_1 & \partial/ \partial y -b_2 & 0
-	\end{bmatrix}
-	\label{eq:AmatrixDiff}
-\end{align}
-We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\ref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ \mathbf{u} \in X $ s.t.
-\begin{align}
-	Q(\mathbf{u},\phi) = F(\phi) \;\; \forall \;\; \phi \in X.
-	\label{eq:VariationalFormulationPoisson}
-\end{align}
-We require that $\vec{f} \in Y$.
-Notice that the spaces $X$ and $Y$ chosen as described above fullfill the condition ~\ref{eq:normEq}. 
-
-

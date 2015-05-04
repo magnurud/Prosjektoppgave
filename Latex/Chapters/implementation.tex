@@ -32,9 +32,9 @@ The total system of equation for all test functions can then be written as a mat
 	Au = F.
 	\label{eq:matrixEq}
 \end{align}
-Where $A_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$, written explicitly it will be a 3-by-3 matrix on the form 
+Where $A^{LS}_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$, written explicitly it will be a 3-by-3 matrix on the form 
 
-$A_{I,J} = \int_{\Omega}
+$A^{LS}_{I,J} = \int_{\Omega}
 \begin{bmatrix}
 	N_IN_J + \partial_x N_{I} \partial_xN_{J} & \partial_x N_{I}\partial_y N_{J} & N_IN_{J,x} \\ 	
 	\partial_yN_{I}\partial_xN_{J} &N_IN_J + \partial_yN_{I}\partial_yN_{J} &  N_IN_{J,y} \\ 	
@@ -42,7 +42,18 @@ $A_{I,J} = \int_{\Omega}
 	\label{mat:basicPoisson}
 \end{bmatrix}
 d\Omega$
-where $\partial_x = \partial / \partial x $ for the poisson problem and $\mu \partial / \partial x - b_1$ for the diffusion transport problem 
+where $\partial_x = \partial / \partial x $ for the poisson problem and $\mu \partial / \partial x - b_1$ for the diffusion transport problem. Similarly $F_I$ will be given as 
+\begin{align}
+	F_I = \int_{\Omega}(\mathcal{L}N_I)^T\vec{f} d\Omega = 
+	\int_{\Omega}
+\begin{bmatrix}
+	\partial_xN_I \\
+	\partial_xN_I \\
+	0
+\end{bmatrix}
+	f d\Omega
+	\label{eq:rhsFunctional}
+\end{align}
 
 Notice that by doing the splitting of variables we obtain a system of equations three times as big as if we were to solve the equation directly. 
 
@@ -51,7 +62,7 @@ Notice that by doing the splitting of variables we obtain a system of equations 
 \section{LS spectral method for poisson}
 
 The spectral implementation is done using Gauss Lobatto nodes and quadrature and the lagrange functions based on the GL nodes as basis functions. 
-Notice that the discrete solution $u_h$ consist of the discretizations of both $u \text{ and } w = \nabla u$. $u_h$ can be structured blockwise such that or nodewise. By choosing a blockwise representation the final system of equations can be written as 
+Notice that the discrete solution $u_h$ consist of the discretizations of both $u \text{ and } w = - \nabla u$. $u_h$ can be structured blockwise such that or nodewise. By choosing a blockwise representation the final system of equations can be written as 
 
 $
 \begin{bmatrix}
@@ -66,16 +77,16 @@ $
 \end{bmatrix}
 =
 \begin{bmatrix}
+ F_1 \\ 	
+ F_2\\ 	
  0 \\ 	
- 0\\ 	
- F^h\\ 	
 \end{bmatrix}
 $.
 
 Where each block $A_{i,j}$ corresponds to  calculating element $i,j$ in the matrix ~\ref{mat:basicPoisson} for all the indices $I,J$. In order to implement this matrix it is convenient to write it in a compact form using the kronecker tensor product. The components needed for this formulation is the $n \times n$ diagonal matrix $ W $ with the GLL-weigths along the diagonal and the $n \times n$ matrix $(L)_{i,j}= l_j'(x_i)$ where $l_j$ is the jth lagrange polynomial and $x_i$ is the ith node in either x or y direction. Note that the formulation is based on a grid of GLL-nodes in both x and y direction. 
 
 $
-A = 
+A^{LS} = 
 \begin{bmatrix}
 	W \otimes (L^TWL+W) & WL \otimes L^TW 		 &	W \otimes WL  \\ 	
 	L^TW \otimes WL     & (L^TWL+W) \otimes W  &	WL \otimes W  \\ 	
@@ -91,7 +102,7 @@ $A_{3,3} = W \otimes L^TWL+ L^TWL \otimes W$
 The A matrix will be divided into the following matrices;
 
 $
-A = 
+A^{LS} = 
 \begin{bmatrix}
 	W \otimes (\mu L^TWL+W) & \mu WL \otimes L^TW 		 &	W \otimes WL  \\ 	
 	\mu L^TW \otimes WL     & (\mu L^TWL+W) \otimes W  &	WL \otimes W  \\ 	
@@ -107,3 +118,41 @@ in addition it will be added some extra terms dependent on $b$ to the upper left
 	G_{2,2} &= -\mu B_2 (WL \otimes W) -\mu (L^TW \otimes W) B_2 + B_2 (W\otimes W) B_2. 
 	\label{eq:additionalMatrixDiffTrans}
 \end{align}
+%
+We can then define the total matrix for the diffusion transport problem $K^{LS}$ as
+\begin{align}
+K^{LS} = A^{LS} + G^{LS}
+	\label{eq:difftransMatrixSum}
+\end{align}
+Where $G^{LS}$ is the matrix given as 
+$
+G^{LS}=
+\begin{bmatrix}
+	G_{11} & G_{12} &0 \\
+	G_{21} & G_{22} &0 \\
+	0 & 0 & 0 
+\end{bmatrix}.
+$
+%
+\section{GLS method for a non-linear diffusion transport problem}
+The GLS-formulation is created simply by adding the variational formulation from the standard galerkin and LS approach. By dividing the matrix surging from the bilinear functional into a linear and a non-linear part the system of equation can be written as 
+%
+\begin{align}
+	(A^{LS}+A)\mathbf{u_h} = -(G^{LS}(\mathbf{u_h})+G(\mathbf{u_h}))\mathbf{u_h} + f_h^{LS}(\mathbf{u_h})+f_h. \\
+	\mathcal{A} \mathbf{u_h} = \mathcal{F} (\mathbf{u_h})
+	\label{eq:nonlinMatrixFormulation}
+\end{align}
+%
+In order to solve this nonlinear system of equations I used newton iterations which can be divided into three steps 
+%
+\begin{enumerate}
+	\item $r^k = \mathcal{ F } (\mathbf{u_h}^k) - \mathcal{A}\mathbf{u_h}^k$   , Calculating the residual
+	\item $\hat{e}^k = \mathcal{J}_k^{-1}r^k $  , Calculating the error 
+	\item $\mathbf{u_h}^{k+1}=\mathbf{u_h}^k+\hat{e}^k$    , updating the solution
+\end{enumerate}
+%
+Where $\mathcal{J}_k$ is the jacobian matrix of $\mathcal{F}(\mathbf{u_h}^k)$
+
+\colorbox{blue}{mention the fact that LS formulation leads to a non-linear loading function}
+
+\colorbox{red}{How to deal with boundary conditions \ldots }

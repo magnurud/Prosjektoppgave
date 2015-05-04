@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.26)  1 MAY 2015 21:13
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.26)  4 MAY 2015 09:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -678,9 +678,6 @@ LaTeX Info: Redefining \cite on input line 694.
 Package hyperref Info: Option `colorlinks' set `true' on input line 33.
  (./main.aux
 
-LaTeX Warning: Label `eq:VariationalFormulationPoisson' multiply defined.
-
-
 LaTeX Warning: Label `eq:bilinearFunctional' multiply defined.
 
 )
@@ -808,14 +805,10 @@ See the amsmath package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.151 ...and $Y$ chosen as described above \vec{f}
+l.152 ...and $Y$ chosen as described above \vec{f}
                                                   ullfill the condition ~\re...
 
 ? 
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 153.
-
 [5] [6]) (./Chapters/newTheory.tex [7]
 Chapter 2.
 ------------------------------------------------------------------------------
@@ -823,44 +816,57 @@ Chapter 2.
 ------------------------------------------------------------------------------
 [8
 
-]) (./Chapters/implementation.tex [9]
+]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 74.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\alpha' on input line 74.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 74.
+
+) (./Chapters/implementation.tex [9] [10]
 Chapter 3.
 ------------------------------------------------------------------------------
  3 Implementation
 ------------------------------------------------------------------------------
-[10
+[11
 
-] [11] [12]) (./Chapters/results.tex [13]
+] [12] [13] [14]) (./Chapters/results.tex [15]
 Chapter 4.
 ------------------------------------------------------------------------------
  4 Results
 ------------------------------------------------------------------------------
 
-LaTeX Warning: Reference `fig:convergence' on page 14 undefined on input line 1
+LaTeX Warning: Reference `fig:convergence' on page 16 undefined on input line 1
 1.
 
-<Figures/errorFEM-LSFEM.pdf, id=269, 397.485pt x 361.35pt>
+<Figures/errorFEM-LSFEM.pdf, id=293, 397.485pt x 361.35pt>
 File: Figures/errorFEM-LSFEM.pdf Graphic file (type pdf)
 
 <use Figures/errorFEM-LSFEM.pdf>
 Package pdftex.def Info: Figures/errorFEM-LSFEM.pdf used on input line 15.
 (pdftex.def)             Requested size: 397.48402pt x 361.34912pt.
 
-<Figures/errorSpec-SpecLS.pdf, id=270, 397.485pt x 361.35pt>
+<Figures/errorSpec-SpecLS.pdf, id=294, 397.485pt x 361.35pt>
 File: Figures/errorSpec-SpecLS.pdf Graphic file (type pdf)
 
 <use Figures/errorSpec-SpecLS.pdf>
 Package pdftex.def Info: Figures/errorSpec-SpecLS.pdf used on input line 24.
 (pdftex.def)             Requested size: 397.48402pt x 361.34912pt.
 
-<Figures/condFEM-LSFEM.pdf, id=271, 397.485pt x 361.35pt>
+<Figures/condFEM-LSFEM.pdf, id=295, 397.485pt x 361.35pt>
 File: Figures/condFEM-LSFEM.pdf Graphic file (type pdf)
 
 <use Figures/condFEM-LSFEM.pdf>
 Package pdftex.def Info: Figures/condFEM-LSFEM.pdf used on input line 32.
 (pdftex.def)             Requested size: 397.48402pt x 361.34912pt.
 
-<Figures/condSpec-SpecLS.pdf, id=272, 397.485pt x 361.35pt>
+<Figures/condSpec-SpecLS.pdf, id=296, 397.485pt x 361.35pt>
 File: Figures/condSpec-SpecLS.pdf Graphic file (type pdf)
 
 <use Figures/condSpec-SpecLS.pdf>
@@ -879,15 +885,15 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) (./Appendices/AppendixA.tex [14
+) (./Appendices/AppendixA.tex [16
 
-] [15 <./Figures/errorFEM-LSFEM.pdf>] [16 <./Figures/errorSpec-SpecLS.pdf>] [17
- <./Figures/condFEM-LSFEM.pdf>] [18 <./Figures/condSpec-SpecLS.pdf>]
+] [17 <./Figures/errorFEM-LSFEM.pdf>] [18 <./Figures/errorSpec-SpecLS.pdf>] [19
+ <./Figures/condFEM-LSFEM.pdf>] [20 <./Figures/condSpec-SpecLS.pdf>]
 Appendix A.
 ------------------------------------------------------------------------------
  A Appendix Title Here
 ------------------------------------------------------------------------------
-) [19
+) [21
 
 ]
 ------------------------------------------------------------------------------
@@ -895,7 +901,7 @@ Appendix A.
 ------------------------------------------------------------------------------
 (./main.bbl)
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 316.
- [20
+ [22
 
 
 ]
@@ -904,7 +910,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 316.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 316.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 316.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 5EDAE532476D5C6D91B171E2B7B46147;3852.
+(rerunfilecheck)             Checksum: 2E799EECF25BAF7B1D893DBA311C47F2;4657.
 
 
 LaTeX Warning: There were undefined references.
@@ -915,31 +921,33 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 316.
  ) 
 Here is how much of TeX's memory you used:
- 13164 strings out of 494465
- 184107 string characters out of 6166360
- 256832 words of memory out of 5000000
- 16092 multiletter control sequences out of 15000+600000
- 15306 words of font info for 56 fonts, out of 8000000 for 9000
+ 13186 strings out of 494465
+ 184369 string characters out of 6166360
+ 256031 words of memory out of 5000000
+ 16104 multiletter control sequences out of 15000+600000
+ 16553 words of font info for 61 fonts, out of 8000000 for 9000
  350 hyphenation exceptions out of 8191
- 49i,14n,45p,905b,367s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 49i,14n,45p,905b,417s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
-msy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.p
-fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on main.pdf (23 pages, 239313 bytes).
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on main.pdf (25 pages, 257880 bytes).
 PDF statistics:
- 595 PDF objects out of 1000 (max. 8388607)
- 545 compressed objects within 6 object streams
- 125 named destinations out of 1000 (max. 500000)
- 181 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 628 PDF objects out of 1000 (max. 8388607)
+ 574 compressed objects within 6 object streams
+ 134 named destinations out of 1000 (max. 500000)
+ 205 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -71,3 +71,11 @@ The proof for a similar method can be found in ~\cite{Quarteroni} Ch.12.
 %\end{align}
 
 
+\subsection{estimation of the constant $\alpha$}
+
+By performing the proof of the poincar\'e inequality from \cite{Quarteroni} for our domain $\Omega$ we end up with showing that $|v|_1\leq \sqrt{8/9}||v||_1 \;\; \forall v \in H^1_0$. By using this inequality twice we end up showing for the poisson problem that
+\begin{align}
+	|||v||| \geq \frac{8}{9}||v||_1,
+	\label{eq:resultAlpha}
+\end{align}
+Hence $\alpha=\frac{8}{9}$. \colorbox{yellow}{should find this constant for the difftrans problem}
