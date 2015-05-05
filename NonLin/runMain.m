@@ -87,6 +87,10 @@ for I = 1:dofs
 	end
 end
 
+f_L = -A_L*Rg;
+f_L(2*dofs+1:end) = f_L(2*dofs+1:end) + f_Sp;
+% f_L is now the linear part of the rhs, and will take care of the BC's.
+
 % Code to repeat
 for it = 1:15 
 	% Updating the vectorfield matrix
@@ -106,18 +110,17 @@ for it = 1:15
   f_LS = delta*f_LS;
 
   G_LS(2*dofs+1:end,2*dofs+1:end) = G_LS(2*dofs+1:end,2*dofs+1:end) + G_Sp;
-  f_LS(2*dofs+1:end) = f_LS(2*dofs+1:end) + f_Sp;
+
 	A_NL = sparse(G_LS); % The non-linear part of A
-	fh = sparse(f_LS); 
+	fh = f_LS+f_L; 
 
   %%%%% COMBINING JACOBI PART %%%%%
   J_LS = delta*(Jf_LS-J_LS);
   J_LS(2*dofs+1:end,2*dofs+1:end) = J_LS(2*dofs+1:end,2*dofs+1:end) - J_Sp;
   %%%%% DONE COMBINING %%%%%
 
-	%  fh = fh - Ah*Rg;
-
   % Homogenous Boundary conditions
+	% The one non-zero term in each row is taken care of by A_L
   for I = 1:dofs
     J = I+2*dofs;
     i = mod(I-1,N)+1;
@@ -125,7 +128,8 @@ for it = 1:15
     if(i==1 || i==N || j==1 || j==N)
       A_NL(J,:) = 0;
       A_NL(:,J) = 0;
-      A_NL(J,J) = 1;
+      J_LS(J,:) = 0;
+      J_LS(:,J) = 0;
       fh(J) = 0;
     end
   end
@@ -139,9 +143,10 @@ for it = 1:15
 	U1 = uh(2*dofs+1:end);
 	W1 = uh(1:dofs);
 	% Boundary adjustment
-  %uh = uh+Rg;
-  eh = norm((uh(2*dofs+1:end)-U),'inf')/norm(U,'inf')
+  uh_BC = uh+Rg;
+  eh = norm((uh_BC(2*dofs+1:end)-U),'inf')/norm(U,'inf')
 end
+uh = uh_BC;
 
 
 % Plotting
