@@ -25,3 +25,4 @@ for I = 1:N^2
   fh(I) = wX(i)*wY(j)*f(x(i),y(j));
 end
 
+

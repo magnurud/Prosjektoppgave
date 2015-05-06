@@ -35,6 +35,6 @@ for I = 1:dofs
   end
   fh(I) = fh(I)           - wX(i)*wY(j)*B1(i,j)*f(x(i),y(j));
   fh(I+dofs) = fh(I+dofs) - wX(i)*wY(j)*B2(i,j)*f(x(i),y(j));
-  fh(I+2*dofs) = fh(I+2*dofs) + sigma*wX(i)*wY(j)*f(x(i),y(j));
+  %fh(I+2*dofs) = fh(I+2*dofs) + sigma*wX(i)*wY(j)*f(x(i),y(j));
 end
 

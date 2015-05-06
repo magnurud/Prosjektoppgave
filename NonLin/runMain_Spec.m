@@ -31,6 +31,7 @@ dB1 = zeros(N,N);
 dB2 = zeros(N,N);
 U = zeros(dofs,1); %Analytical solution
 uh = ones(dofs,1); % Initial guess
+F  = zeros(dofs,1); % Loading function 
 for I = 1:dofs
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
@@ -40,6 +41,7 @@ for I = 1:dofs
 	bloc = dB(x(i),y(j));
 	dB1(i,j) = bloc(1);
 	dB2(i,j) = bloc(2); 
+	F(I,I) = f(x(i),y(j));
 end
 
 % Assembling the linear matrices
