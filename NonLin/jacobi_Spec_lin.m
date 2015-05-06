@@ -1,4 +1,4 @@
-function [Jh] = jacobi_Spec_lin(W,LDM,dB1,dB2,B1,B2,U);
+function [Jh] = jacobi_Spec_lin(W,LDM,dB1,dB2,B1,B2,U,Rg);
 % description:
 %      generate the jacobian for the LS-part of the nonlin system 
 %
@@ -11,6 +11,7 @@ function [Jh] = jacobi_Spec_lin(W,LDM,dB1,dB2,B1,B2,U);
 %		- B1		the first component of the vector field diagonal matrix
 %		- B2		the second component of the vector field diagonal matrix
 %		- U			the current solution, vector dofs x 1
+%		- Rg 		the lifting function, vector dofs x 1
 % returns:
 %		- Jh 	  Jacobi matrix (dofs^2 elements)
 %
@@ -21,5 +22,5 @@ function [Jh] = jacobi_Spec_lin(W,LDM,dB1,dB2,B1,B2,U);
 PHI = kron(W,W*LDM);
 PSI = kron(WL,W);
 
-Jh = B1*PHI+diag(dB1*PHI*U)+B2*PSI+diag(dB2*PSI*U);
+Jh = B1*PHI+diag(dB1*PHI*(U+Rg))+B2*PSI+diag(dB2*PSI*(U+Rg)); % From the grad-part Includes BC's
 
