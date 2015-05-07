@@ -1,4 +1,4 @@
-function [Jfh] = load_LS(N,x,y,wX,wY,f,LDM,dB1,dB2)
+function [Jfh] = jacobi_LS_load_lin(W,dB1,dB2,F)
 %function [Jfh] = load_2D_fast(N,x,y,wX,wY,f,LDM)
 %
 % description:
@@ -22,15 +22,17 @@ function [Jfh] = load_LS(N,x,y,wX,wY,f,LDM,dB1,dB2)
 % author: Magnus Aa. Rud
 % last edit: April 2015
 
-NLS = 3*N; 
-dofs = N^2;
+dofs = length(F);
 LSdofs = 3*dofs;
-Jfh = zeros(LSdofs,1);
-for I = 1:dofs
-  i = mod(I-1,N)+1;
-  j = fix((I-1)/N)+1;
-  Jfh(I) = Jfh(I)           - wX(i)*wY(j)*dB1(i,j)*f(x(i),y(j));
-  Jfh(I+dofs) = Jfh(I+dofs) - wX(i)*wY(j)*dB2(i,j)*f(x(i),y(j));
-end
+Jfh = zeros(LSdofs);
+ZEROS = zeros(size(dB1));
+%%%%%%%%for I = 1:dofs
+%%%%%%%%  i = mod(I-1,N)+1;
+%%%%%%%%  j = fix((I-1)/N)+1;
+%%%%%%%%  Jfh(I) = Jfh(I)           - wX(i)*wY(j)*dB1(i,j)*f(x(i),y(j));
+%%%%%%%%  Jfh(I+dofs) = Jfh(I+dofs) - wX(i)*wY(j)*dB2(i,j)*f(x(i),y(j));
+%%%%%%%%end
+Jf1 = -kron(W,W)*dB1*F;
+Jf2 = -kron(W,W)*dB2*F;
 
-Jfh = diag(Jfh);
+Jfh = [ZEROS ZEROS diag(Jf1) ; ZEROS ZEROS diag(Jf2) ; ZEROS ZEROS ZEROS];

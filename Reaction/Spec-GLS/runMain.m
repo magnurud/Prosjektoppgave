@@ -22,7 +22,7 @@ NLS = 3*N; % Number of unknowns in each direction
 dofs = N^2;
 LSdofs = 3*dofs;
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
-B = @(x,y) alpha*[x;y]; %Vector Field
+B = @(x,y) alpha*[1-x;y]; %Vector Field
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
     +exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)] + sigma*u(x,y); % Loading function
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
@@ -32,6 +32,7 @@ W = diag(wX);
 B1 = zeros(N,N);
 B2 = zeros(N,N);
 U = zeros(dofs,1);
+F = zeros(dofs,1);
 for I = 1:dofs
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
@@ -39,6 +40,7 @@ for I = 1:dofs
   B1(i,j) = bloc(1);
   B2(i,j) = bloc(2); 
   U(I) = u(x(i),y(j));
+  F(I) = f(x(i),y(j));
 end
 
 % Assembling LS part %
@@ -46,7 +48,9 @@ A_LS = stiffness_LS(W,LDM,mu);
 G_LS = gradient_LS(mu,B1,B2,W,LDM,dofs);
 R_LS = reaction_LS(mu,B1,B2,sigma,W,LDM,dofs);
 A_LS = A_LS+G_LS+R_LS;
-f_LS = load_LS(N,x,y,wX,wY,f,LDM,B1,B2,mu,sigma);
+%f_LS = load_LS(N,x,y,wX,wY,f,LDM,B1,B2,mu,sigma);
+%f_LS = load_LS2(N,x,y,wX,wY,f,LDM,B1,B2,mu,sigma);
+f_LS = load_LS2(W,LDM,B1,B2,F,mu,sigma);
 
 % Assembling Spectral part 
 A_Sp = stiffness_Spec(W,LDM);

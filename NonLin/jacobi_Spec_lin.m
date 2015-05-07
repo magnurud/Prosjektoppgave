@@ -20,7 +20,7 @@ function [Jh] = jacobi_Spec_lin(W,LDM,dB1,dB2,B1,B2,U,Rg);
 
 %%% OOPS DIAGONAL MATRICES ARE REALLLY SLOW!!!%%% 
 PHI = kron(W,W*LDM);
-PSI = kron(WL,W);
+PSI = kron(W*LDM,W);
 
 Jh = B1*PHI+diag(dB1*PHI*(U+Rg))+B2*PSI+diag(dB2*PSI*(U+Rg)); % From the grad-part Includes BC's
 
