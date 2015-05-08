@@ -3,7 +3,7 @@ function [Ah] = stiffness_Spec(W,LDM);
 %      generate the stiffness matrix Ah;
 %
 % arguments:
-%   - wX    The weight used in the quadrature rule for the x-direction
+%   - W    The weight used in the quadrature rule 
 %   - LDM   The derivatives of the basisfunctions evaluated in every point
 %           ( LDM(i,j) = l_j'(x_i) )
 % returns:
