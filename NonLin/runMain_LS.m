@@ -17,8 +17,9 @@ function [eh cn] = runMain_LS(N,mu,alpha)
 % author: Magnus Aa. Rud
 % last edit: April 2015
 tic
-maxit = 10;
+maxit = 8;
 eVec = zeros(maxit+1,1);
+Convrate = zeros(maxit,1);
 eVec(1)=1;
 h = 1/(N-1);
 dofs = N^2;
@@ -26,7 +27,7 @@ LSdofs = 3*dofs;
 sigma = 0;
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
 w2 = @(x,y) pi*exp(x)*cos(pi*y);
-dB = @(x,y) alpha*[1;0]; %Vector Field, linear part
+dB = @(x,y) alpha*[x^2;1-2*y]; %Vector Field, linear part
 f = @(x,y) exp(x)*(mu*pi^2-mu)*sin(pi*y)...
     +exp(x)*(dB(x,y)*u(x,y))'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
@@ -37,7 +38,7 @@ W = diag(wX);
 dB1 = zeros(dofs);
 dB2 = zeros(dofs);
 U = zeros(dofs,1); %Analytical solution
-U_anal = zeros(LSdofs,1);
+U_anal = zeros(LSdofs,1); % Total analytical solution
 uh = 1*ones(LSdofs,1); % Initial guess
 F  = zeros(dofs,1); % Loading function 
 for I = 1:dofs
@@ -101,20 +102,27 @@ for it = 1:maxit
 	U1 = uh(2*dofs+1:end);
 	W1 = uh(1:dofs);
 	W2 = uh(dofs+1:2*dofs);
+
 	% Updating the vectorfield matrix
 	B1 = diag(dB1*(U1+Rg)); 
 	B2 = diag(dB2*(U1+Rg));
 
+	% Getting the u-dependent matrices
 	%G_Sp = gradient_Spec(LDM,B1,B2,W,dofs);
 	G_LS = gradient_LS(mu,B1,B2,W,LDM,dofs);
-	F_NL = load_LS2(W,LDM,B1,B2,F,mu,sigma);
+	F_NL_2 = load_LS2(W,LDM,B1,B2,F,mu,sigma);
+	F_NL = load_LS(N,x,y,wX,wY,f,LDM,B1,B2,mu,sigma);
+	norm(F_NL-F_NL_2)
+	A_NL = sparse(G_LS); % The non-linear part of A, is already 
 
+	% Getting the components of the jacobi matrices
+	%J_Sp = jacobi_Spec_lin(W,LDM,dB1,dB2,B1,B2,U1,Rg);
 	J_LS = jacobi_LS_lin(W,LDM,dB1,dB2,B1,B2,W1,W2,mu);
 	J_f  = jacobi_LS_load_lin(W,dB1,dB2,F);
-	%J_Sp = jacobi_Spec_lin(W,LDM,dB1,dB2,B1,B2,U1,Rg);
-	A_NL = sparse(G_LS); % The non-linear part of A, is already 
-  	J_LS = sparse(J_LS-J_f);
-	fh = F_L-F_NL+A_NL*[zeros(2*dofs,1);Rg];
+  J_LS = sparse(J_LS-J_f); %% PLUS OR MIUS !??!?! GET BETTER RESULT WITH PLUS .... 
+
+	% Calculating the final u-dependent term corresponding to the loading function.
+	fh = F_L-F_NL;%+A_NL*[zeros(2*dofs,1);Rg];
 
   % Homogenous Boundary conditions
 	% The one non-zero term in each row is taken care of by A_L
@@ -134,8 +142,8 @@ for it = 1:maxit
 	% Step 1
 	r = (A_L+A_NL)*uh+fh;
 	%Step 2
-	B = sparse(A_L+A_NL+J_LS); % The B-matrix used in the newtons iteration
-	e = B\r;
+	J = sparse(A_L+A_NL+J_LS); % The J-matrix used in the newtons iteration
+	e = J\r;
 	%Step 3
 	uh = uh-e;
 	%U1 = uh;
@@ -144,17 +152,17 @@ for it = 1:maxit
   eh = norm((uh_BC-U),'inf')/norm(U,'inf');
   %eh = norm(uh+[zeros(2*dofs,1) ; Rg ] - U_anal,'inf');%/norm(U_anal,'inf');
   eVec(it+1) = eh;
-  eh/((eVec(it)));
+  Convrate(it) = eh/((eVec(it)^1));
   
 end
 uh = uh_BC;
 format long
-eVec
+Convrate
 
 plot(1:maxit,log(eVec(2:end)))
 
 % Plotting
-if(0)
+if(1)
 figure;
 subplot(1,2,1)
 surf(x,y,reshape(uh,N,N)');

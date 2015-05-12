@@ -34,14 +34,16 @@ The total system of equation for all test functions can then be written as a mat
 \end{align}
 Where $A^{LS}_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$, written explicitly it will be a 3-by-3 matrix on the form 
 
-$A^{LS}_{I,J} = \int_{\Omega}
+$
+A^{LS}_{I,J} = \int_{\Omega}
 \begin{bmatrix}
 	N_IN_J + \partial_x N_{I} \partial_xN_{J} & \partial_x N_{I}\partial_y N_{J} & N_IN_{J,x} \\ 	
 	\partial_yN_{I}\partial_xN_{J} &N_IN_J + \partial_yN_{I}\partial_yN_{J} &  N_IN_{J,y} \\ 	
 	N_{I,x}N_J & N_{I,y}N_J & N_{I,x}N_{J,x} + N_{I,y}N_{J,y} \\ 	
 	\label{mat:basicPoisson}
 \end{bmatrix}
-d\Omega$
+d\Omega
+$
 where $\partial_x = \partial / \partial x $ for the poisson problem and $\mu \partial / \partial x - b_1$ for the diffusion transport problem. Similarly $F_I$ will be given as 
 \begin{align}
 	F_I = \int_{\Omega}(\mathcal{L}N_I)^T\vec{f} d\Omega = 
@@ -83,7 +85,7 @@ $
 \end{bmatrix}
 $.
 
-Where each block $A_{i,j}$ corresponds to  calculating element $i,j$ in the matrix ~\ref{mat:basicPoisson} for all the indices $I,J$. In order to implement this matrix it is convenient to write it in a compact form using the kronecker tensor product. The components needed for this formulation is the $n \times n$ diagonal matrix $ W $ with the GLL-weigths along the diagonal and the $n \times n$ matrix $(L)_{i,j}= l_j'(x_i)$ where $l_j$ is the jth lagrange polynomial and $x_i$ is the ith node in either x or y direction. Note that the formulation is based on a grid of GLL-nodes in both x and y direction. 
+Where each block $A_{i,j}$ corresponds to  calculating element $i,j$ in the matrix~\ref{mat:basicPoisson} for all the indices $I,J$. In order to implement this matrix it is convenient to write it in a compact form using the kronecker tensor product. The components needed for this formulation is the $n \times n$ diagonal matrix $ W $ with the GLL-weigths along the diagonal and the $n \times n$ matrix $(L)_{i,j}= l_j'(x_i)$ where $l_j$ is the jth lagrange polynomial and $x_i$ is the ith node in either x or y direction. Note that the formulation is based on a grid of GLL-nodes in both x and y direction. 
 
 $
 A^{LS} = 
@@ -99,7 +101,7 @@ $
 Similarly without the reformulation of the PDE and with regular galerkin formulation the stiffness matrix will simply be 
 $A_{3,3} = W \otimes L^TWL+ L^TWL \otimes W$
 \section{LS spectral method for Diffusion transport}
-The A matrix will be divided into the following matrices;
+The matrix corresponding to the discretized variational formulation can be divided into two parts where one dependends on $\mu$ alone and the other one contains the contributions from the gradient term in the original equation. 
 
 $
 A^{LS} = 
@@ -109,7 +111,8 @@ A^{LS} =
 	W \otimes L^TW		  & L^TW \otimes W       &  L^TWL \otimes W +	W\otimes L^TWL  \\ 	
 \end{bmatrix}
 $
-in addition it will be added some extra terms dependent on $b$ to the upper left 2-by-2 block matrix. 
+
+in addition it will be added some extra terms dependent on $b$ to the upper left $2 \times 2$ block matrix. Let $B_1$ and $B_2$ be diagonal $n^2 \times n^2$ matrices with the values of the first and second component of $b$ evaluated in each spacial node along the diagonal.  
 
 \begin{align}
 	G_{1,1} &= -\mu B_1 (W \otimes WL) -\mu( W \otimes L^TW) B_1 + B_1( W\otimes W) B_1 \\ 	
@@ -134,25 +137,64 @@ G^{LS}=
 \end{bmatrix}.
 $
 %
-\section{GLS method for a non-linear diffusion transport problem}
-The GLS-formulation is created simply by adding the variational formulation from the standard galerkin and LS approach. By dividing the matrix surging from the bilinear functional into a linear and a non-linear part the system of equation can be written as 
+
+Adding the gradient term in our equation also affects the loading function. In a compact notation the discretized loading vector from the variational formulation can be written as
+$
+F^{LS}=
+\begin{bmatrix}
+	\mu(W \otimes L^T W)F - (W \otimes W)B_1F \\
+	\mu(L^TW \otimes W)F - (W \otimes W)B_2F \\
+	0 & 
+	\label{mat:FLS}
+\end{bmatrix},
+$
+where $F$ is the vector with the loading function evaluated in each spacial node.
+%
+\section{non-linear diffusion transport problem}
+The stepwise algorithm to solve the nonlinear equation is descriped in chapter~\ref{chap:newTheory}. However there are several computational steps that needs to be taken care of, both with regular galerking and least squares. In both cases we obtain two matrices which we will name $A$ and $G$ and with superscript LS if they refer to the least squares formulation. In both cases only $G$ will depend on the numerical solution $u_h$. An important difference however is that in the LS setting the $F$ vector will depend on $u_h$ while in the straight forward galerkin setting it will not. For regular galerkin spectral approach we obtain
 %
 \begin{align}
-	(A^{LS}+A)\mathbf{u_h} = -(G^{LS}(\mathbf{u_h})+G(\mathbf{u_h}))\mathbf{u_h} + f_h^{LS}(\mathbf{u_h})+f_h. \\
-	\mathcal{A} \mathbf{u_h} = \mathcal{F} (\mathbf{u_h})
-	\label{eq:nonlinMatrixFormulation}
+	A \tilde{u} + AR_g  + G(\tilde{u}+R_g)(\tilde{u}+R_g) -F = 0
+\end{align}
+Notice that for each iteration the matrix $G(\tilde{u}+R_g)$ needs to be evaluated, the homogenous boundary conitions on $\tilde{u}$ needs to be imposed and the jacobian needs to be calculated. The jacobian $\mathcal{F}$ will for this setting be given as
+%
+\begin{align}
+	\mathcal{J}_{i,j} = A_{i,j} + G(\tilde{u}+R_g)_{i,j} +  (\tilde{u}+R_g)_i \; \frac{\partial}{\partial \tilde{u}_j} (G(\tilde{u}+R_g))_i.
 \end{align}
 %
-In order to solve this nonlinear system of equations I used newton iterations which can be divided into three steps 
-%
-\begin{enumerate}
-	\item $r^k = \mathcal{ F } (\mathbf{u_h}^k) - \mathcal{A}\mathbf{u_h}^k$   , Calculating the residual
-	\item $\hat{e}^k = \mathcal{J}_k^{-1}r^k $  , Calculating the error 
-	\item $\mathbf{u_h}^{k+1}=\mathbf{u_h}^k+\hat{e}^k$    , updating the solution
-\end{enumerate}
-%
-Where $\mathcal{J}_k$ is the jacobian matrix of $\mathcal{F}(\mathbf{u_h}^k)$
+With the LS formulation we obtain
+\begin{align}
+A^{LS}\tilde{u} + A^{LS}R_g  + G^{LS}(\tilde{u}+R_g)(\tilde{u}+R_g) -F^{LS}(\tilde{u}+R_g) = 0\\
+A^{LS}\tilde{u} + A^{LS}R_g  + G^{LS}(\tilde{u}+R_g)\tilde{u} -F^{LS}(\tilde{u}+R_g) = 0
+\end{align}
+It is clear from this equation that the term surging from the loading function also needs to be handled when calculating the jacobian. The lifting function $R_g$ does only have nonzero values in the third "block", hence it belongs to the kernel of the $G$-matrix.
 
-\colorbox{blue}{mention the fact that LS formulation leads to a non-linear loading function}
+\begin{align}
+	\mathcal{J}_{i,j} = A_{i,j} + G(\tilde{u}+R_g)_{i,j} +  \tilde{u}_i \; \frac{\partial}{\partial \tilde{u}_j} (G(\tilde{u}+R_g))_i - \frac{\partial}{\partial \tilde{u}_j}F(\tilde{u}+R_g)_i.
+\end{align}
+%
+Let us first consider the $F$-vector. The terms are given in equation~\ref{mat:FLS} and it is clear that only the last terms in each block depends on $u$, notice that it does not depend on the components of the gradient $[ w_1 \; w_2]$. Hence the contribution to the total Jacobi matrix will only be in block $(1,3)$ and $(2,3)$. Further since $B_1$ and $B_2$ are both diagonal matrices where $B_{i,i}(u) = B_{i,i}(u_i)$ the jacobian can be calculated efficiently by creating the matrices $dB_1$ and $dB_2$ which has the partial derivative of $B_1,B_2$ evaluated in each node.   
 
-\colorbox{red}{How to deal with boundary conditions \ldots }
+
+
+%The GLS-formulation is created simply by adding the variational formulation from the standard galerkin and LS approach. By dividing the matrix surging from the bilinear functional into a linear and a non-linear part the system of equation can be written as 
+%%
+%\begin{align}
+	%(A^{LS}+A)\mathbf{u_h} = -(G^{LS}(\mathbf{u_h})+G(\mathbf{u_h}))\mathbf{u_h} + f_h^{LS}(\mathbf{u_h})+f_h. \\
+	%\mathcal{A} \mathbf{u_h} = \mathcal{F} (\mathbf{u_h})
+	%\label{eq:nonlinMatrixFormulation}
+%\end{align}
+%%
+%In order to solve this nonlinear system of equations I used newton iterations which can be divided into three steps 
+%%
+%\begin{enumerate}
+	%\item $r^k = \mathcal{ F } (\mathbf{u_h}^k) - \mathcal{A}\mathbf{u_h}^k$   , Calculating the residual
+	%\item $\hat{e}^k = \mathcal{J}_k^{-1}r^k $  , Calculating the error 
+	%\item $\mathbf{u_h}^{k+1}=\mathbf{u_h}^k+\hat{e}^k$    , updating the solution
+%\end{enumerate}
+%%
+%Where $\mathcal{J}_k$ is the jacobian matrix of $\mathcal{F}(\mathbf{u_h}^k)$
+
+%\colorbox{blue}{mention the fact that LS formulation leads to a non-linear loading function}
+
+%\colorbox{red}{How to deal with boundary conditions \ldots }

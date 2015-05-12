@@ -17,7 +17,7 @@ function [eh cn] = runMain_Spec(N,mu,alpha,sigma,delta)
 % author: Magnus Aa. Rud
 % last edit: April 2015
 tic
-maxit = 8;
+maxit = 18;
 eVec = zeros(maxit+1,1);
 eVec(1)=1;
 h = 1/(N-1);
@@ -34,7 +34,7 @@ W = diag(wX);
 dB1 = zeros(dofs);
 dB2 = zeros(dofs);
 U = zeros(dofs,1); %Analytical solution
-uh = 10*ones(dofs,1); % Initial guess
+uh = 100*ones(dofs,1); % Initial guess
 F  = zeros(dofs,1); % Loading function 
 for I = 1:dofs
   i = mod(I-1,N)+1;
@@ -109,7 +109,7 @@ for it = 1:maxit
 	G_Sp = gradient_Spec(LDM,B1,B2,W,dofs);
 	J_Sp = jacobi_Spec_lin(W,LDM,dB1,dB2,B1,B2,U1,Rg);
 	A_NL = sparse(G_Sp); % The non-linear part of A, is already 
-  	J_LS = sparse(J_Sp);
+ 	J_LS = sparse(J_Sp);
 	fh 	 = F_L+A_NL*Rg;
 
   % Homogenous Boundary conditions

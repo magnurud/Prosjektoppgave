@@ -25,9 +25,9 @@ function [fh] = load_LS2(W,LDM,B1,B2,F,mu,sigma)
 dofs = length(F);
 fh = zeros(3*dofs,1);
 
-fh(1:dofs) = mu*(kron(W,LDM'*W))*F - (kron(W,W))*B1*F; 
+fh(1:dofs)        = mu*(kron(W,LDM'*W))*F - (kron(W,W))*B1*F; 
 
-fh(dofs+1:2*dofs) = mu*(kron(LDM'*W,W))*F-(kron(W,W))*B2*F; 
+fh(dofs+1:2*dofs) = mu*(kron(LDM'*W,W))*F - (kron(W,W))*B2*F; 
 
 %fh(2*dofs+1:end) =  sigma*kron(W,W)*F;
 

@@ -25,21 +25,11 @@ PSI = kron(W*LDM,W);
 WW = kron(W,W);
 
 
-DG13 =  -mu*(diag(dB1*PHI*W1)) -mu*diag(dB1*PHI'*W1) + 2*diag(dB1*WW*B1*W1); % FROM G11*W1
-DG13 = DG13 -mu*(diag(dB2*PHI*W2)) -mu*diag(dB1*PSI'*W2)+diag(dB1*WW*B2*W2+dB2*WW*B1*W2); % FROM G12*W2
+DG13 =      -mu*(diag(dB1*PHI*W1)) -mu*diag(PHI'*dB1*W1) + diag(2*dB1*WW*B1*W1); % FROM G11*W1
+DG13 = DG13 -mu*(diag(dB2*PHI*W2)) -mu*diag(PSI'*dB1*W2) + diag(dB1*WW*B2*W2+dB2*WW*B1*W2); % FROM G12*W2
 
-DG23 = -mu*(diag(dB1*PSI*W1)) - mu*diag(dB2*PHI'*W1) + diag(dB2*WW*B1*W1+dB1*WW*B2*W1); %FROM G21*W1
-DG23 = DG23 -mu*(diag(dB2*PSI*W2)) -mu*diag(dB2*PSI'*W2)+diag(2*dB2*WW*B2*W2); %FROM G22*W2
-
-
-%DG11 = -mu*(B1*PHI+diag(dB1*PHI*U)) -mu*(PHI'*B1+diag(dB1*PHI'*U))+diag(2*dB1*WW*B2*U)+B1*WW*B1...
-%			 -mu*(diag(dB2*PHI*W1)) -mu*diag(dB1*PSI'*W1)+diag(dB1*WW*B2*W1+dB2*WW*B1*W1);
-
-%DG21 = -mu*(PHI'*B2+diag(dB2*PHI'*U)) -mu*(B1*PSI+diag(dB1*PHI*U))+diag(dB2*WW*B1*U+dB1*WW*B2*U)+B2*WW*B2...
-%			 -mu*(diag(dB2*PSI*W1)) -mu*diag(dB2*PSI'*W1)+diag(2*dB2*WW*B2*W1);
-
-%DG12 = -mu*B2*PHI - mu*PSI'*B1 + B1*WW*B2;
-%DG22 = -mu*B2*PSI - mu*PSI'*B2 + B2*WW*B2;
+DG23 =      -mu*(diag(dB1*PSI*W1)) -mu*diag(PHI'*dB2*W1) + diag(dB2*WW*B1*W1+dB1*WW*B2*W1); %FROM G21*W1
+DG23 = DG23 -mu*(diag(dB2*PSI*W2)) -mu*diag(PSI'*dB2*W2) + diag(2*dB2*WW*B2*W2); %FROM G22*W2
 
 ZEROS = zeros(size(WW));
 
