@@ -33,8 +33,8 @@ for I = 1:dofs
   fh(I) = fh(I)           + mu*wX(gamma)*wY(j)*LDM(gamma,i)*f(x(gamma),y(j));
   fh(I+dofs) = fh(I+dofs) + mu*wX(i)*wY(gamma)*LDM(gamma,j)*f(x(i),y(gamma));
   end
-  fh(I) = fh(I)           - wX(i)*wY(j)*B1(i,j)*f(x(i),y(j));
-  fh(I+dofs) = fh(I+dofs) - wX(i)*wY(j)*B2(i,j)*f(x(i),y(j));
+  fh(I) = fh(I)           - wX(i)*wY(j)*B1(I,I)*f(x(i),y(j));
+  fh(I+dofs) = fh(I+dofs) - wX(i)*wY(j)*B2(I,I)*f(x(i),y(j));
   %fh(I+2*dofs) = fh(I+2*dofs) + sigma*wX(i)*wY(j)*f(x(i),y(j));
 end
 

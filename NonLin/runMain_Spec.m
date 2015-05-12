@@ -1,4 +1,4 @@
-function [eh cn] = runMain_Spec(N,mu,alpha,sigma,delta)
+function [eh cn] = runMain_Spec(N,mu,alpha)
 % runMain.m
 %
 % description:
@@ -17,9 +17,12 @@ function [eh cn] = runMain_Spec(N,mu,alpha,sigma,delta)
 % author: Magnus Aa. Rud
 % last edit: April 2015
 tic
-maxit = 18;
+maxit = 8;
 eVec = zeros(maxit+1,1);
+Convrate = zeros(maxit,1);
 eVec(1)=1;
+sigma = 0;
+delta = 0;
 h = 1/(N-1);
 dofs = N^2;
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
@@ -140,9 +143,10 @@ for it = 1:maxit
   uh_BC = uh+Rg;
   eh = norm((uh_BC-U),'inf')/norm(U,'inf');
   eVec(it+1) = eh;
-  eh/(eVec(it)^2)
+  Convrate(it) = eh/((eVec(it)^1));
 end
-eVec
+%eVec
+Convrate
 uh = uh_BC;
 
 plot(1:maxit,log(eVec(2:end)))

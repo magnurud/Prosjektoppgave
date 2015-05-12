@@ -170,10 +170,10 @@ A^{LS}\tilde{u} + A^{LS}R_g  + G^{LS}(\tilde{u}+R_g)\tilde{u} -F^{LS}(\tilde{u}+
 It is clear from this equation that the term surging from the loading function also needs to be handled when calculating the jacobian. The lifting function $R_g$ does only have nonzero values in the third "block", hence it belongs to the kernel of the $G$-matrix.
 
 \begin{align}
-	\mathcal{J}_{i,j} = A_{i,j} + G(\tilde{u}+R_g)_{i,j} +  \tilde{u}_i \; \frac{\partial}{\partial \tilde{u}_j} (G(\tilde{u}+R_g))_i - \frac{\partial}{\partial \tilde{u}_j}F(\tilde{u}+R_g)_i.
+	\mathcal{J}_{i,j} = A_{i,j} + G(\tilde{u}+R_g)_{i,j} +  [\frac{\partial}{\partial \tilde{u}_j} (G(\tilde{u}+R_g))_{i,:}] \tilde{u} \; - \frac{\partial}{\partial \tilde{u}_j}F(\tilde{u}+R_g)_i.
 \end{align}
 %
-Let us first consider the $F$-vector. The terms are given in equation~\ref{mat:FLS} and it is clear that only the last terms in each block depends on $u$, notice that it does not depend on the components of the gradient $[ w_1 \; w_2]$. Hence the contribution to the total Jacobi matrix will only be in block $(1,3)$ and $(2,3)$. Further since $B_1$ and $B_2$ are both diagonal matrices where $B_{i,i}(u) = B_{i,i}(u_i)$ the jacobian can be calculated efficiently by creating the matrices $dB_1$ and $dB_2$ which has the partial derivative of $B_1,B_2$ evaluated in each node.   
+Let us first consider the $F$-vector. The terms are given in equation~\ref{mat:FLS} and it is clear that only the last terms in each block depends on $u$, notice that it does not depend on the components of the gradient $[ w_1 \; w_2]$. Hence the contribution to the total Jacobi matrix will only be in block $(1,3)$ and $(2,3)$. Further since $B_1$ and $B_2$ are both diagonal matrices where $B_{i,i}(u) = B_{i,i}(u_i)$ the jacobian can be calculated efficiently by creating the matrices $dB_1$ and $dB_2$ which has the partial derivative of $B_1,B_2$ wrt. $u$ evaluated in each node.   
 
 
 
