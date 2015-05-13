@@ -262,7 +262,38 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 \lhead{\emph{Notation}} % Set the left side page header to "Abbreviations"
 \listofsymbols{ll} % Include a list of Abbreviations (a table of two columns)
 {
-\textbf{LAH} & \textbf{L}ist \textbf{A}bbreviations \textbf{H}ere \\
+\textbf{CONVENTION} & we let subscript h denote the discretized variables \\
+$u$ & Solution of the pde \\
+$\vec{w} = [w_1 \; w_2 ] $ & Negative gradient of u \\
+$\mathbf{u} = [ \vec{w} \; u ]^T$ & Solution to the first order transfomation \\ 
+$ R_g $ & Lifting function \\
+$\tilde{\mathbf{u}} = \mathbf{u}-R_g $ & Solution to the first order transfomation minus the lifting function \\ 
+$\vec{b}$ & Two dimensional vector field \\
+$f$ & loading function\\
+$\vec{f} = (0,0,f)$ & loading function for the first order transformation\\
+$\mathcal{L} , \mathcal{B} $ & Linear operators \\
+$(\cdot,\cdot)$ & Inner product \\
+$a(\cdot,\cdot)$ & Bilinear form obtained from standard galerkin approach \\
+$Q(\cdot,\cdot)$ & Bilinear form obtained from the least squares approach \\
+$\mathring{a}(\cdot,\cdot)$ & Bilinear form obtained from the combined GLS-method\\
+$F(\cdot)$ & Linear form obtained from the least squares approach \\
+$\tilde{F}(\cdot)$ & Linear form obtained from the least squares approach including BC's \\
+$\mathring{F}(\cdot)$ & Linear form obtained from the combined GLS-method \\
+$\mathcal{F}(\cdot,\cdot) $ & non-linear functional \\
+$\mathcal{J} $ & Jacobian of $\mathcal{F}$ \\
+\textbf{Linear Algebra} & A good idea to denote matrices with an underscore ?  \\
+$A$ & The stiffness matrix \\
+$G$ & The gradient matrix \\
+$F$ & The vector obtained from the linear functional $F$ \\ 
+$B_1$ & The diagonal matrix with the first component of $b$ evaluated in each node \\
+$B_2$ & The diagonal matrix with the second component of $b$ evaluated in each node \\
+$F$   & The diagonal matrix with the loading function evaluated in each node \\ 
+$W$ 	& The diagonal matrix with the GLL-weights \\ 
+$L$ 	& The matrix with the derivative of the lagrange functions evaluated in each node \\ 
+$\Phi$ & $W\otimes WL$\\ 
+$\Psi$ & $WL\otimes W$\\ 
+
+%\textbf{LAH} & \textbf{L}ist \textbf{A}bbreviations \textbf{H}ere \\
 %\textbf{Acronym} & \textbf{W}hat (it) \textbf{S}tands \textbf{F}or \\
 }
 
