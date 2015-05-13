@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.26)  13 MAY 2015 08:14
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.26)  13 MAY 2015 19:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -773,7 +773,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
  Notation
 ------------------------------------------------------------------------------
 
-Overfull \hbox (27.37175pt too wide) in alignment at lines 298--298
+Overfull \hbox (79.141pt too wide) in alignment at lines 298--298
  [] [] 
  []
 
@@ -781,10 +781,6 @@ Overfull \hbox (27.37175pt too wide) in alignment at lines 298--298
 Overfull \hbox (79.141pt too wide) in alignment at lines 298--298
  [] [] 
  []
-
-
-Package longtable Warning: Column widths have changed
-(longtable)                in table 1 on input line 298.
 
 [2
 
@@ -902,11 +898,8 @@ Appendix A.
  Bibliography
 ------------------------------------------------------------------------------
 (./main.bbl)
-
-Package longtable Warning: Table widths have changed. Rerun LaTeX.
-
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 347.
-[23
+ [23
 
 
 ]
@@ -928,7 +921,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 347.
 Here is how much of TeX's memory you used:
  13197 strings out of 494465
  184479 string characters out of 6166360
- 256087 words of memory out of 5000000
+ 256086 words of memory out of 5000000
  16106 multiletter control sequences out of 15000+600000
  16553 words of font info for 61 fonts, out of 8000000 for 9000
  350 hyphenation exceptions out of 8191
@@ -949,7 +942,7 @@ sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on main.pdf (27 pages, 266410 bytes).
+Output written on main.pdf (27 pages, 266089 bytes).
 PDF statistics:
  649 PDF objects out of 1000 (max. 8388607)
  593 compressed objects within 6 object streams
