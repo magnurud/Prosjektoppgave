@@ -68,6 +68,7 @@ function [eh cn] = runMain(N,mu,alpha,delta)
 	g3 = @(x,y) u(x,y); % West side boundary function
 	%% Neumann boundary conditions %%
 	g4 = @(x,y) -pi*exp(x)*cos(pi*y) ; % North side boundary function
+	g5 = @(x,y) -exp(x)*cos(pi*y) ; % North side boundary function for the x-comp! ONLY FOR TESTING! 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 	%% Vectorized BC's %% 
 	Rg = zeros(LSdofs,1);
@@ -86,6 +87,9 @@ function [eh cn] = runMain(N,mu,alpha,delta)
 		if(j == N) 
 		J = I+dofs;
 		Rg(J) = g4(x(i),y(j)); % North side
+		%%%%%%%%%%%%% 
+		Rg(I) = g5(x(i),y(j)); % North side
+		%%%%%%%%%%%%%
 		end
 	end
 	fh = fh - Ah*Rg;
@@ -107,6 +111,13 @@ function [eh cn] = runMain(N,mu,alpha,delta)
 	Ah(:,J) = 0;
 	Ah(J,J) = 1;
 	fh(J) = 0;
+	%%%%%%%%%% 
+	% Doing this for the x-comp as well 
+	Ah(I,:) = 0;
+	Ah(:,I) = 0;
+	Ah(I,I) = 1;
+	fh(I) = 0;
+	%%%%%%%%%%
 	end
 	end
 

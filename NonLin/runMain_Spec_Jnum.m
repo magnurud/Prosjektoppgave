@@ -1,9 +1,9 @@
-function [eh cn] = runMain_LS(N,mu,alpha)
+function [eh cn] = runMain_Spec(N,mu,alpha)
 % runMain.m
 %
 % description:
-%      Solving the nonlinear diffusion transport problem on the square (0,1)^2
-% 		 using spectral-least squares methods and numerical jacobi;
+%      Solving the Poisson problem on the square (0,1)^2
+% 		 using spectral-least squares methods;
 %
 % arguments:
 %   - N     number of discretization points in each direction
@@ -17,17 +17,16 @@ function [eh cn] = runMain_LS(N,mu,alpha)
 % author: Magnus Aa. Rud
 % last edit: April 2015
 tic
-maxit = 15;
+maxit = 8;
 eVec = zeros(maxit+1,1);
 Convrate = zeros(maxit,1);
 eVec(1)=1;
+sigma = 0;
+delta = 0;
 h = 1/(N-1);
 dofs = N^2;
-LSdofs = 3*dofs;
-sigma = 0;
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
-w2 = @(x,y) pi*exp(x)*cos(pi*y);
-dB = @(x,y) alpha*[x^2;1-2*y]; %Vector Field, linear part
+dB = @(x,y) alpha*[2*x;1-y]; %Vector Field, linear part
 f = @(x,y) exp(x)*(mu*pi^2-mu)*sin(pi*y)...
     +exp(x)*(dB(x,y)*u(x,y))'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
@@ -38,24 +37,22 @@ W = diag(wX);
 dB1 = zeros(dofs);
 dB2 = zeros(dofs);
 U = zeros(dofs,1); %Analytical solution
-U_anal = zeros(LSdofs,1); % Total analytical solution
-uh = 1*ones(LSdofs,1); % Initial guess
+uh = 1*ones(dofs,1); % Initial guess
 F  = zeros(dofs,1); % Loading function 
 for I = 1:dofs
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
- % uh(2*dofs+I) = 0.3*u(x(i),y(j));
+  %uh(I) = -0.7*u(x(i),y(j));
   U(I) = u(x(i),y(j));
- U_anal(I) = -u(x(i),y(j));
- U_anal(dofs+I) = -w2(x(i),y(j));
- U_anal(2*dofs+I) = u(x(i),y(j));
 % The constant dB-matrices
 bloc = dB(x(i),y(j));
 dB1(I,I) = bloc(1);
 dB2(I,I) = bloc(2); 
 F(I) = f(x(i),y(j));
 end
-%uh = 0.5*U_anal;
+%uh = 1.2*U;
+U1 = uh;
+
 %% Dirchlet boundary conditions %%
 g1 = @(x,y) u(x,y); % South side boundary function
 g2 = @(x,y) u(x,y); % East side boundary function
@@ -81,117 +78,99 @@ for I = 1:dofs
 end
 
 % Assembling the linear matrices
-A_LS = stiffness_LS(W,LDM,mu);
-A_L = sparse(A_LS);
-F_L = A_L*[zeros(2*dofs,1);Rg];
+A_Sp = mu*stiffness_Spec(W,LDM);
+A_L = sparse(A_Sp);
+
+%f_Sp = load_Spec(N,x,y,wX,wY,f);
+f_Sp = load_Spec2(W,F);
+% The gradient part due to non-homogenous BC's
+%	B1R = diag(dB1*Rg); 
+%	B2R = diag(dB2*Rg);
+%	G_R = gradient_Spec(LDM,B1R,B2R,W,dofs);
+
+%F_L = A_L*Rg + G_R*Rg -f_Sp;
+F_L = A_L*Rg - f_Sp;
 
 % Homogenous Boundary conditions
 for I = 1:dofs
-	J = 2*dofs+I;
+	J = I;
 	i = mod(I-1,N)+1;
 	j = fix((I-1)/N)+1;
 	if(i==1 || i==N || j==1 || j==N)
 		A_L(J,:) = 0;
 		A_L(:,J) = 0;
 		A_L(J,J) = 1;
+%		F_L(J) = 0;
 	end
 end
 
 % Code to repeat
 for it = 1:maxit
-	U1 = uh(2*dofs+1:end);
-	W1 = uh(1:dofs);
-	W2 = uh(dofs+1:2*dofs);
-
 	% Updating the vectorfield matrix
 	B1 = diag(dB1*(U1+Rg)); 
 	B2 = diag(dB2*(U1+Rg));
-
-	% Getting the u-dependent matrices
-	%G_Sp = gradient_Spec(LDM,B1,B2,W,dofs);
-	%F_NL = load_LS(N,x,y,wX,wY,f,LDM,B1,B2,mu,sigma);
-	G_LS = gradient_LS(mu,B1,B2,W,LDM,dofs);
-	F_NL = load_LS2(W,LDM,B1,B2,F,mu,sigma);
-	A_NL = sparse(G_LS); % The non-linear part of A, is already 
-
-	% Getting the components of the jacobi matrices
+	G_Sp = gradient_Spec(LDM,B1,B2,W,dofs);
 	%J_Sp = jacobi_Spec_lin(W,LDM,dB1,dB2,B1,B2,U1,Rg);
-	%J_LS = jacobi_LS_lin(W,LDM,dB1,dB2,B1,B2,W1,W2,mu);
-	%J_f  = jacobi_LS_load_lin(W,dB1,dB2,F);
-  %J_LS = sparse(J_LS-J_f); 
-
-	% Calculating the final u-dependent term corresponding to the loading function.
-	fh = F_L-F_NL;%+A_NL*[zeros(2*dofs,1);Rg];
+	A_NL = sparse(G_Sp); % The non-linear part of A, is already 
+ 	%J_LS = sparse(J_Sp);
+	fh 	 = F_L+A_NL*Rg;
 
   % Homogenous Boundary conditions
-	% The one non-zero term in each row is taken care of by A_L
+  % The one non-zero term in each row is taken care of by A_L
+
   for I = 1:dofs
-    J = 2*dofs+I;
+    J = I;
     i = mod(I-1,N)+1;
     j = fix((I-1)/N)+1;
     if(i==1 || i==N || j==1 || j==N)
       A_NL(J,:) = 0;
       A_NL(:,J) = 0;
-      %J_LS(J,:) = 0;
-      %J_LS(:,J) = 0;
+   %   J_LS(J,:) = 0;
+   %   J_LS(:,J) = 0;
+      %J_LS(J,J) = 1;
       fh(J) = 0;
     end
   end
 	% Step 1
 	r = (A_L+A_NL)*uh+fh;
-	e = zeros(LSdofs,1);
-	Jac = zeros(LSdofs);
-	d = 0.005;
-	for It = 1:LSdofs
-		ej = e;
+	zerovec = zeros(dofs,1);
+	Jac = zeros(dofs);
+	d = 0.01;
+	for It = 1:dofs
+		ej = zerovec;
 		ej(It) = d;
-		if(It>2*dofs && it<3) % If U1 is affected
-			U1 = uh(2*dofs+1:end) + ej(2*dofs+1:end);
-			B1 = diag(dB1*(U1+Rg)); 
-			B2 = diag(dB2*(U1+Rg));
-
-			% Getting the u-dependent matrices
-			%G_Sp = gradient_Spec(LDM,B1,B2,W,dofs);
-			%F_NL = load_LS(N,x,y,wX,wY,f,LDM,B1,B2,mu,sigma);
-			G_LS = gradient_LS(mu,B1,B2,W,LDM,dofs);
-			F_NL = load_LS2(W,LDM,B1,B2,F,mu,sigma);
-			A_NL = sparse(G_LS); % The non-linear part of A, is already 
-			fh = F_L-F_NL;%+A_NL*[zeros(2*dofs,1);Rg];
-			for I = 1:dofs
-				J = 2*dofs+I;
-				i = mod(I-1,N)+1;
-				j = fix((I-1)/N)+1;
-				if(i==1 || i==N || j==1 || j==N)
-					A_NL(J,:) = 0;
-					A_NL(:,J) = 0;
-					fh(J) = 0;
-				end
+		B1 = diag(dB1*(U1+Rg+ej)); 
+		B2 = diag(dB2*(U1+Rg+ej));
+		G_Sp = gradient_Spec(LDM,B1,B2,W,dofs);
+		A_NL = sparse(G_Sp); % The non-linear part of A, is already 
+		fh 	 = F_L+A_NL*Rg;
+		for I = 1:dofs
+			J = I;
+			i = mod(I-1,N)+1;
+			j = fix((I-1)/N)+1;
+			if(i==1 || i==N || j==1 || j==N)
+				A_NL(J,:) = 0;
+				A_NL(:,J) = 0;
+				fh(J) = 0;
 			end
 		end
 		rh = (A_L+A_NL)*(uh+ej) + fh; 
 		Jac(:,It) = (rh-r)/d;
 	end
-	currentstep = it
-
 	%Step 2
-	%J = sparse(A_L+A_NL+J_LS); % The J-matrix used in the newtons iteration
 	e = Jac\r;
 	%Step 3
 	uh = uh-e;
-	%U1 = uh;
+	U1 = uh;
 	% Boundary adjustment
-  uh_BC = uh(2*dofs+1:end)+Rg;
+  uh_BC = uh+Rg;
   eh = norm((uh_BC-U),'inf')/norm(U,'inf');
-  %eh = norm(uh+[zeros(2*dofs,1) ; Rg ] - U_anal,'inf');%/norm(U_anal,'inf');
   eVec(it+1) = eh;
   Convrate(it) = eh/((eVec(it)^2));
-	if(eh < 1E-7)
-		break	
-	end
 end
-uh = uh_BC;
-format long
+%eVec
 Convrate
+uh = uh_BC;
 
 plot(1:maxit,log(eVec(2:end)))
 
@@ -215,12 +194,12 @@ xlabel('x')
 ylabel('y')
 zlabel('z')
 end
+
 eh = norm((uh-U),'inf')/norm(U,'inf');
 cn = condest(A_L+A_NL);
 
 %Peclet number
 %Peclet = max(max(sqrt(B1.^2+B2.^2)))*h/(2*mu)
 toc
-
 
 
