@@ -8,8 +8,8 @@
 
 %----------------------------------------------------------------------------------------
 
-\section{Informal introduction to LSFEM}
-The Least Squares Finite Element Method is a numerical method similar to mixed galerkin. But with a different approach regarding defining the bilinear functional. Let us look at a system of first order differential equations on the form 
+\section{Informal introduction to least-squares}
+The least-squares finite element method is a numerical method with similarities to mixed Galerkin. However it has a fundamentally different approach regarding the definition of the bilinear functional. Let us look at a system of first order differential equations on the form 
 \begin{align}
 	Au &= f \text{ in } \Omega \\
 	u &= g \text{ on } \partial \Omega.
@@ -20,7 +20,7 @@ Where $A$ is a partial differential operator defined as
 	A = \sum_{i = 1}^{n} A_i\frac{\partial}{\partial x_i} + A_0.
 	\label{def:operatorA}
 \end{align}
-	$n$ beeing the number of dimensions of the domain $\Omega$. If $u$ happens to be a vector function of say $k$ dimensions then $A_i$ will be a matrix with $k$ columns and $k$ or more rows. Let us initially assume without loss of generality that $g=0$ . Further we require $f \in L_2(\Omega)$ and choose $V = \left\{ v\in L_2(\Omega) | v = 0 \text{ on } \partial \Omega \right\}$. A residual is defined
+	$n$ being the number of dimensions of the domain $\Omega$. If $u$ happens to be a vector function of say $k$ dimensions then $A_i$ will be a matrix with $k$ columns and $k$ or more rows. Let us initially assume without loss of generality that $g=0$ . Further we require $f \in L_2(\Omega)$ and choose $V = \left\{ v\in L_2(\Omega) | v = 0 \text{ on } \partial \Omega \right\}$. A residual is defined
 \begin{align}
 	R(v) = Av-f,
 	\label{eq:Residual}
@@ -30,7 +30,7 @@ and a functional
 	 J(v) = \frac{1}{2}||R(v)||^2_0.
 	\label{eq:Functional}
 \end{align} 
-The solution $u$ and it's gradient needs to be in $L^2$ for the functional to make sence, hence $u$ is restricted to the space $H^1_0(\Omega)$. The homogenous boundary condition is now baked into the definition of the search space. By minimizing $J$ we obtain 
+The solution $u$ and it's gradient needs to be in $L^2$ for the functional to make sense, hence $u$ is restricted to the space $H^1_0(\Omega)$. The homogeneous boundary condition is now baked into the definition of the search space. By minimizing $J$ we obtain 
 \begin{align}
 	\lim_{t\rightarrow 0} \frac{d}{dt}J(u+tv) = \int_{\Omega}(Av)^T(Au-f)d\Omega = 0 \text{    ,   } \forall v \in V.
 	\label{eq:minProb}
@@ -46,18 +46,15 @@ where
 	F(v) = (f,Av).
 	\label{def:bilin}
 \end{align}
-~\cite{Jiang}
-Notice that the bilinear form $Q$ is symmetric, this is an important advantage LSFEM has over regular galerkin methods. The bilinear form that surged from a first-order problem by the LSFEM leads us to a variational formulation similar to the one obtained from a second order problem by regular FEM. Generally the bilinear form from LSFEM will correspond to a bilinear form of a problem of twice the order obtained using FEM. In order to avoid problems of large complexity a higher order PDE should therefore be transformed to a system of first order PDE's (similar to a mixed galerkin approach) before defining the least squares functional.
-
+Notice that the bilinear form $Q$ is symmetric, this is an important advantage least-squares has over regular Galerkin methods. The bilinear form that surged from a first-order problem by the least-squares leads us to a variational formulation similar to the one obtained from a second order problem by regular FEM. Generally the bilinear form from least-squares will correspond to a bilinear form of a problem of twice the order obtained using FEM. \colorbox{yellow}{Bold statement?} In order to avoid problems of large complexity a higher order PDE should therefore be transformed to a system of first order PDE's (similar to a mixed Galerkin approach) before defining the least squares functional.
+\cite{Jiang}
 %In order to apply a numerical algorithm the domain $\Omega$ needs to be discretized, we name this discretization $\Omega_h$. A set of basis functions $ \left\{ N \right\}_i $ is defined for $V_h = H^1_0(\Omega_h)$ such that the discrete variational formulation can be stated. Find $u_h \in V_h$ such that 
 %\begin{align}
 	%Q(u_h,v_h) = F(v_h) \; \; \; , \; \; \; \forall v_h \in V_h,
 	%\label{def:varForm}
 %\end{align}
 
-\cite{Jiang}
-
-\section{ Formal formulation of LSFEM}
+\section{ Formal formulation of least-squares}
 Let us look at a general boundary value problem where $f \in Y(\Omega)$, $g \in B(\partial \Omega)$, $\mathcal{B}\colon X(\partial \Omega) \to B(\partial\Omega) $ and $\mathcal{L}\colon X(\Omega)\to Y(\Omega)$. Find $u \in X(\Omega) $ such that 
 \begin{align}
 	\mathcal{L} u &= f \; \; \; \text{ in } \Omega \\
@@ -79,8 +76,8 @@ For any well-posed problem $\exists \alpha,\beta > 0$ such that
 	\alpha||u||_X^2 \leq J(u;0,0) = (\mathcal{L}u,\mathcal{L}u)_Y+(\mathcal{B}u,\mathcal{B}u)_B \leq \beta||u||_X^2.
 	\label{eq:normEq}
 \end{align}
-The fact that our functional is norm-equivalent is of crucial importance to a successfull LS-method. It is therefore important that the spaces $X,Y \text{ and } B$ is chosen such that the LS-functional defines a norm is equivalent to $|| \cdot ||_X$.\colorbox{yellow}{Need to show this ? }
-Minimizing this functional is equivalent to solving the Euler-lagrange equations formulated as 
+The fact that our functional is norm-equivalent is of crucial importance to a successful LS-method. It is therefore important that the spaces $X,Y \text{ and } B$ is chosen such that the LS-functional defines a norm is equivalent to $|| \cdot ||_X$.\colorbox{yellow}{Need to show this ? }
+Minimizing this functional is equivalent to solving the Euler-Lagrange equations formulated as 
 \begin{align}
 	\text{find } u \in X \text{  such that  } Q(u,v) = F(v) \; \; \forall v\in X
 	\label{eq:varFormGen}
@@ -102,14 +99,14 @@ In order to solve this numerically we define the function spaces $X^h, Y^h \text
 ~\cite{Bochev}
 %
 \subsection{Error analysis}
-Let $u$ be the analytical solution of a problem of the type ~\ref{eq:BVP}, $u^h$ is our numerical solution to ~\ref{eq:varFormGenDisc} and $u^h_{\perp} $ is the orthogonal projection of $u$ in $X_h$. 
+Let $u$ be the analytical solution of a problem of the type ~\eref{eq:BVP}, $u^h$ is our numerical solution to ~\eref{eq:varFormGenDisc} and $u^h_{\perp} $ is the orthogonal projection of $u$ in $X_h$. 
 \begin{align}
 	Q(u-u^h,u-u^h) &= Q(u-u^h,u-u^h_{\perp}) + Q(u-u^h,u^h_{\perp}-u^h) \\
 							   &= Q(u-u^h,u-u^h_{\perp}) \\
 							 	 &\leq \beta ||u-u^h||_{X_h} \; ||u-u^h_{\perp}||_{X_h}.
 	\label{eq:error1}
 \end{align}
-The first equality is due to adding and subtracting $u^h_{\perp}$, because both $u^h$ and $u^h_{\perp}$ solves the variatonal formulation we can cancel the last term, and by using the norm-equivalency from ~\ref{eq:normEq} and schwartz inequality we get the last  expression. Now by applying the first inequality of ~\ref{eq:normEq} we end up with 
+The first equality is due to adding and subtracting $u^h_{\perp}$, because both $u^h$ and $u^h_{\perp}$ solves the variational formulation we can cancel the last term, and by using the norm-equivalency from ~\eref{eq:normEq} and Schwartz inequality we get the last  expression. Now by applying the first inequality of ~\eref{eq:normEq} we end up with 
 \begin{align}
 	||u-u^h||_{X_h}\leq \frac{\beta}{\alpha}||u-u^h_{\perp}||_{X_h} = \min_{w^h \in X_h}\frac{\beta}{\alpha}||u-w^h||_{X_h}.
 	\label{error_final}
@@ -120,65 +117,65 @@ Hence we can show that the Least squares method provides a convergence result of
 
 \section{Example - Poisson problem}
 
-The poisson problem is defined as 
+The Poisson problem is defined as 
 \begin{align}
 	-\Delta u = f \text{ in } \Omega \\
 	u = g \text{ on } \partial \Omega
 	\label{eq:Poisson}
 \end{align}
-Let us first consider the homogenous case. The straight forward LSFEM approach is to define $\vec{w} = -\nabla u$ and solve the system of equations 
+Let us first consider the homogeneous case. The straight forward least-squares approach is to define $\mathbf{w} = -\nabla u$ and solve the system of equations 
 \begin{align}
-	\vec{w} + \nabla u = 0 \text{ in } \Omega \\
-	\nabla \cdot \vec{w} = f \text{ in } \Omega \\
+	\mathbf{w} + \nabla u = 0 \text{ in } \Omega \\
+	\nabla \cdot \mathbf{w} = f \text{ in } \Omega \\
 	u = 0 \text{ on } \partial \Omega.
 	\label{eq:PoissonSystem}
 \end{align}
-which can be written in the same form as ~\ref{eq:BVP} with $ \mathbf{u} = \vec{w} \oplus u $, $\vec{f} = (0,0,f)$, $g=0$, $\mathcal{B} = (0,0,1)^T $ and $\mathcal{L}$ given as 
+which can be written in the same form as ~\eref{eq:BVP} with $ \mathbf{u} = \mathbf{w} \oplus u $, $\mathbf{f} = (0,0,f)$, $g=0$, $\mathcal{B} = (0,0,1)^T $ and $\mathcal{L}$ given as 
 \begin{align}
 	\mathcal{L} =
 	\begin{bmatrix}
-		1 & 0 & \partial / \partial x  \\
-		0 & 1 & \partial / \partial y  \\
-		\partial / \partial x & \partial/ \partial y  & 0
+		1 & 0 & \frac{\partial} {\partial x}  \\
+		0 & 1 & \frac{\partial} {\partial y}  \\
+    \frac{\partial} {\partial x} & \frac{\partial} {\partial y} & 0 
 	\end{bmatrix}
 	\label{eq:Amatrix}
 \end{align}
-We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\ref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ \mathbf{u} \in X $ s.t.
+We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\eref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ \mathbf{u} \in X $ such that
 \begin{align}
 	Q(\mathbf{u},\phi) = F(\phi) \;\; \forall \;\; \phi \in X.
 	\label{eq:VariationalFormulationPoisson}
 \end{align}
-We require that $\vec{f} \in Y$.
+We require that $\mathbf{f} \in Y$.
 \colorbox{yellow}{Should I state the numerical variational formulation instead??}
-Notice that the spaces $X$ and $Y$ chosen as described above fullfill the condition ~\ref{eq:normEq}. 
+Notice that the spaces $X$ and $Y$ chosen as described above fulfill the condition ~\eref{eq:normEq}. 
 %
 \section{Example - Diffusion convection reaction problem}
 %
 The diffusion convection problem to be analyzed is given as 
 \begin{align}
-	-\Delta u + \vec{b} \cdot \nabla u +\sigma u = f \text{ in } \Omega \\
+	-\mu \Delta u + \mathbf{b} \cdot \nabla u +\sigma u = f \text{ in } \Omega \\
 	u = g \text{ on } \partial \Omega
 	\label{eq:DiffTrans}
 \end{align}
-where $\vec{b} = [b_1 , b_2]$ is a vector field, and $\sigma$ is some reaction constant. By following the same approach as for the poisson problem we end up with $\mathcal{L}$ on the form
+where $\mathbf{b} = [b_1 , b_2]$ is a vector field, and $\sigma$ is some reaction constant. By following the same approach as for the Poisson problem we end up with $\mathcal{L}$ on the form
 \begin{align}
 	\mathcal{L} =
 	\begin{bmatrix}
-		1 & 0 & \partial / \partial x  \\
-		0 & 1 & \partial / \partial y  \\
-		\partial / \partial x - b_1 & \partial/ \partial y -b_2 & \sigma
+		1 & 0 & \frac{\partial} {\partial x}  \\
+		0 & 1 & \frac{\partial} {\partial y}  \\
+		\mu \frac{\partial} {\partial x} - b_1 & \mu \frac{\partial} {\partial y} -b_2 & \sigma
 	\end{bmatrix}
 	\label{eq:AmatrixDiff}
 \end{align}
-which leads to a similar but slightly different linear system than the one created by the poisson problem.
+which leads to a similar but slightly different linear system than the one created by the Poisson problem.
 
-%The straight forward LSFEM approach is to define $\vec{w} = -\nabla u$ and solve the system of equations \begin{align}
-	%\vec{w} + \nabla u = 0 \text{ in } \Omega \\
-	%\nabla \cdot \vec{w} - b \cdot \vec{w} = f \text{ in } \Omega \\
+%The straight forward least-squares approach is to define $\mathbf{w} = -\nabla u$ and solve the system of equations \begin{align}
+	%\mathbf{w} + \nabla u = 0 \text{ in } \Omega \\
+	%\nabla \cdot \mathbf{w} - b \cdot \mathbf{w} = f \text{ in } \Omega \\
 	%u = 0 \text{ on } \partial \Omega.
 	%\label{eq:DiffTransSystem}
 %\end{align}
-%which can be written in the same form as ~\ref{eq:BVP} with $ \mathbf{u} = \vec{w} \oplus u $, $\vec{f} = (0,0,f)$, g = 0, $\mathcal{B} = (0,0,1)^T $ and L given as 
+%which can be written in the same form as ~\eref{eq:BVP} with $ \mathbf{u} = \mathbf{w} \oplus u $, $\mathbf{f} = (0,0,f)$, g = 0, $\mathcal{B} = (0,0,1)^T $ and L given as 
 %\begin{align}
 	%\mathcal{L} =
 	%\begin{bmatrix}
@@ -188,16 +185,16 @@ which leads to a similar but slightly different linear system than the one creat
 	%\end{bmatrix}
 	%\label{eq:AmatrixDiff}
 %\end{align}
-%We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\ref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ \mathbf{u} \in X $ s.t.
+%We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\eref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ \mathbf{u} \in X $ s.t.
 %\begin{align}
 	%Q(\mathbf{u},\phi) = F(\phi) \;\; \forall \;\; \phi \in X.
 	%\label{eq:VariationalFormulationPoisson}
 %\end{align}
-%We require that $\vec{f} \in Y$.
-%Notice that the spaces $X$ and $Y$ chosen as described above fullfill the condition ~\ref{eq:normEq}. 
+%We require that $\mathbf{f} \in Y$.
+%Notice that the spaces $X$ and $Y$ chosen as described above fullfill the condition ~\eref{eq:normEq}. 
 
 \section{Boundary conditions}
-\subsection{non-homogenous Dirichlet boundary conditions}
+\subsection{non-homogeneous Dirichlet boundary conditions}
 If $g \neq 0$ then we simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{\mathbf{u}}=\mathbf{u}-R_g$ we can replace $\mathbf{u}$ in the variation formulation and get 
 \begin{align}
 	Q(\tilde{\mathbf{u}}+R_g,\phi) &= F(\phi) \\
@@ -207,15 +204,15 @@ If $g \neq 0$ then we simply define a lifting function $R_g \in X$ such that $R_
 	\label{eq:liftingFunc}
 \end{align}
 %
-\subsection{non-homogenous Neumann boundary conditions}
-Because of the geometry of our problem and the fact that we define the flux as an extra variable we can trasform the neumann conditions to a dirichlet condition on the flux. 
+\subsection{non-homogeneous Neumann boundary conditions}
+Because of the geometry of our problem and the fact that we define the flux as an extra variable we can transform the Neumann conditions to a Dirichlet condition on the flux. 
 \begin{align}
-	\frac{\partial u}{\partial \vec{n}} &= h \text{  on   } \partial \Omega \\
-	\nabla u \cdot \vec{n} &= h \\
-	 \vec{w} \cdot \vec{n} &= -h. 
+	\frac{\partial u}{\partial \mathbf{n}} &= h \text{  on   } \partial \Omega \\
+	\nabla u \cdot \mathbf{n} &= h \\
+	 \mathbf{w} \cdot \mathbf{n} &= -h. 
 	\label{eq:neumann}
 \end{align}
-Let us define $\hat{x}$ and $\hat{y}$ as the unit vectors in each direction. Notice that for the west ($x=0$) and east ($x=1$) edges the normal vector $\vec{n}= \pm\hat{x}$, and at the north ($y=1$) and south($y=0$) edges $\vec{n}=\pm \hat{y}$. This way we can write the Neumann conditions as a dirichlet condition on the first and second component of $\vec{w}= [ w_1 \:\: w_2]$. 
+Let us define $\hat{x}$ and $\hat{y}$ as the unit vectors in each direction. Notice that for the west ($x=0$) and east ($x=1$) edges the normal vector $\mathbf{n}= \pm\hat{x}$, and at the north ($y=1$) and south($y=0$) edges $\mathbf{n}=\pm \hat{y}$. This way we can write the Neumann conditions as a Dirichlet condition on the first and second component of $\mathbf{w}= [ w_1 \:\: w_2]$. 
 \begin{align}
 	w_1 = \pm h \text{    for $y = 0$ and $y=1$ }\\
 	w_2 = \pm h \text{    for $x = 0$ and $x=1$ }

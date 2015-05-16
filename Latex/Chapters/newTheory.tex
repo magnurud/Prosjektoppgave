@@ -7,45 +7,48 @@
 \lhead{Chapter 2. \emph{New theory}} % This is for the header on each page - perhaps a shortened title
 
 %----------------------------------------------------------------------------------------
-\section{Using the Least squares method to gain stability}
+\section{Using least-squares method to gain stability}
 
-In regular galerkin FEM for the Diffusion-Transport equation you end up with the variational formulation 
+With regular Galerkin approach for the diffusion-transport equation you end up with the variational formulation 
 \begin{align}
-	a(u,v) = (f,v)_0 \; \; \; \forall v \in V
+	a(u,v) = (f,v) \; \; \; \forall v \in V.
 	\label{eq:varFormDiffFEM}
 \end{align}
-where the bilinear functional is given as 
+where $V$ is some closed subspace of $H^1$, and the bilinear functional is given as 
 \begin{align}
-	a(u,v) &= \mu\int_{\Omega}\nabla u \cdot \nabla v d\Omega 
+	a(u,v) &= \mu\int_{\Omega}\nabla u \cdot \nabla v \: d\Omega 
 	+ \int_{\Omega} v (b \cdot \nabla u) d \Omega
 	\label{eq:bilinearFunctional}
 \end{align}
 We can define a new norm from this functional in the following manner
 \begin{align}
-	a(u,u) &= \mu\int_{\Omega}\nabla u \cdot \nabla u d\Omega 
-	+ \int_{\Omega} u (b \cdot \nabla u) d \Omega\\
+	a(u,u) &= \mu\int_{\Omega}\nabla u \cdot \nabla u \: d\Omega 
+	+ \int_{\Omega}  b \cdot (u\nabla u) d \Omega\\
 	       &= \mu||\nabla u||^2_0 
 	+ \frac{1}{2}\int_{\Omega} b \cdot \nabla u^2 d \Omega \\
 	       &= \mu||\nabla u||^2_0 
 	- \frac{1}{2}\int_{\Omega} u^2  (\nabla \cdot b)  d \Omega \\
 	\label{eq:bilinearFunctional}
 \end{align}
-Let $\gamma_0 \leq - \frac{1}{2}\nabla \cdot b \leq \gamma_1 $, we can now make a lower and upper bound for the bilinear form 
+Where we have used Greens theorem and the assumption that $u=0$ on the boundary in the last equality. Let us assume that the divergence of our vector field can be bounded within some interval, say  $\gamma_0 \leq \frac{1}{2}\nabla \cdot b \leq \gamma_1 $, we can now make a lower and upper bound for the bilinear form 
 \begin{align}
-	\mu||\nabla u||^2_0 + \gamma_0||u||^2_0 \leq a(u,u) \leq \mu||\nabla u||^2_0 + \gamma_1||u||^2_0
+	\mu||\nabla u||^2_0 - \gamma_1||u||^2_0 \leq a(u,u) \leq \mu||\nabla u||^2_0 - \gamma_0||u||^2_0
 	\label{eq:bilinearOperatorBounds}
 \end{align}
 
 \colorbox{yellow}{should I change signs in the equation?? } 
 
-It is clear that for small $\mu$ and large $\gamma_1$ the bilinear form is no longer coercive and thus our convergence requirements are no longer valid.Remember that the functional in the LSFEM-formulation is chosen such that it is norm-equivalent with $|| \cdot ||_1 $, hence we can find $\alpha,\beta$ such that $\alpha||u||_1^2 \leq Q(u,u) \leq \beta||u||_1^2 $.
-Now, let us explore what happens if we add the variational formulation obtained from the LSFEM to the standard FEM formulation
+
+It is clear that for small $\mu$ and large positive $\gamma_1$ the bilinear form is no longer coercive and thus our convergence requirements are no longer valid. Standard Galerkin method is therefore not a suited way to solve this type of problem. 
+
+Now remember from equation \eref{eq:normEq} that the least squares formulation guarantees us a coercive bilinear form, given that the BVP has a solution and that the search- and solution space are chosen correctly. For this particular problem we can find $\alpha,\beta$ such that $\alpha||u||_1^2 \leq Q(\mathbf{u},\mathbf{u}) \leq \beta||u||_1^2 $.
+Now, let us define $\mathring{a}(\cdot,\cdot)$ and $\mathring{f}(\cdot)$ as the as the linear combinations of the linear and bilinear form surging from standard Galerkin and least-squares method. 
 \begin{align}
-	a(u,v) + \delta Q(u,v) &= (f,v) + \delta F(v) \\
-	\mathring{a}(u,v) &= \mathring{f}(v)
+	\mathring{a}(u,v) &= a(u,v) + \delta Q(\mathbf{u},\mathbf{\phi}) \\
+	 \mathring{f}(v) &= (f,v) + \delta F(\mathbf{\phi}) 
 	\label{eq:GLS}
 \end{align}
-Let us study the coerciveness of this functional,
+Let us study the coerciveness of the bilinear form $\mathring{a}(\cdot,\cdot)$
 \begin{align}
 	\mathring{a}(u,u) &\geq \mu ||\nabla u||_0^2+\gamma_0||u||_0^2+\delta \alpha ||u||^2_1 \\
 	&\geq \mu ||\nabla u||_0^2+\gamma_0||u||_0^2+\delta \alpha ||u||^2_0 \\
@@ -53,8 +56,9 @@ Let us study the coerciveness of this functional,
 	&= \mu ||u||^2_1
 	\label{eq:coercivity}
 \end{align}
+\colorbox{yellow}{Don't like the way Q has to be defined with $\mathbf{u}$}
 In the third inequality we make the assumption that $\gamma_0+\delta \alpha \geq \mu $ in other words $\delta$, (the amount of smoothing from LS) has to be chosen such that $\delta \geq (\mu-\gamma_0)/\alpha$.
-We can also prove stability for a discrete solution of the variatonal formulation, 
+This leads to stability for our discrete solution of the variational formulation, 
 \begin{align}
 	\mathring{a}(u_h,u_h)_h \leq C ||f||_0
 	\label{eq:stabilityResult}
@@ -73,7 +77,7 @@ The proof for a similar method can be found in~\cite{Quarteroni} Ch.12.
 
 \subsection{estimation of the constant $\alpha$}
 
-By performing the proof of the poincar\'e inequality from~\cite{Quarteroni} for our domain $\Omega$ we end up with showing that $|v|_1\leq \sqrt{2/3}||v||_1 \;\; \forall v \in H^1_0$. By using this inequality twice we end up showing for the poisson problem that
+By performing the proof of the Poincar\'e inequality from~\cite{Quarteroni} for our domain $\Omega=(0,1)^2$ we end up with showing that $|v|_1\leq \sqrt{2/3}||v||_1 \;\; \forall v \in H^1_0$. By using this inequality twice we end up showing for the Poisson problem that
 \begin{align}
 	|||v||| \geq \frac{2}{3}||v||_1,
 	\label{eq:resultAlpha}
@@ -81,26 +85,33 @@ By performing the proof of the poincar\'e inequality from~\cite{Quarteroni} for 
 Hence $\alpha=\frac{2}{3}$. \colorbox{yellow}{should find this constant for the difftrans problem}
 %
 \section{Nonlinear diffusion transport problem}
-Now let the vector field $b$ be a function of $u$. This gives us a nonlinear variational formulation that does not allow us to solve our system of equations directly. In order to find a solution Newtons method was used. For a regular galerkin approach the jacobian of the vector generated by $Q$ needs to be calculated or at least approximated. For the least squares setting one needs to add the jacobian of $F$ as well since this depends on $b$ and thus also $u$. 
-%
-Let us consider the diffusion-transport equation with non-homogenous boundary conditions and a non-linear gradient term with a LS-approach. This corresponds to solving the equation 
+Now let the vector field $\mathbf{b}$ from the diffusion transport problem be a function of $u$. 
 \begin{align}
-	Q(\tilde{\mathbf{u}},\phi;b) &= \tilde{F}(\phi;b) \\
-	Q(\tilde{\mathbf{u}},\phi;b) - \tilde{F}(\phi;b) &= 0\\
-	\mathcal{F}(\tilde{\mathbf{u}},\phi;b) &= 0
-	\label{eq:varFormNonLin}
+	-\mu \Delta u + \mathbf{b}(u) \cdot \nabla u = f \text{ in } \Omega \\
+	u = g \text{ on } \partial \Omega
+	\label{eq:DiffTransNonLin}
 \end{align}
-%
-Where the dirichlet homogenous boundary conditions on $\tilde{\mathbf{u}}$ are required by the search space.
+This gives us a nonlinear variational formulation that does not allow us to solve our system of equations directly. In order to find a solution Newtons method was used. An important difference between standard Galerkin and least-squares, is that the linear functional $F(\cdot)$ will also be non-linear in the LS case. 
+%Needs to add the Jacobian of $F$ as well since this depends on $b$ and thus also $u$. 
+%%
+%Let us consider the diffusion-transport equation with non-homogeneous boundary conditions and a non-linear gradient term with a LS-approach. This corresponds to solving the equation 
+%\begin{align}
+	%Q(\tilde{\mathbf{u}},\phi;b) &= \tilde{F}(\phi;b) \\
+	%Q(\tilde{\mathbf{u}},\phi;b) - \tilde{F}(\phi;b) &= 0\\
+	%\mathcal{F}(\tilde{\mathbf{u}},\phi;b) &= 0
+	%\label{eq:varFormNonLin}
+%\end{align}
+%%
+%Where the Dirichlet homogeneous boundary conditions on $\tilde{\mathbf{u}}$ are required by the search space.
 
-Newtons method is then applied, you start by guessing an initial $\tilde{\mathbf{u}}_h^0$ and then repeating
-%
-\begin{enumerate}
-	\item $r^k = \mathcal{ F } (\tilde{\mathbf{u}}_h^k)$  , Calculating the residual
-	\item $\hat{e}^k = \mathcal{J}_k^{-1}r^k $  , Calculating the error 
-	\item $\tilde{\mathbf{u}}_h^{k+1}=\tilde{\mathbf{u}}_h^k-\hat{e}^k$    , updating the solution
-\end{enumerate}
-%
-until you reach your solution. $\mathcal{J}_k$ is the jacobian matrix of $\mathcal{F}(\mathbf{u_h}^k)$.
+%Newtons method is then applied, you start by guessing an initial $\tilde{\mathbf{u}}_h^0$ and then repeating
+%%
+%\begin{enumerate}
+	%\item $r^k = \mathcal{ F } (\tilde{\mathbf{u}}_h^k)$  , Calculating the residual
+	%\item $\hat{e}^k = \mathcal{J}_k^{-1}r^k $  , Calculating the error 
+	%\item $\tilde{\mathbf{u}}_h^{k+1}=\tilde{\mathbf{u}}_h^k-\hat{e}^k$    , updating the solution
+%\end{enumerate}
+%%
+%until you reach your solution. $\mathcal{J}_k$ is the Jacobian matrix of $\mathcal{F}(\mathbf{u_h}^k)$.
 
 
