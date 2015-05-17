@@ -8,7 +8,7 @@
 
 %----------------------------------------------------------------------------------------
 
-All implementation have been done in two dimensions on the unit square $(0,1)^2$. The goal of the implementation has been to show the strengths of the least-squares method. It is implemented with finite element and spectral basis functions and is compared to the results from standard Galerkin formulation. Finally the combined GLS-method described in chapter \ref{chap:newTheory} is also tested against the separate methods. The problems solved are simply expansions of the Poisson problem (All problems have belonging Dirichlet boundary contitions). 
+All the implementation has been done in two dimensions on the unit square $(0,1)^2$. The goal of the implementation has been to show the strengths of the least-squares method. It is implemented with finite element and spectral basis functions and is compared to the results from standard Galerkin formulation. Finally the combined GLS-method described in chapter \ref{chap:newTheory} is also tested against the separate methods. The problems solved are simply expansions of the Poisson problem (All problems have been implemented with non-homogeneous Dirichlet boundary conditions). 
 \begin{align}
 	-\Delta u = f \text{  in  } \Omega
 	\label{eq:PossionImplementation}
@@ -28,6 +28,15 @@ And as a final complication the vector field $\mathbf{b}$ can be made dependent 
 	-\mu \Delta u + \mathbf{b}(u) \cdot \nabla u +\sigma u = f \text{ in } \Omega
 	\label{eq:ReactionImplementation}
 \end{align}
+%
+All the equations listed above are transformed into a first order system of PDE's 
+\begin{align}
+	\mathcal{L}\mathbf{u} = \mathbf{f}.
+	\label{eq:genFirstOrderFormulation}
+\end{align}
+The partial differential operator $\mathcal{L}$ is the one stated in chapter
+\ref{chap:theory}.
+
 
 \section{The bilinear form obtained from least-squares}
  For the general problem\eref{eq:BVP} the functional $Q$ will take the form 
@@ -51,10 +60,12 @@ Where $K$ denotes the number of discretization points, which is the same as the 
 \end{align}
 The total system of equation for all test functions can then be written as a matrix equation 
 \begin{align}
-	Au = F.
+	A^{LS}\mathbf{u} = F^{LS}.
 	\label{eq:matrixEq}
 \end{align}
-Where $A^{LS}_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$. Written explicitly for the Poisson and diffusion transport equations it will be a 3-by-3 matrix on the form 
+Where $A^{LS}_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$. \colorbox{yellow}{Should somehow show the importance of this formula}
+
+Written explicitly for the \textbf{Poisson and diffusion transport equation} it will be a 3-by-3 matrix on the form 
 
 $
 A^{LS}_{I,J} = \int_{\Omega}
@@ -81,12 +92,11 @@ where $\partial_x = \partial / \partial x $ for the Poisson problem and $\mu \pa
 
 Notice that by doing the splitting of variables we obtain a system of equations three times as big as if we were to solve the equation directly. 
 
-\section{LSFEM for Poisson}
+\section{Least squares with finite element basis functions}
 \colorbox{yellow}{finite element space $X_h^1$ ? quadrature\ldots  }
-\section{LS spectral method for Poisson}
+\section{Least squares with spectral basis functions}
 
-The spectral implementation is done using Gauss Lobatto nodes and quadrature and the lagrange functions based on the GL nodes as basis functions. 
-Notice that the discrete solution $u_h$ consist of the discretization of both $u \text{ and } w = - \nabla u$. $u_h$ can be structured block wise or node wise. By choosing a block wise representation the final system of equations can be written as 
+The spectral implementation is done using Gauss Lobatto nodes and quadrature rule. The basis functions are then chosen as the lagrange functions based on the GL nodes. Notice that the discrete solution $\mathbf{u}_h$ consist of the discretization of both $u \text{ and } \mathbf{w} = - \nabla u$.\colorbox{yellow}{is it clear what system I am talking of here??} $\mathbf{u}_h$ can be structured block wise or node wise. By choosing a block wise representation the final system of equations surging from the Poisson problem can be written as 
 
 $
 \begin{bmatrix}
@@ -107,19 +117,19 @@ $
 \end{bmatrix}
 $.
 
-Where each block $A_{m,n}$ corresponds to  calculating element $m,n$ in the matrix~\ref{mat:basicPoisson} for all combinations of $I,J$. Let us take a closer look at element $A_{1,3}$ in order to achieve a more compact notation. 
+Where each block $A_{m,n}$ corresponds to  calculating element $m,n$ in the matrix\eref{mat:basicPoisson} for all combinations of $I,J$. In order to keep track of the indexing we use the expressions $I = i+jN$ and $J = k+lN$ where the helping indices denotes the position in $x,y$-coordinates. Let us take a closer look at element $A_{1,3}$ in order to achieve a more compact notation. 
 \begin{align}
 	(A_{1,3})_{I,J} &= \int_{\Omega} N_I N_{J,x} d\Omega \\
 	&= \int_{\Omega} l_i(x)l_j(y)l'_k(x)l_l(y) d\Omega \\
 	&= \sum_{\alpha}\sum_{\beta} w_{\alpha}w_{\beta}l_i(x_{\alpha})l_j(y_{\beta})l'_k(x_{\alpha})l_l(y_{\beta}).
 	\label{eq:MatrixDerivation}
 \end{align}
-The sum is obtained by using Gauss Lobatto quadrature rule. Now notice that the lagrange polynomials $l_j(y_{\beta})$ are non-zero only when $\beta = j$, this implies that for the sum to exist we have to require $\beta = j=l$, and $\alpha = i$. With these considerations the double sum above simplifies to  
+The sum is obtained by using Gauss Lobatto quadrature rule. Now notice that the lagrange polynomials $l_j(y_{\beta})$ are non-zero only when $\beta = j$, this implies that for the non-zero terms in the sum we have $\beta = j=l$, and $\alpha = i$. With these considerations the double sum above simplifies to  
 \begin{align}
 	(A_{1,3})_{I,J} &= w_{i}w_{j}l'_k(x_{i})
 	\label{eq:MatrixDerivation2}
 \end{align}
-Remember that $I = i+jN$ and $J = k+lN$, with $N$ being the number of nodes in each direction. This means that $A_{1,3}$ will consist of blocks where $i$ and $k$ goes from $1$ to $N$ while $j$ and $k$ are constant within each block. Since we require that $j=k$ we can immediately conclude that $A_{1,3}$ is nonzero only in the blocks along the diagonal. Notice that the factor $w_il'_k(x_i)$ is the same for each block, and it can be written in matrix form as $WL$, where $W$ is the $n \times n$ diagonal matrix with the GLL-weights along the diagonal and the $(L)_{i,j}= l_j'(x_i)$ is the matrix containing the derivatives of the lagrange polynomials. Since each block is multiplied with $w_j$ the whole matrix can simply be written as the Kronecker tensor product $(W\otimes WL)$. Similar reasoning can be made with all the other block matrices $A_{m,n}$ and we end up with a matrix on the form
+Remember that $I = i+jN$ and $J = k+lN$, with $N$ being the number of nodes in each spacial direction. This means that $A_{1,3}$ will consist of blocks where $i$ and $k$ goes from $1$ to $N$ while $j$ and $k$ are constant within each block. Since we require that $j=k$ we can immediately conclude that $A_{1,3}$ is nonzero only in the blocks along the diagonal. Notice that the factor $w_il'_k(x_i)$ is the same for each block, and it can be written in matrix form as $WL$. With this notation $W$ is the $n \times n$ diagonal matrix with the GLL-weights along the diagonal and $L$ is the matrix containing the derivatives of the lagrange polynomials $(L)_{i,j}= l_j'(x_i)$. Since each block $WL$ is multiplied with $w_j$ the whole matrix can simply be written as the Kronecker tensor product $(W\otimes WL)$. Similar reasoning can be made with all the other block matrices $A_{m,n}$ and we end up with a matrix on the form
 %In order to implement this matrix it is convenient to write it in a compact form using the Kronecker tensor product. The components needed for this formulation is the $n \times n$ diagonal matrix $ W $ with the GLL-weigths along the diagonal and the $n \times n$ matrix $(L)_{i,j}= l_j'(x_i)$ where $l_j$ is the jth lagrange polynomial and $x_i$ is the ith node in either x or y direction. Note that the formulation is based on a grid of GLL-nodes in both x and y direction. 
 
 %
@@ -146,17 +156,18 @@ A^{LS} =
 \end{bmatrix}
 $
 
-in addition it will be added some extra terms dependent on $b$ to the upper left $2 \times 2$ block matrix. Let $B_1$ and $B_2$ be diagonal $n^2 \times n^2$ matrices with the values of the first and second component of $b$ evaluated in each spacial node along the diagonal.  
-
+In addition it will be added some extra terms dependent on $\mathbf{b}$ to the upper left $2 \times 2$ block matrix. Let $B_1$ and $B_2$ be diagonal $n^2 \times n^2$ matrices with the values of the first and second component of $\mathbf{b}$ evaluated in each spacial node along the diagonal.  
 \begin{align}
 	G_{1,1} &= -\mu B_1 (W \otimes WL) -\mu( W \otimes L^TW) B_1 + B_1( W\otimes W) B_1 \\ 	
 	G_{1,2} &= -\mu B_2 (W \otimes WL) -\mu (L^TW \otimes W) B_1 + B_1 (W\otimes W) B_2 \\
-	G_{2,1} &= G_{1,2}^T \\
+	G_{2,1} &= -\mu B_1 (WL \otimes W) -\mu (W \otimes L^TW) B_2 + B_2 (W\otimes W) B_1 \\
 	G_{2,2} &= -\mu B_2 (WL \otimes W) -\mu (L^TW \otimes W) B_2 + B_2 (W\otimes W) B_2. 
 	\label{eq:additionalMatrixDiffTrans}
 \end{align}
 %
-We can then define the total matrix for the diffusion transport problem $K^{LS}$ as
+Notice that $G_{2,1} &= G_{1,2}^T $, the least-squares formulation always provide a symmetric system of equations.
+We can now define the total matrix for the diffusion transport problem $K^{LS}$ as
+
 \begin{align}
 K^{LS} = A^{LS} + G^{LS}
 	\label{eq:difftransMatrixSum}
@@ -176,13 +187,13 @@ Adding the gradient term in our equation also affects the loading function. In a
 $
 F^{LS}=
 \begin{bmatrix}
-	\mu(W \otimes L^T W)F - (W \otimes W)B_1F \\
-	\mu(L^TW \otimes W)F - (W \otimes W)B_2F \\
+	\mu(W \otimes L^T W)F_m - (W \otimes W)B_1F_m \\
+	\mu(L^TW \otimes W)F_m - (W \otimes W)B_2F_m \\
 	0 & 
 	\label{mat:FLS}
 \end{bmatrix},
 $
-where $F$ is the vector with the loading function evaluated in each spacial node.
+where $F_m$ is the vector with the loading function evaluated in each spacial node.
 %
 \section{non-linear diffusion transport problem}
 The stepwise algorithm to solve the nonlinear equation is described in chapter~\ref{chap:newTheory}. However there are several computational steps that needs to be taken care of, both with regular Galerkin and least squares. In both cases we obtain two matrices which we will name $A$ and $G$ and with superscript LS if they refer to the least squares formulation. In both cases only $G$ will depend on the numerical solution $u_h$. An important difference however is that in the LS setting the $F$ vector will depend on $u_h$ while in the straight forward Galerkin setting it will not. For regular Galerkin spectral approach we obtain
@@ -207,7 +218,7 @@ It is clear from this equation that the term surging from the loading function a
 	\mathcal{J}_{i,j} = A_{i,j} + G(\tilde{u}+R_g)_{i,j} +  [\frac{\partial}{\partial \tilde{u}_j} (G(\tilde{u}+R_g))_{i,:}] \tilde{u} \; - \frac{\partial}{\partial \tilde{u}_j}F(\tilde{u}+R_g)_i.
 \end{align}
 %
-Let us first consider the $F$-vector. The terms are given in equation~\ref{mat:FLS} and it is clear that only the last terms in each block depends on $u$, notice that it does not depend on the components of the gradient $[ w_1 \; w_2]$. Hence the contribution to the total Jacobi matrix will only be in block $(1,3)$ and $(2,3)$. Further since $B_1$ and $B_2$ are both diagonal matrices where $B_{i,i}(u) = B_{i,i}(u_i)$ the Jacobian can be calculated efficiently by creating the matrices $dB_1$ and $dB_2$ which has the partial derivative of $B_1,B_2$ wrt. $u$ evaluated in each node.   
+Let us first consider the $F$-vector. The terms are given in equation\eref{mat:FLS} and it is clear that only the last terms in each block depends on $u$, notice that it does not depend on the components of the gradient $[ w_1 \; w_2]$. Hence the contribution to the total Jacobi matrix will only be in block $(1,3)$ and $(2,3)$. Further since $B_1$ and $B_2$ are both diagonal matrices where $B_{i,i}(u) = B_{i,i}(u_i)$ the Jacobian can be calculated efficiently by creating the matrices $dB_1$ and $dB_2$ which has the partial derivative of $B_1,B_2$ wrt. $u$ evaluated in each node.   
 
 
 

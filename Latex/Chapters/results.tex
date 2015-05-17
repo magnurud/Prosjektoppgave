@@ -8,38 +8,51 @@
 
 %----------------------------------------------------------------------------------------
 \section{The main differences}
-Using least squares will always give you a SPD system of equations which can be advantageous. However for second order equations this system is three times as big as if we were to solve it using more standard methods. Comparing the correctness of the solution as done in figure ~\ref{fig:convergence} shows that the convergence rate is the same as for standard methods, but the the value of the residual is slightly higher for the least squares method. This can be explained by the functional that is minimized. Notice that in the least squares methods you minimize the square of the residual. since the correctness of both methods are restricted by the smoothness of the solution and the number of discrete points LS-methods will minimize the residual squared down to a given precision and hence the residual itself to a slightly higher value. 
+Using least squares will always give you a SPD system of equations which can be advantageous. However for second order equations this system is three times as big as if we were to solve it using more standard methods. Comparing the correctness of the solution as done in figure~\ref{fig:ConvergencePoisson} shows that the convergence rate is the same as for standard methods, but the the value of the residual is slightly higher for the least squares method. This can be explained by the functional that is minimized. Notice that in the least squares methods you minimize the square of the residual. since the correctness of both methods are restricted by the smoothness of the solution and the number of discrete points LS-methods will minimize the residual squared down to a given precision and hence the residual itself to a slightly higher value. 
 %
-\begin{figure}[hl]
-	\centering
-	\includegraphics{Figures/errorFEM-LSFEM.pdf}
-	\caption{convergence of LSFEM and FEM}
-	\label{fig:convergenceFEM}
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+	\includegraphics[width=\textwidth]{Figures/errorFEM-LSFEM.pdf}
+  \end{subfigure}%
+  \quad
+  \begin{subfigure}[b]{0.48\textwidth}
+	\includegraphics[width=\textwidth]{Figures/errorSpec-SpecLS.pdf}
+  \end{subfigure}
+          %(or a blank line to force the subfigure onto a new line)
+  \vspace{-0.1\baselineskip}
+  \caption{Convergence of Galerkin and corresponding least-squares formulation on the Poisson problem.}
+  \label{fig:ConvergencePoisson}
 \end{figure}
 %
-The condition number is also worth comparing \ldots
-%
-\begin{figure}[hl]
-	\centering
-	\includegraphics{Figures/errorSpec-SpecLS.pdf}
-	\caption{convergence of Spectral and LS-Spectral method}
-	\label{fig:convergenceSpec}
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+	\includegraphics[width=\textwidth]{Figures/condFEM-LSFEM.pdf}
+  \end{subfigure}%
+  \quad
+  \begin{subfigure}[b]{0.48\textwidth}
+	\includegraphics[width=\textwidth]{Figures/condSpec-SpecLS.pdf}
+  \end{subfigure}
+          %(or a blank line to force the subfigure onto a new line)
+  \vspace{-0.1\baselineskip}
+  \caption{Condition number of Galerkin and corresponding least-squares formulation on the Poisson problem.}
+  \label{fig:ConditionPoisson}
 \end{figure}
-%
-%
-\begin{figure}[hl]
-	\centering
-  \includegraphics{Figures/condFEM-LSFEM.pdf}
-	\caption{condition number of LSFEM and FEM}
-	\label{fig:conditionFEM}
-\end{figure}
-%
-%
-\begin{figure}[hl]
-	\centering
-	\includegraphics{Figures/condSpec-SpecLS.pdf}
-	\caption{condition number of Spectral and LS-Spectral method}
-	\label{fig:conditionSpec}
-\end{figure}
-%
+
+%\begin{figure}[hl]
+	%\centering
+  %\includegraphics[width=80mm]{Figures/condFEM-LSFEM.pdf}
+	%\caption{condition number of LSFEM and FEM}
+	%\label{fig:conditionFEM}
+%\end{figure}
+%%
+%%
+%\begin{figure}[hl]
+	%\centering
+	%\includegraphics[width=80mm]{Figures/condSpec-SpecLS.pdf}
+	%\caption{condition number of Spectral and LS-Spectral method}
+	%\label{fig:conditionSpec}
+%\end{figure}
+%%
 
