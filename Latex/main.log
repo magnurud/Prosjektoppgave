@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.26)  17 MAY 2015 08:59
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.26)  18 MAY 2015 15:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -827,27 +827,27 @@ Chapter 2.
 ------------------------------------------------------------------------------
 [8
 
-]
+] [9]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 78.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\alpha' on input line 78.
+(hyperref)                removing `math shift' on input line 95.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 78.
+(hyperref)                removing `\alpha' on input line 95.
 
-[9]) (./Chapters/implementation.tex [10]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 95.
+
+[10]) (./Chapters/implementation.tex [11]
 Chapter 3.
 ------------------------------------------------------------------------------
  3 Implementation
 ------------------------------------------------------------------------------
-[11
+[12
 
-] [12]
+] [13]
 Overfull \hbox (14.64612pt too wide) in paragraph at lines 65--67
 \OT1/cmr/m/n/10.95 Where $\OML/cmm/m/it/10.95 A[] \OT1/cmr/m/n/10.95 = [][](\OM
 S/cmsy/m/n/10.95 L\OML/cmm/m/it/10.95 N[]\OT1/cmr/m/n/10.95 )[](\OMS/cmsy/m/n/1
@@ -856,39 +856,39 @@ m/n/10.95
 $. [][][][][][] 
  []
 
-[13] [14]
+[14] [15]
 ! Misplaced alignment tab character &.
 l.168 Notice that $G_{2,1} &
                             = G_{1,2}^T $, the least-squares formulation alw...
 
 ? 
-[15] [16]) (./Chapters/results.tex [17]
+[16] [17]) (./Chapters/results.tex [18]
 Chapter 4.
 ------------------------------------------------------------------------------
  4 Results
 ------------------------------------------------------------------------------
-<Figures/errorFEM-LSFEM.pdf, id=329, 397.485pt x 361.35pt>
+<Figures/errorFEM-LSFEM.pdf, id=340, 397.485pt x 361.35pt>
 File: Figures/errorFEM-LSFEM.pdf Graphic file (type pdf)
 
 <use Figures/errorFEM-LSFEM.pdf>
 Package pdftex.def Info: Figures/errorFEM-LSFEM.pdf used on input line 16.
 (pdftex.def)             Requested size: 200.38528pt x 182.17429pt.
 
-<Figures/errorSpec-SpecLS.pdf, id=330, 397.485pt x 361.35pt>
+<Figures/errorSpec-SpecLS.pdf, id=341, 397.485pt x 361.35pt>
 File: Figures/errorSpec-SpecLS.pdf Graphic file (type pdf)
 
 <use Figures/errorSpec-SpecLS.pdf>
 Package pdftex.def Info: Figures/errorSpec-SpecLS.pdf used on input line 20.
 (pdftex.def)             Requested size: 200.38528pt x 182.17429pt.
 
-<Figures/condFEM-LSFEM.pdf, id=331, 397.485pt x 361.35pt>
+<Figures/condFEM-LSFEM.pdf, id=342, 397.485pt x 361.35pt>
 File: Figures/condFEM-LSFEM.pdf Graphic file (type pdf)
 
 <use Figures/condFEM-LSFEM.pdf>
 Package pdftex.def Info: Figures/condFEM-LSFEM.pdf used on input line 31.
 (pdftex.def)             Requested size: 200.38528pt x 182.17429pt.
 
-<Figures/condSpec-SpecLS.pdf, id=332, 397.485pt x 361.35pt>
+<Figures/condSpec-SpecLS.pdf, id=343, 397.485pt x 361.35pt>
 File: Figures/condSpec-SpecLS.pdf Graphic file (type pdf)
 
 <use Figures/condSpec-SpecLS.pdf>
@@ -901,15 +901,15 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-) (./Appendices/AppendixA.tex [18
+) (./Appendices/AppendixA.tex [19
 
-] [19 <./Figures/errorFEM-LSFEM.pdf> <./Figures/errorSpec-SpecLS.pdf> <./Figure
+] [20 <./Figures/errorFEM-LSFEM.pdf> <./Figures/errorSpec-SpecLS.pdf> <./Figure
 s/condFEM-LSFEM.pdf> <./Figures/condSpec-SpecLS.pdf>]
 Appendix A.
 ------------------------------------------------------------------------------
  A Appendix Title Here
 ------------------------------------------------------------------------------
-) [20
+) [21
 
 ]
 ------------------------------------------------------------------------------
@@ -917,7 +917,7 @@ Appendix A.
 ------------------------------------------------------------------------------
 (./main.bbl)
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 347.
- [21
+ [22
 
 
 ]
@@ -926,7 +926,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 347.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 347.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 347.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: C45E364D278F151E13E47CAB522EA950;5458.
+(rerunfilecheck)             Checksum: CAE4A3B5043F82FCF06CC1520EFAD36D;5459.
 
 
 LaTeX Warning: There were multiply-defined labels.
@@ -934,32 +934,33 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 347.
  ) 
 Here is how much of TeX's memory you used:
- 13253 strings out of 494465
- 185474 string characters out of 6166360
- 258548 words of memory out of 5000000
- 16159 multiletter control sequences out of 15000+600000
+ 13260 strings out of 494465
+ 185572 string characters out of 6166360
+ 258624 words of memory out of 5000000
+ 16160 multiletter control sequences out of 15000+600000
  16553 words of font info for 61 fonts, out of 8000000 for 9000
  350 hyphenation exceptions out of 8191
  49i,14n,45p,971b,463s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on main.pdf (25 pages, 264888 bytes).
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on main.pdf (26 pages, 273886 bytes).
 PDF statistics:
- 649 PDF objects out of 1000 (max. 8388607)
- 596 compressed objects within 6 object streams
- 145 named destinations out of 1000 (max. 500000)
+ 665 PDF objects out of 1000 (max. 8388607)
+ 609 compressed objects within 7 object streams
+ 151 named destinations out of 1000 (max. 500000)
  221 words of extra memory for PDF output out of 10000 (max. 10000000)
 

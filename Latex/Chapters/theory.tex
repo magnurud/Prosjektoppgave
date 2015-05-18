@@ -142,7 +142,7 @@ which can be written in the same form as ~\eref{eq:BVP} with $ \mathbf{u} = \mat
 \end{align}
 We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\eref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ \mathbf{u} \in X $ such that
 \begin{align}
-	Q(\mathbf{u},\phi) = F(\phi) \;\; \forall \;\; \phi \in X.
+	Q(\mathbf{u},\mathbf{v}) = F(\mathbf{v}) \;\; \forall \;\; \mathbf{v} \in X.
 	\label{eq:VariationalFormulationPoisson}
 \end{align}
 We require that $\mathbf{f} \in Y$.
@@ -187,7 +187,7 @@ which leads to a similar but slightly different linear system than the one creat
 %\end{align}
 %We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\eref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ \mathbf{u} \in X $ s.t.
 %\begin{align}
-	%Q(\mathbf{u},\phi) = F(\phi) \;\; \forall \;\; \phi \in X.
+	%Q(\mathbf{u},\mathbf{v}) = F(\mathbf{v}) \;\; \forall \;\; \mathbf{v} \in X.
 	%\label{eq:VariationalFormulationPoisson}
 %\end{align}
 %We require that $\mathbf{f} \in Y$.
@@ -197,10 +197,10 @@ which leads to a similar but slightly different linear system than the one creat
 \subsection{non-homogeneous Dirichlet boundary conditions}
 If $g \neq 0$ then we simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{\mathbf{u}}=\mathbf{u}-R_g$ we can replace $\mathbf{u}$ in the variation formulation and get 
 \begin{align}
-	Q(\tilde{\mathbf{u}}+R_g,\phi) &= F(\phi) \\
-	Q(\tilde{\mathbf{u}},\phi)+Q(R_g,\phi) &= F(\phi) \\
-	Q(\tilde{\mathbf{u}},\phi) &= F(\phi) - Q(R_g,\phi)\\
-	Q(\tilde{\mathbf{u}},\phi) &= \tilde{F}(\phi) 
+	Q(\tilde{\mathbf{u}}+R_g,\mathbf{v}) &= F(\mathbf{v}) \\
+	Q(\tilde{\mathbf{u}},\mathbf{v})+Q(R_g,\mathbf{v}) &= F(\mathbf{v}) \\
+	Q(\tilde{\mathbf{u}},\mathbf{v}) &= F(\mathbf{v}) - Q(R_g,\mathbf{v})\\
+	Q(\tilde{\mathbf{u}},\mathbf{v}) &= \tilde{F}(\mathbf{v}) 
 	\label{eq:liftingFunc}
 \end{align}
 %

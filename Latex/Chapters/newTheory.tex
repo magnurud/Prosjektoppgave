@@ -44,8 +44,8 @@ It is clear that for small $\mu$ and large positive $\gamma_1$ the bilinear form
 Now remember from equation \eref{eq:normEq} that the least squares formulation guarantees us a coercive bilinear form, given that the BVP has a solution and that the search- and solution space are chosen correctly. For this particular problem we can find $\alpha,\beta$ such that $\alpha||u||_1^2 \leq Q(\mathbf{u},\mathbf{u}) \leq \beta||u||_1^2 $.
 Now, let us define $\mathring{a}(\cdot,\cdot)$ and $\mathring{f}(\cdot)$ as the as the linear combinations of the linear and bilinear form surging from standard Galerkin and least-squares method. 
 \begin{align}
-	\mathring{a}(u,v) &= a(u,v) + \delta Q(\mathbf{u},\mathbf{\phi}) \\
-	 \mathring{f}(v) &= (f,v) + \delta F(\mathbf{\phi}) 
+	\mathring{a}(u,v) &= a(u,v) + \delta Q(\mathbf{u},\mathbf{\mathbf{v}}) \\
+	 \mathring{f}(v) &= (f,v) + \delta F(\mathbf{\mathbf{v}}) 
 	\label{eq:GLS}
 \end{align}
 Let us study the coerciveness of the bilinear form $\mathring{a}(\cdot,\cdot)$
@@ -58,12 +58,29 @@ Let us study the coerciveness of the bilinear form $\mathring{a}(\cdot,\cdot)$
 \end{align}
 \colorbox{yellow}{Don't like the way Q has to be defined with $\mathbf{u}$}
 In the third inequality we make the assumption that $\gamma_0+\delta \alpha \geq \mu $ in other words $\delta$, (the amount of smoothing from LS) has to be chosen such that $\delta \geq (\mu-\gamma_0)/\alpha$.
-This leads to stability for our discrete solution of the variational formulation, 
+Using \eref{VarFormLinForms} with homogeneous boundary conditions we obtain the identities $Q(\mathbf{u},\mathbf{u}) = (\mathcal{L}\mathbf{u},\mathcal{L}\mathbf{u})$ and $F(\mathbf{u}) = (\mathbf{f},\mathcal{L}\mathbf{u})$ we can derive the following stability result for our discrete solution of the variational formulation, 
+	
 \begin{align}
-	\mathring{a}(u_h,u_h)_h \leq C ||f||_0
+	\mathring{a}(u_h,u_h)_h \leq C ||f||^2
 	\label{eq:stabilityResult}
 \end{align}
 The proof for a similar method can be found in~\cite{Quarteroni} Ch.12. 
+
+\colorbox{yellow}{Need to fix this Proof, not OK !! }
+Proof:
+\begin{align}
+	\mathring{a}(u_h,u_h) &= \mathring{f}(u_h) \\
+	&= (f,u_h) + \delta(\mathbf{f},\mathcal{L}\mathbf{u_h}) \\
+	&\leq ||f||\:||u_h||+\delta||\mathbf{f}||\:||\mathcal{L}\mathbf{u_h}|| \\
+	&\leq ||f||^2 + \frac{1}{4}||u_h||^2 + \delta||\mathbf{f}||^2 + \frac{\delta}{4}||\mathcal{L}\mathbf{u_h}||^2 \\
+	&= ||f||^2 + \delta||f||^2 + \frac{1}{4}\mathring{a}(u_h,u_h).
+	\label{eq:derivationStabilityResult}
+\end{align}
+
+Which Allows us to determine the constant $C= \frac{4}{3}(1+\delta)$
+
+
+
 
 %Let us derive an upper bound for the norm created by the combined bilinear form $\mathring{a}(\cdot,\cdot)$. 
 %\begin{align}
@@ -96,9 +113,9 @@ This gives us a nonlinear variational formulation that does not allow us to solv
 %%
 %Let us consider the diffusion-transport equation with non-homogeneous boundary conditions and a non-linear gradient term with a LS-approach. This corresponds to solving the equation 
 %\begin{align}
-	%Q(\tilde{\mathbf{u}},\phi;b) &= \tilde{F}(\phi;b) \\
-	%Q(\tilde{\mathbf{u}},\phi;b) - \tilde{F}(\phi;b) &= 0\\
-	%\mathcal{F}(\tilde{\mathbf{u}},\phi;b) &= 0
+	%Q(\tilde{\mathbf{u}},\mathbf{v};b) &= \tilde{F}(\mathbf{v};b) \\
+	%Q(\tilde{\mathbf{u}},\mathbf{v};b) - \tilde{F}(\mathbf{v};b) &= 0\\
+	%\mathcal{F}(\tilde{\mathbf{u}},\mathbf{v};b) &= 0
 	%\label{eq:varFormNonLin}
 %\end{align}
 %%
