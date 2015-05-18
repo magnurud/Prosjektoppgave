@@ -1,4 +1,4 @@
-function [eh cn] = runMain_LS(N,mu,alpha)
+function [Jac eh cn] = runMain_LS(N,mu,alpha)
 % runMain.m
 %
 % description:
@@ -145,29 +145,29 @@ for it = 1:maxit
 	for It = 1:LSdofs
 		ej = e;
 		ej(It) = d;
-		if(It>2*dofs && it<3) % If U1 is affected
-			U1 = uh(2*dofs+1:end) + ej(2*dofs+1:end);
-			B1 = diag(dB1*(U1+Rg)); 
-			B2 = diag(dB2*(U1+Rg));
+		%if(It>2*dofs && it<3) % If U1 is affected
+			%U1 = uh(2*dofs+1:end) + ej(2*dofs+1:end);
+			%B1 = diag(dB1*(U1+Rg)); 
+			%B2 = diag(dB2*(U1+Rg));
 
-			% Getting the u-dependent matrices
-			%G_Sp = gradient_Spec(LDM,B1,B2,W,dofs);
-			%F_NL = load_LS(N,x,y,wX,wY,f,LDM,B1,B2,mu,sigma);
-			G_LS = gradient_LS(mu,B1,B2,W,LDM,dofs);
-			F_NL = load_LS2(W,LDM,B1,B2,F,mu,sigma);
-			A_NL = sparse(G_LS); % The non-linear part of A, is already 
-			fh = F_L-F_NL;%+A_NL*[zeros(2*dofs,1);Rg];
-			for I = 1:dofs
-				J = 2*dofs+I;
-				i = mod(I-1,N)+1;
-				j = fix((I-1)/N)+1;
-				if(i==1 || i==N || j==1 || j==N)
-					A_NL(J,:) = 0;
-					A_NL(:,J) = 0;
-					fh(J) = 0;
-				end
-			end
-		end
+			%% Getting the u-dependent matrices
+			%%G_Sp = gradient_Spec(LDM,B1,B2,W,dofs);
+			%%F_NL = load_LS(N,x,y,wX,wY,f,LDM,B1,B2,mu,sigma);
+			%G_LS = gradient_LS(mu,B1,B2,W,LDM,dofs);
+			%F_NL = load_LS2(W,LDM,B1,B2,F,mu,sigma);
+			%A_NL = sparse(G_LS); % The non-linear part of A, is already 
+			%fh = F_L-F_NL;%+A_NL*[zeros(2*dofs,1);Rg];
+			%for I = 1:dofs
+				%J = 2*dofs+I;
+				%i = mod(I-1,N)+1;
+				%j = fix((I-1)/N)+1;
+				%if(i==1 || i==N || j==1 || j==N)
+					%A_NL(J,:) = 0;
+					%A_NL(:,J) = 0;
+					%fh(J) = 0;
+				%end
+			%end
+		%end
 		rh = (A_L+A_NL)*(uh+ej) + fh; 
 		Jac(:,It) = (rh-r)/d;
 	end
@@ -192,7 +192,7 @@ end
 uh = uh_BC;
 format long
 Convrate
-
+figure(1);
 plot(1:maxit,log(eVec(2:end)))
 
 % Plotting

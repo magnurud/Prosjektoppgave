@@ -1,9 +1,9 @@
-function [eh cn] = runMain(N,mu,alpha,delta)
-% runMain.m
+function [cn] = runMain_Qtest(N,mu,alpha,delta)
+% runMain_Qtest.m
 %
 % description:
 %      Solving the Poisson problem on the square (0,1)^2
-% 		 using spectral-least squares methods;
+% 		 using regular galerkin spektral method combined with spectral-least squares methods ;
 %
 % arguments:
 %   - N     number of discretization points in each direction
@@ -16,11 +16,22 @@ function [eh cn] = runMain(N,mu,alpha,delta)
 % author: Magnus Aa. Rud
 % last edit: April 2015
 
+% Illustrational tests
+
+%%%% Showing that the divergence of b is highly relevant for stability! 
+% runMain_Qtest(15,0.001,1,0)		 positive divergence
+% runMain_Qtest(15,0.001,-1,0)	 Negative divergence
+
+%%%% Showing the effect of LS	
+% runMain_Qtest(15,0.001,1,0)
+% runMain_Qtest(15,0.001,1,0.1)
+
+
 h = 1/(N-1);
 NLS = 3*N; % Number of unknowns in each direction
 dofs = N^2;
 LSdofs = 3*dofs;
-B = @(x,y) alpha*[1;1]; %Vector Field
+B = @(x,y) alpha*[x;y]; %Vector Field
 f = @(x,y) 1;
 u = @(x,y) 0;% exp(x)*sin(pi*y); % Analytical solution
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
@@ -78,15 +89,21 @@ end
 uh = Ah\fh;
 
 % Plotting
+if(1)
 figure;
 surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
 title('Numerical Solution');
 xlabel('x')
 ylabel('y')
 zlabel('z')
+view(40.5,30);
+end
 
-eh = norm((uh(2*dofs+1:end)-U),'inf')/norm(U,'inf');
-cn = condest(Ah);
+if(delta==0)
+	cn = condest(Ah(2*dofs+1:end,2*dofs+1:end));
+else
+	cn = condest(Ah);
+end
 
 %Peclet number
 Peclet = max(max(sqrt(B1.^2+B2.^2)))*h/(2*mu)
