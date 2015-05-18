@@ -17,11 +17,9 @@ function [eh cn] = runMain(N,mu,alpha)
 % last edit: April 2015
 
 dofs = N^2;
-H=1;
-B = @(x,y) alpha*[0;1]; %Vector Field
-%f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
-    %+exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
-f = @(x,y) 1;
+B = @(x,y) alpha*[2;1]; %Vector Field
+f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
+    +exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
 [y,wY] = GLL_(N,0,1); % getting the GLL-points for the unit square
@@ -45,49 +43,58 @@ Ah = mu*Ah+Gh;
 
 
 %% Dirchlet boundary conditions %%
-%g1 = @(x,y) u(x,y);  South side boundary function
-%g2 = @(x,y) u(x,y);  East side boundary function
-%g3 = @(x,y) u(x,y);  West side boundary function
-%g4 = @(x,y) u(x,y);  North side boundary function
+g1 = @(x,y) u(x,y); % South side boundary function
+g2 = @(x,y) u(x,y); % East side boundary function
+g3 = @(x,y) u(x,y); % West side boundary function
+g4 = @(x,y) 1/mu*exp(x)*cos(pi*y); % North side boundary function
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %% Vectorized BC's %% 
-%Rg = zeros(dofs,1);
-%for I = 1:dofs
-	%i = mod(I-1,N)+1;
-	%j = fix((I-1)/N)+1;
-	%if(j==1) 
-		%Rg(I) = g1(x(i),y(j));  South side
-	%elseif(i == N) 
-		%Rg(I) = g2(x(i),y(j));  East side
-	%elseif(i == 1) 
-		%Rg(I) = g3(x(i),y(j));  West side
-	%elseif(j == N) 
-		%Rg(I) = g4(x(i),y(j));  North side
-	%end
-%end
-%fh = fh - Ah*Rg;
+Rg = zeros(dofs,1);
+for I = 1:dofs
+  i = mod(I-1,N)+1;
+  j = fix((I-1)/N)+1;
+  if(j==1) 
+    Rg(I) = g1(x(i),y(j)); % South side
+  elseif(i == N) 
+    Rg(I) = g2(x(i),y(j)); % East side
+  elseif(i == 1) 
+    Rg(I) = g3(x(i),y(j)); % West side
+  %elseif(j == N) 
+   % Rg(I) = g4(x(i),y(j)); % North side
+ 	elseif(j == N)
+		fh(I) = fh(I)+wX(i)*g4(x(i),y(j));
+  end
+end
+fh = fh - Ah*Rg;
 
 % Boundary conditions
 for I = 1:dofs
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
-  if(i==1 || i==N || j==N) % South side has neumann
+  if(i==1 || i==N || j==1 || j==N)
     Ah(I,:) = 0;
     Ah(:,I) = 0;
     Ah(I,I) = 1;
     fh(I) = 0;
-	elseif(j==1) % South side has neumann
-    fh(I) = fh(I)+wX(i)*mu*H;
   end
 end
     
 uh = Ah\fh;
-%uh = uh + Rg;
+uh = uh + Rg;
 
 % Plotting
 figure;
+subplot(1,2,1) % first subplot
 surf(x,y,reshape(uh,N,N)');
 title('Numerical Solution');
+xlabel('x')
+ylabel('y')
+zlabel('z')
+
+%% Plotting the analytical solution
+subplot(1,2,2) % second subplot
+surf(x,y,reshape(U,N,N)');
+title('Analytical Solution');
 xlabel('x')
 ylabel('y')
 zlabel('z')
@@ -95,4 +102,3 @@ zlabel('z')
 cn = condest(Ah);
 %eh = norm((uh-U),'inf')/norm(U,'inf');
 eh = norm((uh-U))/norm(U);
-

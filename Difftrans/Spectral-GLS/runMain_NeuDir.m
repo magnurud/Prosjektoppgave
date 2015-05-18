@@ -1,4 +1,5 @@
-function [eh cn] = runMain(N,mu,alpha,delta)
+function [eh cn] = runMain_NeuDir(N,mu,alpha,delta)
+
 	% runMain.m
 	%
 	% description:
@@ -17,7 +18,6 @@ function [eh cn] = runMain(N,mu,alpha,delta)
 	% last edit: April 2015
 
 	h = 1/(N-1);
-	H = 1; % Neumann condition
 	NLS = 3*N; % Number of unknowns in each direction
 	dofs = N^2;
 	LSdofs = 3*dofs;
@@ -68,8 +68,7 @@ function [eh cn] = runMain(N,mu,alpha,delta)
 	g2 = @(x,y) u(x,y); % East side boundary function
 	g3 = @(x,y) u(x,y); % West side boundary function
 	%% Neumann boundary conditions %%
-	g4 = @(x,y) -pi*exp(x)*cos(pi*y) ; % North side boundary function
-	g5 = @(x,y) -exp(x)*sin(pi*y) ; % North side boundary function for the x-comp! ONLY FOR TESTING! 
+	g4 = @(x,y) pi*exp(x)*cos(pi*y) ; % North side boundary function
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 	%% Vectorized BC's %% 
 	Rg = zeros(LSdofs,1);
@@ -86,8 +85,8 @@ function [eh cn] = runMain(N,mu,alpha,delta)
 		% Neumann part
 		elseif(j == N) 
 			J = I+dofs;
-			Rg(J) = g4(x(i),y(j)); % North side
-			f_LS(I+2*dofs) = f_LS(I+2*dofs)+f(i,j)+wX(i)*H;
+			Rg(J) = -g4(x(i),y(j)); % North side
+			fh(I+2*dofs) = fh(I+2*dofs)+1/mu*wX(i)*g4(x(i),y(j));
 		end
   end
 		%%%%%%%%%%%%% 
