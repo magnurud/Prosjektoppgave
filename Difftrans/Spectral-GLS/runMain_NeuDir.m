@@ -1,4 +1,5 @@
-function [eh cn] = runMain(N,mu,alpha,delta)
+function [eh cn] = runMain_NeuDir(N,mu,alpha,delta)
+
 	% runMain.m
 	%
 	% description:
@@ -67,8 +68,7 @@ function [eh cn] = runMain(N,mu,alpha,delta)
 	g2 = @(x,y) u(x,y); % East side boundary function
 	g3 = @(x,y) u(x,y); % West side boundary function
 	%% Neumann boundary conditions %%
-	g4 = @(x,y) -pi*exp(x)*cos(pi*y) ; % North side boundary function
-	g5 = @(x,y) -exp(x)*cos(pi*y) ; % North side boundary function for the x-comp! ONLY FOR TESTING! 
+	g4 = @(x,y) pi*exp(x)*cos(pi*y) ; % North side boundary function
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 	%% Vectorized BC's %% 
 	Rg = zeros(LSdofs,1);
@@ -77,48 +77,40 @@ function [eh cn] = runMain(N,mu,alpha,delta)
 		j = fix((I-1)/N)+1;
 		J = 2*dofs+I;
 		if(j==1) 
-		Rg(J) = g1(x(i),y(j)); % South side
+			Rg(J) = g1(x(i),y(j)); % South side
 		elseif(i == N) 
-		Rg(J) = g2(x(i),y(j)); % East side
+			Rg(J) = g2(x(i),y(j)); % East side
 		elseif(i == 1) 
-		Rg(J) = g3(x(i),y(j)); % West side
-		end
+			Rg(J) = g3(x(i),y(j)); % West side
 		% Neumann part
-		if(j == N) 
-		J = I+dofs;
-		Rg(J) = g4(x(i),y(j)); % North side
-		%%%%%%%%%%%%% 
-		Rg(I) = g5(x(i),y(j)); % North side
-		%%%%%%%%%%%%%
+		elseif(j == N) 
+			J = I+dofs;
+			Rg(J) = -g4(x(i),y(j)); % North side
+			fh(I+2*dofs) = fh(I+2*dofs)+1/mu*wX(i)*g4(x(i),y(j));
 		end
-	end
+  end
+		%%%%%%%%%%%%% 
 	fh = fh - Ah*Rg;
 
 	% Homogenous Neumann Boundary conditions
 	for I = 1:dofs
-	i = mod(I-1,N)+1;
-	j = fix((I-1)/N)+1;
-	if(i==1 || i==N || j==1) % Dirichlet on the solution vector
-	J = 2*dofs+I;
-	Ah(J,:) = 0;
-	Ah(:,J) = 0;
-	Ah(J,J) = 1;
-	fh(J) = 0;
-	end
-	if(j==N) % Dirichlet on the y-comp of w 
-	J = I+dofs;
-	Ah(J,:) = 0;
-	Ah(:,J) = 0;
-	Ah(J,J) = 1;
-	fh(J) = 0;
-	%%%%%%%%%% 
-	% Doing this for the x-comp as well 
-	Ah(I,:) = 0;
-	Ah(:,I) = 0;
-	Ah(I,I) = 1;
-	fh(I) = 0;
-	%%%%%%%%%%
-	end
+		i = mod(I-1,N)+1;
+		j = fix((I-1)/N)+1;
+		if(i==1 || i==N || j==1) % Dirichlet on the solution vector
+			J = 2*dofs+I;
+			Ah(J,:) = 0;
+			Ah(:,J) = 0;
+			Ah(J,J) = 1;
+			fh(J) = 0;
+		end
+		if(j==N) % Dirichlet on the y-comp of w 
+			J = I+dofs;
+			Ah(J,:) = 0;
+			Ah(:,J) = 0;
+			Ah(J,J) = 1;
+			fh(J) = 0;
+			%%%%%%%%%% 
+		end
 	end
 
 	uh = Ah\fh;

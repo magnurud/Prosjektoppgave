@@ -143,7 +143,10 @@ for it = 1:maxit
   uh_BC = uh+Rg;
   eh = norm((uh_BC-U),'inf')/norm(U,'inf');
   eVec(it+1) = eh;
-  Convrate(it) = eh/((eVec(it)^1));
+  Convrate(it) = eh/((eVec(it)^2));
+	if(eh<1E-14)
+		break
+	end
 end
 %eVec
 Convrate

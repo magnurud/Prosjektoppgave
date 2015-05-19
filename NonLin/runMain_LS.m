@@ -1,4 +1,4 @@
-function [eh cn] = runMain_LS(N,mu,alpha)
+function [J eh cn] = runMain_LS(N,mu,alpha)
 % runMain.m
 %
 % description:
@@ -71,12 +71,16 @@ for I = 1:dofs
 	j = fix((I-1)/N)+1;
 	if(j==1) 
 		Rg(J) = g1(x(i),y(j)); % South side
+		uh(J+2*dofs) = 0;
 	elseif(i == N) 
 		Rg(J) = g2(x(i),y(j)); % East side
+		uh(J+2*dofs) = 0;
 	elseif(i == 1) 
 		Rg(J) = g3(x(i),y(j)); % West side
+		uh(J+2*dofs) = 0;
 	elseif(j == N) 
 		Rg(J) = g4(x(i),y(j)); % North side
+		uh(J+2*dofs) = 0;
 	end
 end
 
@@ -112,7 +116,7 @@ for it = 1:maxit
 	%F_NL = load_LS(N,x,y,wX,wY,f,LDM,B1,B2,mu,sigma);
 	G_LS = gradient_LS(mu,B1,B2,W,LDM,dofs);
 	F_NL = load_LS2(W,LDM,B1,B2,F,mu,sigma);
-	A_NL = sparse(G_LS); % The non-linear part of A, is already 
+	A_NL = sparse(G_LS); % The non-linear part of A
 
 	% Getting the components of the jacobi matrices
 	%J_Sp = jacobi_Spec_lin(W,LDM,dB1,dB2,B1,B2,U1,Rg);
@@ -158,6 +162,7 @@ uh = uh_BC;
 format long
 Convrate
 
+figure(1);
 plot(1:maxit,log(eVec(2:end)))
 
 % Plotting

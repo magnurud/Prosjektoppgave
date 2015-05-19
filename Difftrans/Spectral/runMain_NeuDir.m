@@ -1,4 +1,4 @@
-function [eh cn] = runMain(N,mu,alpha,delta)
+function [eh cn] = runMain(N,mu,alpha)
 % runMain.m
 %
 % description:
@@ -9,18 +9,15 @@ function [eh cn] = runMain(N,mu,alpha,delta)
 %   - N     number of discretization points in each direction
 %   - mu    the diffusion constant
 %   - alpha The size of the vector field b 
-%   - delta the weight of the spectral part
+%          
 % returns:
 %		- cn  Condition number for the matrix
-%
+%   - eh  Error compared to the amalytical solution
 % author: Magnus Aa. Rud
 % last edit: April 2015
 
-h = 1/(N-1);
-NLS = 3*N; % Number of unknowns in each direction
 dofs = N^2;
-LSdofs = 3*dofs;
-B = @(x,y) -alpha*[1;1]; %Vector Field
+B = @(x,y) alpha*[2;1]; %Vector Field
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
     +exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
@@ -39,76 +36,56 @@ for I = 1:dofs
   B2(i,j) = bloc(2); 
   U(I) = u(x(i),y(j));
 end
+Ah = stiffness_2D_fast(wX,LDM);
+Gh = gradient_2D_fast(LDM,B1,B2,W,dofs);
+fh = load_2D(N,x,y,wX,wY,f);
+Ah = mu*Ah+Gh;
 
-% Assembling LS part %
-A_LS = stiffness_LS(W,LDM,mu);
-G_LS = gradient_LS(mu,B1,B2,W,LDM,dofs);
-A_LS = A_LS+G_LS;
-f_LS = load_LS(N,x,y,wX,wY,f,LDM,B1,B2,mu);
-
-% Assembling Spectral part 
-A_Sp = stiffness_Spec(W,LDM);
-G_Sp = gradient_Spec(LDM,B1,B2,W,dofs);
-f_Sp = load_Spec(N,x,y,wX,wY,f);
-A_Sp = mu*A_Sp+G_Sp;
-
-%%%%% COMBINING %%%%%
-A_LS = delta*A_LS;
-f_LS = delta*f_LS;
-
-A_LS(2*dofs+1:end,2*dofs+1:end) = A_LS(2*dofs+1:end,2*dofs+1:end) + A_Sp;
-f_LS(2*dofs+1:end) = f_LS(2*dofs+1:end) + f_Sp;
-%%%%% DONE COMBINING %%%%%
-
-Ah = sparse(A_LS);
-fh = sparse(f_LS);
 
 %% Dirchlet boundary conditions %%
 g1 = @(x,y) u(x,y); % South side boundary function
 g2 = @(x,y) u(x,y); % East side boundary function
 g3 = @(x,y) u(x,y); % West side boundary function
-g4 = @(x,y) u(x,y); % North side boundary function
+g4 = @(x,y) 1/mu*exp(x)*cos(pi*y); % North side boundary function
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %% Vectorized BC's %% 
-Rg = zeros(LSdofs,1);
+Rg = zeros(dofs,1);
 for I = 1:dofs
-	J = I+2*dofs;
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
   if(j==1) 
-    Rg(J) = g1(x(i),y(j)); % South side
+    Rg(I) = g1(x(i),y(j)); % South side
   elseif(i == N) 
-    Rg(J) = g2(x(i),y(j)); % East side
+    Rg(I) = g2(x(i),y(j)); % East side
   elseif(i == 1) 
-    Rg(J) = g3(x(i),y(j)); % West side
-  elseif(j == N) 
-    Rg(J) = g4(x(i),y(j)); % North side
+    Rg(I) = g3(x(i),y(j)); % West side
+  %elseif(j == N) 
+   % Rg(I) = g4(x(i),y(j)); % North side
+ 	elseif(j == N)
+		fh(I) = fh(I)+wX(i)*g4(x(i),y(j));
   end
 end
 fh = fh - Ah*Rg;
 
-% Homogenous Boundary conditions
+% Boundary conditions
 for I = 1:dofs
-	J = I+2*dofs;
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
   if(i==1 || i==N || j==1 || j==N)
-    Ah(J,:) = 0;
-    Ah(:,J) = 0;
-    Ah(J,J) = 1;
-    fh(J) = 0;
+    Ah(I,:) = 0;
+    Ah(:,I) = 0;
+    Ah(I,I) = 1;
+    fh(I) = 0;
   end
 end
-
+    
 uh = Ah\fh;
-uh = uh+Rg;
+uh = uh + Rg;
 
 % Plotting
 figure;
-subplot(1,2,1)
-%surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
-%surf(x,y,reshape(uh(dofs+1:2*dofs),N,N)');
-surf(x,y,reshape(uh(1:dofs),N,N)');
+subplot(1,2,1) % first subplot
+surf(x,y,reshape(uh,N,N)');
 title('Numerical Solution');
 xlabel('x')
 ylabel('y')
@@ -122,8 +99,6 @@ xlabel('x')
 ylabel('y')
 zlabel('z')
 
-eh = norm((uh(2*dofs+1:end)-U),'inf')/norm(U,'inf');
 cn = condest(Ah);
-
-%Peclet number
-Peclet = max(max(sqrt(B1.^2+B2.^2)))*h/(2*mu)
+%eh = norm((uh-U),'inf')/norm(U,'inf');
+eh = norm((uh-U))/norm(U);

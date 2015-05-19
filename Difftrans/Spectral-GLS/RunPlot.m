@@ -1,4 +1,4 @@
-function [cn] = runMain_Qtest(N,mu,alpha,delta)
+function [cn] = runPlot(N,mu,alpha,delta,name)
 % runMain_Qtest.m
 %
 % description:
@@ -10,6 +10,7 @@ function [cn] = runMain_Qtest(N,mu,alpha,delta)
 %   - mu    the diffusion constant
 %   - alpha The size of the vector field b 
 %   - delta the weight of the spectral part
+%		- name 	name of the file
 % returns:
 %		- cn  Condition number for the matrix
 %
@@ -89,16 +90,6 @@ end
 uh = Ah\fh;
 
 % Plotting
-if(1)
-figure;
-surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
-title('Numerical Solution');
-xlabel('x')
-ylabel('y')
-zlabel('z')
-view(40.5,30);
-end
-
 if(delta==0)
 	cn = condest(Ah(2*dofs+1:end,2*dofs+1:end));
 else
@@ -106,5 +97,17 @@ else
 end
 
 %Peclet number
-Peclet = max(max(sqrt(B1.^2+B2.^2)))*h/(2*mu)
+Peclet = max(max(sqrt(B1.^2+B2.^2)))*h/(2*mu);
 
+figure;
+surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
+xlabel('x')
+ylabel('y')
+zlabel('z')
+view(40.5,30);
+fig = gcf;
+
+Filename = ['../../Latex/Figures/' name]
+set(fig, 'PaperPosition', [0 0 5 5]); %Position plot at left hand corner with width 5 and height 5.
+set(fig, 'PaperSize', [5.5 5]); %Set the paper to have width 5 and height 5.
+saveas(fig, Filename , 'pdf') %Save figure
