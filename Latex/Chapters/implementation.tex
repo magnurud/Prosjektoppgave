@@ -92,8 +92,9 @@ where $\partial_x = \partial / \partial x $ for the Poisson problem and $\mu \pa
 
 Notice that by doing the splitting of variables we obtain a system of equations three times as big as if we were to solve the equation directly. 
 
+Note that the gradient of our solution must be restricted to the space $H^1(\text{div},\Omega) = \left\{  \mathbf{w}\in L^2(\Omega) | \nabla \cdot \mathbf{w} \in L^2(\Omega)\right\} $. In order to simplify the implementation I have in this project chosen my basis functions to a subspace such that $\mathbf{w}\in [H^1(\Omega)]^2$. In other words, the basis functions for the solution, and both components of the gradients are the same.  
 \section{Least squares with finite element basis functions}
-\colorbox{yellow}{finite element space $X_h^1$ ? quadrature\ldots  }
+The same triangular grid has been chosen for the implementation of both regular Galerkin FEM and the least-squares FEM. By choosing 1st order hat functions each element consists of three non-zero basis functions. For the GFEM this leads to calculating a $3\times 3$ matrix for each element whereas for LSFEM a $9 \times 9$ matrix has to be calculated, although it is fairly structured it still leads to additional computational costs and is a lot more tedious to implement.
 \section{Least squares with spectral basis functions}
 
 The spectral implementation is done using Gauss Lobatto nodes and quadrature rule. The basis functions are then chosen as the lagrange functions based on the GL nodes. Notice that the discrete solution $\mathbf{u}_h$ consist of the discretization of both $u \text{ and } \mathbf{w} = - \nabla u$.\colorbox{yellow}{is it clear what system I am talking of here??} $\mathbf{u}_h$ can be structured block wise or node wise. By choosing a block wise representation the final system of equations surging from the Poisson problem can be written as 
@@ -144,8 +145,14 @@ $
 
 Note that without the reformulation of the PDE as a first order system and with regular Galerkin formulation the stiffness matrix will simply be 
 $A_{3,3} = W \otimes L^TWL+ L^TWL \otimes W$.
-\section{LS spectral method for Diffusion transport}
-The matrix corresponding to the discretized variational formulation can be divided into two parts where one depends on $\mu$ alone and the other one contains the contributions from the gradient term in the original equation. 
+\section{LS spectral method for the diffusion transport reaction equation}
+The matrix corresponding to the discretized variational formulation can be divided into three parts due to its dependency on $\mu$,$\mathbf{b}$ and $\sigma$. When using galerkin formulation one can easily add extra terms, and the bilinear form expands as a superposition of the bilinear form from each term. In the least-squares setting this is not the case, each term added creates a bit more chaos, I have however tried to illustrate a way one can divide up the total matrix resulting from the diffusion transport equation
+\begin{align}
+	-\mu \Delta u + \mathbf{b} \cdot \nabla u +\sigma u = f \text{ in } \Omega
+	\label{eq:ReactionImplementation}
+\end{align}
+\subsection{Laplacian part}
+The part of the matrix which is closest related to the laplacian operator can be generated as 
 
 $
 A^{LS} = 
@@ -156,7 +163,8 @@ A^{LS} =
 \end{bmatrix}
 $
 
-In addition it will be added some extra terms dependent on $\mathbf{b}$ to the upper left $2 \times 2$ block matrix. Let $B_1$ and $B_2$ be diagonal $n^2 \times n^2$ matrices with the values of the first and second component of $\mathbf{b}$ evaluated in each spacial node along the diagonal.  
+\subsection{Gradient part}
+The gradient part will probvide us with a matrix that is dependent of $\mathbf{b}$. Let $B_1$ and $B_2$ be diagonal $n^2 \times n^2$ matrices with the values of the first and second component of $\mathbf{b}$ evaluated in each spacial node along the diagonal.  
 \begin{align}
 	G_{1,1} &= -\mu B_1 (W \otimes WL) -\mu( W \otimes L^TW) B_1 + B_1( W\otimes W) B_1 \\ 	
 	G_{1,2} &= -\mu B_2 (W \otimes WL) -\mu (L^TW \otimes W) B_1 + B_1 (W\otimes W) B_2 \\
@@ -166,35 +174,60 @@ In addition it will be added some extra terms dependent on $\mathbf{b}$ to the u
 \end{align}
 %
 Notice that $G_{2,1} &= G_{1,2}^T $, the least-squares formulation always provide a symmetric system of equations.
-We can now define the total matrix for the diffusion transport problem $K^{LS}$ as
+The full contribution from the gradient term given as a matrix is then given as  
 
-\begin{align}
-K^{LS} = A^{LS} + G^{LS}
-	\label{eq:difftransMatrixSum}
-\end{align}
-Where $G^{LS}$ is the matrix given as 
-$
-G^{LS}=
+$ G^{LS}=
 \begin{bmatrix}
 	G_{11} & G_{12} &0 \\
 	G_{21} & G_{22} &0 \\
 	0 & 0 & 0 
 \end{bmatrix}.
 $
-%
 
-Adding the gradient term in our equation also affects the loading function. In a compact notation the discretized loading vector from the variational formulation can be written as
+\subsection{Reaction part}
+The reactional term will consist of the following three $n^2 \times n^2$ sub matrices
+\begin{align}
+	R_{1,3} &= \sigma(\mu W\otimes L^T W - B_1 W\otimes W),\\
+	R_{2,3} &= \sigma(\mu L^T W\otimes W - B_2 W\otimes W),\\
+	R_{3,3} &= \sigma^2(W\otimes W).
+	\label{ReactionalTerm}
+\end{align}
+Now, because of the symmetry guaranteed by the least-squares formulation $R_{3,1}=R_{1,3}^T$ and $R_{3,2}=R_{2,3}^T$. Hence the total attribution from the extra reactional term is 
+
+$
+R^{LS}=
+\begin{bmatrix}
+	0 & 0	 &	R_{1,3}   \\
+	0 & 0	 &	R_{2,3}   \\
+	R_{3,1} & R_{3,1} & R_{3,3} 
+\end{bmatrix}.
+$
+
+\subsection{The loading function}
+Adding the gradient and reactional term in our equation also affects the loading function. In a compact notation the discretized loading vector from the variational formulation can be written as
 $
 F^{LS}=
 \begin{bmatrix}
 	\mu(W \otimes L^T W)F_m - (W \otimes W)B_1F_m \\
 	\mu(L^TW \otimes W)F_m - (W \otimes W)B_2F_m \\
-	0 & 
+	\sigma(W\otimes W)F_m & 
 	\label{mat:FLS}
 \end{bmatrix},
 $
 where $F_m$ is the vector with the loading function evaluated in each spacial node.
 %
+
+\subsection{Total matrix}
+We can now define the total matrix for the diffusion transport reaction problem $K^{LS}$ as
+
+\begin{align}
+	K^{LS} = A^{LS} + G^{LS} + R^{LS}
+	\label{eq:difftransMatrixSum}
+\end{align}
+%
+
+Notice that most of the terms in the final matrix are cross terms, and does not surge solely from one of the terms in the equation. The way that the matrices have been divided into parts here are of now other than practical reasons and can be done in a different matter.  
+
 \section{non-linear diffusion transport problem}
 The stepwise algorithm to solve the nonlinear equation is described in chapter~\ref{chap:newTheory}. However there are several computational steps that needs to be taken care of, both with regular Galerkin and least squares. In both cases we obtain two matrices which we will name $A$ and $G$ and with superscript LS if they refer to the least squares formulation. In both cases only $G$ will depend on the numerical solution $u_h$. An important difference however is that in the LS setting the $F$ vector will depend on $u_h$ while in the straight forward Galerkin setting it will not. For regular Galerkin spectral approach we obtain
 %

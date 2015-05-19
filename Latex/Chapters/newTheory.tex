@@ -65,19 +65,20 @@ Using \eref{VarFormLinForms} with homogeneous boundary conditions we obtain the 
 	\label{eq:stabilityResult}
 \end{align}
 The proof for a similar method can be found in~\cite{Quarteroni} Ch.12. 
-
+Let us start by assuming that the Galerkin formulation provides a bilinear form that is normequivalent to the $L^2$-norm, $a(u_h,u_h)= \theta||u_h||_0$. 
 \colorbox{yellow}{Need to fix this Proof, not OK !! }
 Proof:
 \begin{align}
 	\mathring{a}(u_h,u_h) &= \mathring{f}(u_h) \\
 	&= (f,u_h) + \delta(\mathbf{f},\mathcal{L}\mathbf{u_h}) \\
-	&\leq ||f||\:||u_h||+\delta||\mathbf{f}||\:||\mathcal{L}\mathbf{u_h}|| \\
-	&\leq ||f||^2 + \frac{1}{4}||u_h||^2 + \delta||\mathbf{f}||^2 + \frac{\delta}{4}||\mathcal{L}\mathbf{u_h}||^2 \\
-	&= ||f||^2 + \delta||f||^2 + \frac{1}{4}\mathring{a}(u_h,u_h).
+	&= (\frac{1}{\sqrt{\theta}}f,\sqrt{\theta}u_h) + \delta(\mathbf{f},\mathcal{L}\mathbf{u_h}) \\
+	&\leq ||\frac{1}{\sqrt{\theta}}f||\:||\sqrt{\theta}u_h||+\delta||\mathbf{f}||\:||\mathcal{L}\mathbf{u_h}|| \\
+	&\leq \frac{1}{\theta}||f||^2 + \frac{1}{4}\theta||u_h||^2 + \delta||\mathbf{f}||^2 + \frac{\delta}{4}||\mathcal{L}\mathbf{u_h}||^2 \\
+	&= \frac{1}{\theta}||f||^2 + \delta||f||^2 + \frac{1}{4}\mathring{a}(u_h,u_h).
 	\label{eq:derivationStabilityResult}
 \end{align}
 
-Which Allows us to determine the constant $C= \frac{4}{3}(1+\delta)$
+Which Allows us to determine the constant $C= \frac{4}{3}(\frac{1}{\theta}+\delta)$
 
 
 
@@ -94,13 +95,39 @@ Which Allows us to determine the constant $C= \frac{4}{3}(1+\delta)$
 
 \subsection{estimation of the constant $\alpha$}
 
-By performing the proof of the Poincar\'e inequality from~\cite{Quarteroni} for our domain $\Omega=(0,1)^2$ we end up with showing that $|v|_1\leq \sqrt{2/3}||v||_1 \;\; \forall v \in H^1_0$. By using this inequality twice we end up showing for the Poisson problem that
+By performing the proof of the Poincar\'e inequality from~\cite{Quarteroni} for our domain $\Omega=(0,1)^2$ we end up with showing that $|v|_1\leq \sqrt{2/3}||v||_1 \;\; \forall v \in H^1_0$. 
+Proof
+let $\mathbf{g} = \frac{1}{\sqrt{2}}[x,y]$ such that $k = \nabla \cdot \mathbf{g}=\frac{2}{\sqrt{2}}$ and let $u \in H_0^1$ then we can outline the following
+
 \begin{align}
-	|||v||| \geq \frac{2}{3}||v||_1,
-	\label{eq:resultAlpha}
+	||u||_0^2 &= k^{-1}\int_{\Omega}k|u(\mathbf{x})|^2d\Omega \\
+	&= -k^{-1}\int_{\Omega}\mathbf{g}\cdot \nabla(|u(\mathbf{x})|^2)d\Omega \\
+	&= -2k^{-1}\int_{\Omega}\mathbf{g}\cdot [u(\mathbf{x})\nabla(u(\mathbf{x}))]d\Omega \\
+	&\leq 2k^{-1}||\mathbf{g}||_{\infty}||u||_0 \: |u|_1\\
+	&\leq 2k^{-1}\frac{1}{\sqrt{2}}||u||_0 \: |u|_1
+	\label{eq:PoincareProof}
 \end{align}
-Hence $\alpha=\frac{2}{3}$. \colorbox{yellow}{should find this constant for the difftrans problem}
-%
+Dividing both sides with the $L^2$-norm leaves us with
+\begin{align}
+	|u|_1 \geq ||u||_0
+	\label{eq:PoincareStatement}
+\end{align}
+Further we can show the following result by using the definition of $||\cdot||_1$
+\begin{align}
+	||u||_1 &= \sqrt{||u||_0^2+|u|_1^2}\\
+	&	\leq \sqrt{2|u|_1^2}\\
+	&= \sqrt{2}|u|_1
+	\label{eq:NormInequalitySobolev}
+\end{align}
+
+This result can be used to show some norm equivalency of the bilinear functional. 
+%By using this inequality twice we end up showing for the Poisson problem that
+%\begin{align}
+	%|||v||| \geq \frac{2}{3}||v||_1,
+	%\label{eq:resultAlpha}
+%\end{align}
+%Hence $\alpha=\frac{2}{3}$. \colorbox{yellow}{should find this constant for the difftrans problem}
+%%
 \section{Nonlinear diffusion transport problem}
 Now let the vector field $\mathbf{b}$ from the diffusion transport problem be a function of $u$. 
 \begin{align}
