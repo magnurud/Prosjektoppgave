@@ -84,9 +84,8 @@ function [eh cn] = runMain_NeuDir(N,mu,alpha,delta)
 			Rg(J) = g3(x(i),y(j)); % West side
 		% Neumann part
 		elseif(j == N) 
-			J = I+dofs;
-			Rg(J) = -g4(x(i),y(j)); % North side
-			fh(I+2*dofs) = fh(I+2*dofs)+1/mu*wX(i)*g4(x(i),y(j));
+			Rg(J-dofs) = -g4(x(i),y(j)); % North side
+			fh(J) = fh(J)+1/mu*wX(i)*g4(x(i),y(j));
 		end
   end
 		%%%%%%%%%%%%% 

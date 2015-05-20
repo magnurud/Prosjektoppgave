@@ -41,46 +41,36 @@ Gh = gradient_2D_fast(LDM,B1,B2,W,dofs);
 fh = load_2D(N,x,y,wX,wY,f);
 Ah = mu*Ah+Gh;
 
-
-%% Dirchlet boundary conditions %%
-g1 = @(x,y) u(x,y); % South side boundary function
-g2 = @(x,y) u(x,y); % East side boundary function
-g3 = @(x,y) u(x,y); % West side boundary function
-g4 = @(x,y) 1/mu*exp(x)*cos(pi*y); % North side boundary function
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%% Vectorized BC's %% 
-Rg = zeros(dofs,1);
-for I = 1:dofs
-  i = mod(I-1,N)+1;
-  j = fix((I-1)/N)+1;
-  if(j==1) 
-    Rg(I) = g1(x(i),y(j)); % South side
-  elseif(i == N) 
-    Rg(I) = g2(x(i),y(j)); % East side
-  elseif(i == 1) 
-    Rg(I) = g3(x(i),y(j)); % West side
-  %elseif(j == N) 
-   % Rg(I) = g4(x(i),y(j)); % North side
- 	elseif(j == N)
-		fh(I) = fh(I)+wX(i)*g4(x(i),y(j));
-  end
-end
-fh = fh - Ah*Rg;
+h_west = @(x,y) u(x,y);
+h_north= @(x,y) pi*exp(x)*cos(pi*y);
 
 % Boundary conditions
 for I = 1:dofs
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
-  if(i==1 || i==N || j==1 || j==N)
+  if( j==1 || i==N)
+		fh = fh - Ah(:,I)*u(x(i),y(j));
+	end
+	if( i==1)
+		fh(I) = fh(I)-mu*wX(j)*h_west(x(i),y(j));
+	end
+	if( j==N)
+		fh(I) = fh(I)+mu*wX(i)*h_north(x(i),y(j));
+  end
+end
+
+for I = 1:dofs
+  i = mod(I-1,N)+1;
+  j = fix((I-1)/N)+1;
+  if( j==1 || i==N)
     Ah(I,:) = 0;
     Ah(:,I) = 0;
     Ah(I,I) = 1;
-    fh(I) = 0;
+    fh(I) = u(x(i),y(j));
   end
 end
     
 uh = Ah\fh;
-uh = uh + Rg;
 
 % Plotting
 figure;
