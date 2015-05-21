@@ -108,7 +108,7 @@ figure;
 subplot(1,2,1)
 %surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
 %surf(x,y,reshape(uh(dofs+1:2*dofs),N,N)');
-surf(x,y,reshape(uh(1:dofs),N,N)');
+surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
 title('Numerical Solution');
 xlabel('x')
 ylabel('y')
