@@ -51,6 +51,7 @@ g2 = @(x,y) u(x,y); % East side boundary function
 g3 = @(x,y) u(x,y); % West side boundary function
 g4 = @(x,y) u(x,y); % North side boundary function
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
 %% Vectorized BC's %% 
 Rg = zeros(LSdofs,1);
 for I = 1:dofs
