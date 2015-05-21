@@ -149,15 +149,15 @@ We require that $\mathbf{f} \in Y$.
 \colorbox{yellow}{Should I state the numerical variational formulation instead??}
 Notice that the spaces $X$ and $Y$ chosen as described above fulfill the condition ~\eref{eq:normEq}. 
 %
-\section{Example - Diffusion convection reaction problem}
+\section{Example - Diffusion transport reaction problem}
 %
-The diffusion convection problem to be analyzed is given as 
+The diffusion transport reaction problem to be analyzed is given as 
 \begin{align}
 	-\mu \Delta u + \mathbf{b} \cdot \nabla u +\sigma u = f \text{ in } \Omega \\
 	u = g \text{ on } \partial \Omega
 	\label{eq:DiffTrans}
 \end{align}
-where $\mathbf{b} = [b_1 , b_2]$ is a vector field, and $\sigma$ is some reaction constant. By following the same approach as for the Poisson problem we end up with $\mathcal{L}$ on the form
+where $ \mu$ is the diffusion constant, $\mathbf{b} = [b_1 , b_2]$ is a vector field nd $\sigma$ is some reaction constant. By following the same approach as for the Poisson problem we end up with $\mathcal{L}$ on the form
 \begin{align}
 	\mathcal{L} =
 	\begin{bmatrix}
@@ -217,4 +217,10 @@ Let us define $\hat{x}$ and $\hat{y}$ as the unit vectors in each direction. Not
 	w_1 = \pm h \text{    for $y = 0$ and $y=1$ }\\
 	w_2 = \pm h \text{    for $x = 0$ and $x=1$ }
 	\label{eq:neumannAsDirichlet}
+\end{align}
+\subsection{Boundary as an additional functional}
+The boundary conditions can also be implemented as the functional described in equation \eref{eq:FunctionalGen}. For a BVP with Dirichlet BC's this will correspon to adding $||u-g||^2_0$ to our functional $J$. By minimizing this term we end up with the following contribution to the variational form
+\begin{align}
+	(u,v)_{\partial \Omega}=(g,v)_{\partial \Omega}
+	\label{eq:BCFunctionalImplementationContribution}
 \end{align}

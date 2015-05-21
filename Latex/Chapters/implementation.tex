@@ -8,7 +8,7 @@
 
 %----------------------------------------------------------------------------------------
 
-All the implementation has been done in two dimensions on the unit square $(0,1)^2$. The goal of the implementation has been to show the strengths of the least-squares method. It is implemented with finite element and spectral basis functions and is compared to the results from standard Galerkin formulation. Finally the combined GLS-method described in chapter \ref{chap:newTheory} is also tested against the separate methods. The problems solved are simply expansions of the Poisson problem (All problems have been implemented with non-homogeneous Dirichlet boundary conditions). 
+All the implementation has been done in two dimensions on the unit square $(0,1)^2$. The goal of the implementation has been to investigate the virtues of the least-squares method. It is implemented with finite element and spectral basis functions and is compared to the results from standard Galerkin formulation. Finally the combined GLS-method described in chapter \ref{chap:newTheory} is also tested against the separate methods. The problems solved are simply expansions of the Poisson problem (All problems have been implemented with non-homogeneous Dirichlet boundary conditions). 
 \begin{align}
 	-\Delta u = f \text{  in  } \Omega
 	\label{eq:PossionImplementation}
@@ -34,10 +34,8 @@ All the equations listed above are transformed into a first order system of PDE'
 	\mathcal{L}\mathbf{u} = \mathbf{f}.
 	\label{eq:genFirstOrderFormulation}
 \end{align}
-The partial differential operator $\mathcal{L}$ is the one stated in chapter
-\ref{chap:theory}.
-
-
+The partial differential operator $\mathcal{L}$ for each problem is the one stated in chapter \ref{chap:theory}.
+%
 \section{The bilinear form obtained from least-squares}
  For the general problem\eref{eq:BVP} the functional $Q$ will take the form 
 \begin{align}
@@ -60,15 +58,15 @@ Where $K$ denotes the number of discretization points, which is the same as the 
 \end{align}
 The total system of equation for all test functions can then be written as a matrix equation 
 \begin{align}
-	A^{LS}\mathbf{u} = F^{LS}.
+	K^{LS}\mathbf{u} = F^{LS}.
 	\label{eq:matrixEq}
 \end{align}
-Where $A^{LS}_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$. \colorbox{yellow}{Should somehow show the importance of this formula}
+Where $K^{LS}_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$. \colorbox{yellow}{Should somehow show the importance of this formula}
 
 Written explicitly for the \textbf{Poisson and diffusion transport equation} it will be a 3-by-3 matrix on the form 
 
 $
-A^{LS}_{I,J} = \int_{\Omega}
+K^{LS}_{I,J} = \int_{\Omega}
 \begin{bmatrix}
 	N_IN_J + \partial_x N_{I} \partial_xN_{J} & \partial_x N_{I}\partial_y N_{J} & N_IN_{J,x} \\ 	
 	\partial_yN_{I}\partial_xN_{J} &N_IN_J + \partial_yN_{I}\partial_yN_{J} &  N_IN_{J,y} \\ 	
@@ -94,7 +92,7 @@ Notice that by doing the splitting of variables we obtain a system of equations 
 
 Note that the gradient of our solution must be restricted to the space $H^1(\text{div},\Omega) = \left\{  \mathbf{w}\in L^2(\Omega) | \nabla \cdot \mathbf{w} \in L^2(\Omega)\right\} $. In order to simplify the implementation I have in this project chosen my basis functions to a subspace such that $\mathbf{w}\in [H^1(\Omega)]^2$. In other words, the basis functions for the solution, and both components of the gradients are the same.  
 \section{Least squares with finite element basis functions}
-The same triangular grid has been chosen for the implementation of both regular Galerkin FEM and the least-squares FEM. By choosing 1st order hat functions each element consists of three non-zero basis functions. For the GFEM this leads to calculating a $3\times 3$ matrix for each element whereas for LSFEM a $9 \times 9$ matrix has to be calculated, although it is fairly structured it still leads to additional computational costs and is a lot more tedious to implement.
+The same triangular grid has been chosen for the implementation of both regular Galerkin FEM and the least-squares FEM. By choosing 1st order hat functions each element consists of three non-zero basis functions. For the GFEM this leads to calculating a $3\times 3$ matrix for each element whereas for LSFEM a $9 \times 9$ matrix has to be calculated, although it has a relatively simple structure it still leads to additional computational costs and is a lot more tedious to implement.
 
 \colorbox{yellow}{What can I say here\ldots not worth to show any derivations}
 \section{Least squares with spectral basis functions}
@@ -103,9 +101,9 @@ The spectral implementation is done using Gauss Lobatto nodes and quadrature rul
 
 $
 \begin{bmatrix}
-	A_{1,1} & A_{1,2} &	A_{1,3} \\ 	
-	A_{2,1} & A_{2,2} & A_{2,3} \\ 	
-	A_{3,1} & A_{3,2} & A_{3,3} \\ 	
+	K_{1,1} & K_{1,2} &	K_{1,3} \\ 	
+	K_{2,1} & K_{2,2} & K_{2,3} \\ 	
+	K_{3,1} & K_{3,2} & K_{3,3} \\ 	
 \end{bmatrix}
 \begin{bmatrix}
  u^h \\ 	
@@ -120,24 +118,24 @@ $
 \end{bmatrix}
 $.
 
-Where each block $A_{m,n}$ corresponds to  calculating element $m,n$ in the matrix\eref{mat:basicPoisson} for all combinations of $I,J$. In order to keep track of the indexing we use the expressions $I = i+jN$ and $J = k+lN$ where the helping indices denotes the position in $x,y$-coordinates. Let us take a closer look at element $A_{1,3}$ in order to achieve a more compact notation. 
+Where each block $K_{m,n}$ corresponds to  calculating element $m,n$ in the matrix\eref{mat:basicPoisson} for all combinations of $I,J$. In order to keep track of the indexing we use the expressions $I = i+jN$ and $J = k+lN$ where the helping indices denotes the position in $x,y$-coordinates. Let us take a closer look at element $K_{1,3}$ in order to achieve a more compact notation. 
 \begin{align}
-	(A_{1,3})_{I,J} &= \int_{\Omega} N_I N_{J,x} d\Omega \\
+	(K_{1,3})_{I,J} &= \int_{\Omega} N_I N_{J,x} d\Omega \\
 	&= \int_{\Omega} l_i(x)l_j(y)l'_k(x)l_l(y) d\Omega \\
 	&= \sum_{\alpha}\sum_{\beta} w_{\alpha}w_{\beta}l_i(x_{\alpha})l_j(y_{\beta})l'_k(x_{\alpha})l_l(y_{\beta}).
 	\label{eq:MatrixDerivation}
 \end{align}
 The sum is obtained by using Gauss Lobatto quadrature rule. Now notice that the lagrange polynomials $l_j(y_{\beta})$ are non-zero only when $\beta = j$, this implies that for the non-zero terms in the sum we have $\beta = j=l$, and $\alpha = i$. With these considerations the double sum above simplifies to  
 \begin{align}
-	(A_{1,3})_{I,J} &= w_{i}w_{j}l'_k(x_{i})
+	(K_{1,3})_{I,J} &= w_{i}w_{j}l'_k(x_{i})
 	\label{eq:MatrixDerivation2}
 \end{align}
-Remember that $I = i+jN$ and $J = k+lN$, with $N$ being the number of nodes in each spacial direction. This means that $A_{1,3}$ will consist of blocks where $i$ and $k$ goes from $1$ to $N$ while $j$ and $k$ are constant within each block. Since we require that $j=k$ we can immediately conclude that $A_{1,3}$ is nonzero only in the blocks along the diagonal. Notice that the factor $w_il'_k(x_i)$ is the same for each block, and it can be written in matrix form as $WL$. With this notation $W$ is the $n \times n$ diagonal matrix with the GLL-weights along the diagonal and $L$ is the matrix containing the derivatives of the lagrange polynomials $(L)_{i,j}= l_j'(x_i)$. Since each block $WL$ is multiplied with $w_j$ the whole matrix can simply be written as the Kronecker tensor product $(W\otimes WL)$. Similar reasoning can be made with all the other block matrices $A_{m,n}$ and we end up with a matrix on the form
+Remember that $I = i+jN$ and $J = k+lN$, with $N$ being the number of nodes in each spacial direction. This means that $K_{1,3}$ will consist of blocks where $i$ and $k$ goes from $1$ to $N$ while $j$ and $k$ are constant within each block. Since we require that $j=k$ we can immediately conclude that $K_{1,3}$ is nonzero only in the blocks along the diagonal. Notice that the factor $w_il'_k(x_i)$ is the same for each block, and it can be written in matrix form as $WL$. With this notation $W$ is the $n \times n$ diagonal matrix with the GLL-weights along the diagonal and $L$ is the matrix containing the derivatives of the lagrange polynomials $(L)_{i,j}= l_j'(x_i)$. Since each block $WL$ is multiplied with $w_j$ the whole matrix can simply be written as the Kronecker tensor product $(W\otimes WL)$. Similar reasoning can be made with all the other block matrices $K_{m,n}$ and for the Poisson problem we end up with a matrix on the form
 %In order to implement this matrix it is convenient to write it in a compact form using the Kronecker tensor product. The components needed for this formulation is the $n \times n$ diagonal matrix $ W $ with the GLL-weigths along the diagonal and the $n \times n$ matrix $(L)_{i,j}= l_j'(x_i)$ where $l_j$ is the jth lagrange polynomial and $x_i$ is the ith node in either x or y direction. Note that the formulation is based on a grid of GLL-nodes in both x and y direction. 
 
 %
 $
-A^{LS} = 
+K^{LS} = 
 \begin{bmatrix}
 	W \otimes (L^TWL+W) & WL \otimes L^TW 		 &	W \otimes WL  \\ 	
 	L^TW \otimes WL     & (L^TWL+W) \otimes W  &	WL \otimes W  \\ 	
@@ -146,7 +144,7 @@ A^{LS} =
 $
 
 Note that without the reformulation of the PDE as a first order system and with regular Galerkin formulation the stiffness matrix will simply be 
-$A_{3,3} = W \otimes L^TWL+ L^TWL \otimes W$.
+$K_{3,3} = W \otimes L^TWL+ L^TWL \otimes W$.
 \section{LS spectral method for the diffusion transport reaction equation}
 The matrix corresponding to the discretized variational formulation can be divided into three parts due to its dependency on $\mu$,$\mathbf{b}$ and $\sigma$. When using galerkin formulation one can easily add extra terms, and the bilinear form expands as a superposition of the bilinear form from each term. In the least-squares setting this is not the case, each term added creates a bit more chaos, I have however tried to illustrate a way one can divide up the total matrix resulting from the diffusion transport equation
 \begin{align}
