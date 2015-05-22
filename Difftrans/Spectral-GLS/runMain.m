@@ -20,10 +20,19 @@ h = 1/(N-1);
 NLS = 3*N; % Number of unknowns in each direction
 dofs = N^2;
 LSdofs = 3*dofs;
-B = @(x,y) -alpha*[1;1]; %Vector Field
-f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
-    +exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
-u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
+B = @(x,y) alpha*[2*x;y]; %Vector Field
+% TEST 1 %
+%f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
+    %+exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
+%u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
+
+% TEST 2 %
+f = @(x,y) -mu*(6*x-pi^2*x^3)*sin(pi*y)...
+    +(B(x,y)')*[3*x^2*sin(pi*y) ; x^3*pi*cos(pi*y)]; % Loading function
+u = @(x,y) x^3*sin(pi*y); % Analytical solution
+% TEST 3 %
+%f = @(x,y) 1;
+%u = @(x,y) 0; % Analytical solution
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
 [y,wY] = GLL_(N,0,1); % getting the GLL-points for the unit square
 LDM = 2*LagrangeDerivativeMatrix_GLL(N); % Need to multiply with 2/(b-a)
@@ -126,4 +135,4 @@ eh = norm((uh(2*dofs+1:end)-U),'inf')/norm(U,'inf');
 cn = condest(Ah);
 
 %Peclet number
-Peclet = max(max(sqrt(B1.^2+B2.^2)))*h/(2*mu)
+Peclet = alpha*h/(2*mu)

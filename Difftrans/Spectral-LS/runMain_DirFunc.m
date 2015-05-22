@@ -20,7 +20,7 @@ h = 1/(N-1);
 NLS = 3*N; % Number of unknowns in each direction
 dofs = N^2;
 LSdofs = 3*dofs;
-B = @(x,y) alpha*[2*x;y]; %Vector Field
+B = @(x,y) alpha*[1;1]; %Vector Field
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
     +exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
@@ -75,22 +75,22 @@ end
 
 uh = Ah\fh;
 
-% Plotting
-figure;
-subplot(1,2,1)
-surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
-title('Numerical Solution');
-xlabel('x')
-ylabel('y')
-zlabel('z')
+%% Plotting
+%figure;
+%subplot(1,2,1)
+%surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
+%title('Numerical Solution');
+%xlabel('x')
+%ylabel('y')
+%zlabel('z')
 
-%% Plotting the analytical solution
-subplot(1,2,2) % second subplot
-surf(x,y,reshape(U,N,N)');
-title('Analytical Solution');
-xlabel('x')
-ylabel('y')
-zlabel('z')
+%%% Plotting the analytical solution
+%subplot(1,2,2) % second subplot
+%surf(x,y,reshape(U,N,N)');
+%title('Analytical Solution');
+%xlabel('x')
+%ylabel('y')
+%zlabel('z')
 
 eh = norm((uh(2*dofs+1:end)-U),'inf')/norm(U,'inf');
 cn = condest(Ah);

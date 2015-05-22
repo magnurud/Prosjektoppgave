@@ -19,8 +19,7 @@ Nodes = N^2;
 NN = 4*(N-1); %Number of nodes
 [p,tri,e] = getSquare(N); %nodes, edges and elements.
 b = alpha*[1; 1]; % Vector field creating the transport
-B = @(x,y) alpha*[1; 1]; % Vector field creating the transport
-%f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)+exp(x)*(b(1)*sin(pi*y)+pi*b(2)*cos(pi*y)); % Loading function
+B = @(x,y) alpha*[x; y]; % Vector field creating the transport
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
     +exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
@@ -30,8 +29,8 @@ for I = 1:Nodes
 end
 
 % Assemble Matrices and loading function for LSFEM 
-	Ah = stiffness_2D(dofs,p,tri,mu); % Now needs to include viscosity
-	Dh = gradient_2D(dofs,p,tri,b,mu);
+	%Ah = stiffness_2D(dofs,p,tri,mu); % Now needs to include viscosity
+	%Dh = gradient_2D(dofs,p,tri,b,mu);
     Ah2 = stiffness(dofs,p,tri,mu); % Now needs to include viscosity
     Dh2 = gradient(dofs,p,tri,B,mu);
     K = Ah2+Dh2; % Total matrix
@@ -78,21 +77,21 @@ end
   uh = K\fh;
   uh = uh+Rg;
     
-  %% Plotting the numerical solution
-  figure(1);
-  trisurf(tri,p(:,1),p(:,2),uh(3:3:dofs));
-title('Numerical Solution');
-xlabel('x')
-ylabel('y')
-zlabel('z')
+  %%% Plotting the numerical solution
+  %figure(1);
+  %trisurf(tri,p(:,1),p(:,2),uh(3:3:dofs));
+%title('Numerical Solution');
+%xlabel('x')
+%ylabel('y')
+%zlabel('z')
 
-%% Plotting the analytical solution
-figure(2);
-trisurf(tri,p(:,1),p(:,2),U);
-title('analytical Solution');
-xlabel('x')
-ylabel('y')
-zlabel('z')
+% Plotting the analytical solution
+%figure(2);
+%trisurf(tri,p(:,1),p(:,2),U);
+%title('analytical Solution');
+%xlabel('x')
+%ylabel('y')
+%zlabel('z')
 
 uh_max = uh(3:3:dofs);
 eh = norm((uh(3:3:dofs)-U),'inf')/norm(U,'inf');
