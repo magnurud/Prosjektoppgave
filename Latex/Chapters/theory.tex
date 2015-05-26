@@ -76,7 +76,7 @@ For any well-posed problem $\exists \alpha,\beta > 0$ such that
 	\alpha||u||_X^2 \leq J(u;0,0) = (\mathcal{L}u,\mathcal{L}u)_Y+(\mathcal{B}u,\mathcal{B}u)_B \leq \beta||u||_X^2.
 	\label{eq:normEq}
 \end{align}
-The fact that our functional is norm-equivalent is of crucial importance to a successful LS-method. It is therefore important that the spaces $X,Y \text{ and } B$ is chosen such that the LS-functional defines a norm is equivalent to $|| \cdot ||_X$.\colorbox{yellow}{Need to show this ? }
+The fact that our functional is norm-equivalent is of crucial importance to a successful LS-method. It is therefore important that the spaces $X,Y \text{ and } B$ is chosen such that the LS-functional defines a norm is equivalent to $|| \cdot ||_X$.
 Minimizing this functional is equivalent to solving the Euler-Lagrange equations formulated as 
 \begin{align}
 	\text{find } u \in X \text{  such that  } Q(u,v) = F(v) \; \; \forall v\in X
@@ -84,26 +84,35 @@ Minimizing this functional is equivalent to solving the Euler-Lagrange equations
 \end{align}
 Where $Q(u,v)$ and $F(v)$ are defined as 
 \begin{align}
+	\begin{split}
 	Q(u,v) &= (\mathcal{L}u,\mathcal{L}v)_Y+(\mathcal{B}u,\mathcal{B}v)_B, \\
 	F(v) &= (f,\mathcal{L}v)_Y+(g,\mathcal{L}v)_B.
-	\label{VarFormLinForms}
+	\end{split}
+	\label{eq:VarFormLinForms}
 \end{align}
 %
-Notice that $Q(u,v)$ defines an inner product and $Q(u,u)^{1/2}=J(u;0,0)^{1/2}$ defines the corresponding norm. 
+Notice that $Q(u,v)$ defines an inner product and $Q(u,u)^{1/2}=J(u;0,0)^{1/2}$ defines the corresponding norm, which we will name the \textit{energy norm},
 
-In order to solve this numerically we define the function spaces $X^h, Y^h \text{ and } B^h$ and the corresponding variational formulation is then written as 
+\begin{align}
+	||| u ||| := Q(u,u)^{1/2}
+	\label{eq:energynorm}
+\end{align}
+
+In order to solve the BVP numerically we define discrete function spaces $X^h \subset X, \; Y^h\subset Y \; \text{ and } B^h \subset B $ and the corresponding variational formulation is then written as 
 \begin{align}
 	\text{find } u^h \in X^h \text{  such that  } Q(u^h,v^h) = F(v^h) \; \; \forall v^h\in X^h.
 	\label{eq:varFormGenDisc}
 \end{align}
 ~\cite{Bochev}
 %
-\subsection{Error analysis}
+\section{Error analysis}
 Let $u$ be the analytical solution of a problem of the type ~\eref{eq:BVP}, $u^h$ is our numerical solution to ~\eref{eq:varFormGenDisc} and $u^h_{\perp} $ is the orthogonal projection of $u$ in $X_h$. 
 \begin{align}
+	\begin{split}
 	Q(u-u^h,u-u^h) &= Q(u-u^h,u-u^h_{\perp}) + Q(u-u^h,u^h_{\perp}-u^h) \\
 							   &= Q(u-u^h,u-u^h_{\perp}) \\
 							 	 &\leq \beta ||u-u^h||_{X_h} \; ||u-u^h_{\perp}||_{X_h}.
+	\end{split}
 	\label{eq:error1}
 \end{align}
 The first equality is due to adding and subtracting $u^h_{\perp}$, because both $u^h$ and $u^h_{\perp}$ solves the variational formulation we can cancel the last term, and by using the norm-equivalency from ~\eref{eq:normEq} and Schwartz inequality we get the last  expression. Now by applying the first inequality of ~\eref{eq:normEq} we end up with 
@@ -114,8 +123,46 @@ The first equality is due to adding and subtracting $u^h_{\perp}$, because both 
 Hence we can show that the Least squares method provides a convergence result of similar order as the Finite element method.
 \colorbox{yellow}{Add the convergence result of spectral methods}
 
+\section{Least squares applied on some common PDE's}
+Before we start elaborating to much on each test case, I will provide a quick overview of the problems investigated in this project. All of them are BVP with either Neumann or Dirichlet boundary conditions, the results can be found in chapter~\ref{chap:results}. The problems attempted to be solved in this project are simply expansions of the Poisson problem,  
+%
+\begin{align}
+	-\Delta u = f \text{  in  } \Omega.
+	\label{eq:PossionImplementation}
+\end{align}
+%
+Then by adding a transport term you obtain the diffusion transport equation
+%
+\begin{align}
+	-\mu \Delta u + \mathbf{b} \cdot \nabla u = f \text{ in } \Omega
+	\label{eq:DiffTransImplementation}
+\end{align}
+%
+This can be further expanded by adding a reaction term
+%
+\begin{align}
+	-\mu \Delta u + \mathbf{b} \cdot \nabla u +\sigma u = f \text{ in } \Omega
+	\label{eq:ReactionImplementation}
+\end{align}
+%
+And as a final complication the vector field $\mathbf{b}$ can be made dependent on $u$ and hence give us the nonlinear diffusion transport reaction equation
+%
+\begin{align}
+	-\mu \Delta u + \mathbf{b}(u) \cdot \nabla u +\sigma u = f \text{ in } \Omega
+	\label{eq:ReactionImplementation}
+\end{align}
+%
+By defining $\mathbf{w}=-\nabla u$, and $ \mathbf{u} = \mathbf{w} \oplus u $, all the equations listed above are transformed into a first order system of PDE's 
+%
+\begin{align}
+	\mathcal{L}\mathbf{u} = \mathbf{f}.
+	\label{eq:genFirstOrderFormulation}
+\end{align}
+%
+We will now investigate the partial differential operator $\mathcal{L}$ for each of the mentioned problems.
+%
 
-\section{Example - Poisson problem}
+\subsection{Poisson problem}
 
 The Poisson problem is defined as 
 \begin{align}
@@ -140,16 +187,21 @@ which can be written in the same form as ~\eref{eq:BVP} with $ \mathbf{u} = \mat
 	\end{bmatrix}
 	\label{eq:Amatrix}
 \end{align}
-We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\Omega) $ and the functional can then be defined as in~\eref{eq:FunctionalGen}. The variational formulation of the problem can be stated. Find $ \mathbf{u} \in X $ such that
+We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\partial \Omega) $. \colorbox{yellow}{Is it ok to write Y x B like this ??} The functional defined in~\eref{eq:FunctionalGen} will for our problem be 
+\begin{align}
+	J(u;f) = ||\mathcal{L}u-f||^2_Y.
+	\label{eq:lsFunctionalPoisson}
+\end{align}
+The term corresponding to the boundary conditions is imposed directly in the definition of our search space and is therefore not included in our functional as implied by equation\eref{eq:FunctionalGen}. We will later show that this results in a better numerical solution. The corresponding variational formulation defined in\eref{eq:VarFormLinForms} can now be stated. Find $ \mathbf{u} \in X $ such that
 \begin{align}
 	Q(\mathbf{u},\mathbf{v}) = F(\mathbf{v}) \;\; \forall \;\; \mathbf{v} \in X.
 	\label{eq:VariationalFormulationPoisson}
 \end{align}
 We require that $\mathbf{f} \in Y$.
-\colorbox{yellow}{Should I state the numerical variational formulation instead??}
+\colorbox{yellow}{get a reference on this !!! }
 Notice that the spaces $X$ and $Y$ chosen as described above fulfill the condition ~\eref{eq:normEq}. 
 %
-\section{Example - Diffusion transport reaction problem}
+\subsection{Diffusion transport reaction problem}
 %
 The diffusion transport reaction problem to be analyzed is given as 
 \begin{align}
@@ -157,7 +209,7 @@ The diffusion transport reaction problem to be analyzed is given as
 	u = g \text{ on } \partial \Omega
 	\label{eq:DiffTrans}
 \end{align}
-where $ \mu$ is the diffusion constant, $\mathbf{b} = [b_1 , b_2]$ is a vector field nd $\sigma$ is some reaction constant. By following the same approach as for the Poisson problem we end up with $\mathcal{L}$ on the form
+where $ \mu$ is the diffusion constant, $\mathbf{b} = [b_1 , b_2]$ is a vector field and $\sigma$ is some reaction constant. By following the same approach as for the Poisson problem we end up with $\mathcal{L}$ on the form
 \begin{align}
 	\mathcal{L} =
 	\begin{bmatrix}
@@ -193,9 +245,37 @@ which leads to a similar but slightly different linear system than the one creat
 %We require that $\mathbf{f} \in Y$.
 %Notice that the spaces $X$ and $Y$ chosen as described above fullfill the condition ~\eref{eq:normEq}. 
 
+\subsection{Nonlinear problem}
+Now let the vector field $\mathbf{b}$ from the diffusion transport reaction problem be a function of $u$. 
+\begin{align}
+	-\mu \Delta u + \mathbf{b}(u) \cdot \nabla u +\sigma u = f \text{ in } \Omega \\
+	u = g \text{ on } \partial \Omega
+	\label{eq:DiffTransNonLin}
+\end{align}
+This gives us a nonlinear variational formulation that does not allow us to solve our system of equations directly. In order to find a solution Newtons method was used. A notable difference between standard Galerkin and least-squares is that the linear functional $F(\cdot)$ will also be non-linear in the LS case.
+%Needs to add the Jacobian of $F$ as well since this depends on $b$ and thus also $u$. 
+%%
+%Let us consider the diffusion transport equation with non-homogeneous boundary conditions and a non-linear gradient term with a LS-approach. This corresponds to solving the equation 
+%\begin{align}
+	%Q(\tilde{\mathbf{u}},\mathbf{v};b) &= \tilde{F}(\mathbf{v};b) \\
+	%Q(\tilde{\mathbf{u}},\mathbf{v};b) - \tilde{F}(\mathbf{v};b) &= 0\\
+	%\mathcal{F}(\tilde{\mathbf{u}},\mathbf{v};b) &= 0
+	%\label{eq:varFormNonLin}
+%\end{align}
+%%
+%Where the Dirichlet homogeneous boundary conditions on $\tilde{\mathbf{u}}$ are required by the search space.
+%Newtons method is then applied, you start by guessing an initial $\tilde{\mathbf{u}}_h^0$ and then repeating
+%%
+%\begin{enumerate}
+	%\item $r^k = \mathcal{ F } (\tilde{\mathbf{u}}_h^k)$  , Calculating the residual
+	%\item $\hat{e}^k = \mathcal{J}_k^{-1}r^k $  , Calculating the error 
+	%\item $\tilde{\mathbf{u}}_h^{k+1}=\tilde{\mathbf{u}}_h^k-\hat{e}^k$    , updating the solution
+%\end{enumerate}
+%%
+%until you reach your solution. $\mathcal{J}_k$ is the Jacobian matrix of $\mathcal{F}(\mathbf{u_h}^k)$.
 \section{Boundary conditions}
 \subsection{non-homogeneous Dirichlet boundary conditions}
-If $g \neq 0$ then we simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{\mathbf{u}}=\mathbf{u}-R_g$ we can replace $\mathbf{u}$ in the variation formulation and get 
+If $g \neq 0$ then we can simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{\mathbf{u}}=\mathbf{u}-R_g$ we can replace $\mathbf{u}$ in the variation formulation and get 
 \begin{align}
 	Q(\tilde{\mathbf{u}}+R_g,\mathbf{v}) &= F(\mathbf{v}) \\
 	Q(\tilde{\mathbf{u}},\mathbf{v})+Q(R_g,\mathbf{v}) &= F(\mathbf{v}) \\
@@ -223,4 +303,10 @@ The boundary conditions can also be implemented as the functional described in e
 \begin{align}
 	(u,v)_{\partial \Omega}=(g,v)_{\partial \Omega}
 	\label{eq:BCFunctionalImplementationContribution}
+\end{align}
+Similarly for a BVP with Neumann boundary conditions on $\Gamma_N$ and Dirichlet conditions on $\Gamma_D$ the contribution to the functional will be
+\begin{align}
+	(u,v)_{\Gamma_D} + (\mathbf{n}\cdot \mathbf{w},v)_{\Gamma_N}=
+	(g_D,v)_{\Gamma_D} + (g_N,v)_{\Gamma_N} 
+	\label{eq:NeuDirFunctional}
 \end{align}

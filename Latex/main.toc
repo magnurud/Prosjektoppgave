@@ -1,15 +1,40 @@
 \contentsline {chapter}{Abstract}{i}{dummy.1}
 \vspace {1em}
 \contentsline {chapter}{Contents}{ii}{dummy.2}
-\contentsline {chapter}{List of Figures}{iii}{dummy.4}
-\contentsline {chapter}{List of Tables}{iv}{dummy.6}
-\contentsline {chapter}{Notation}{v}{dummy.8}
-\contentsline {chapter}{\numberline {1}Theory}{1}{chapter.11}
-\contentsline {section}{\numberline {1.1}LSFEM - Main idea}{1}{section.12}
-\contentsline {subsection}{\numberline {1.1.1}Difference from FEM}{1}{subsection.13}
-\contentsline {subsection}{\numberline {1.1.2}Subsection 2}{1}{subsection.14}
-\contentsline {section}{\numberline {1.2}Main Section 2}{2}{section.15}
+\contentsline {chapter}{Notation}{iv}{dummy.4}
+\contentsline {chapter}{\numberline {1}Theory}{1}{chapter.7}
+\contentsline {section}{\numberline {1.1}Informal introduction to least-squares}{1}{section.8}
+\contentsline {section}{\numberline {1.2} Formal formulation of least-squares}{3}{section.18}
+\contentsline {section}{\numberline {1.3}Error analysis}{4}{section.28}
+\contentsline {section}{\numberline {1.4}Least squares applied on some common PDE's}{4}{section.31}
+\contentsline {subsection}{\numberline {1.4.1}Poisson problem}{5}{subsection.37}
+\contentsline {subsection}{\numberline {1.4.2}Diffusion transport reaction problem}{7}{subsection.46}
+\contentsline {subsection}{\numberline {1.4.3}Nonlinear problem}{7}{subsection.50}
+\contentsline {section}{\numberline {1.5}Boundary conditions}{8}{section.53}
+\contentsline {subsection}{\numberline {1.5.1}non-homogeneous Dirichlet boundary conditions}{8}{subsection.54}
+\contentsline {subsection}{\numberline {1.5.2}non-homogeneous Neumann boundary conditions}{8}{subsection.59}
+\contentsline {subsection}{\numberline {1.5.3}Boundary as an additional functional}{8}{subsection.65}
+\contentsline {chapter}{\numberline {2}Stability properties of least-squares}{10}{chapter.68}
+\contentsline {section}{\numberline {2.1}Instability with the Galerkin formulation}{10}{section.69}
+\contentsline {section}{\numberline {2.2}Adding least squares in order to obtain stability}{11}{section.74}
+\contentsline {section}{\numberline {2.3}Estimation of the coercivity constant $\alpha $}{12}{section.79}
+\contentsline {chapter}{\numberline {3}Implementation}{14}{chapter.84}
+\contentsline {section}{\numberline {3.1}The bilinear form obtained from least-squares}{14}{section.85}
+\contentsline {section}{\numberline {3.2}Least squares with finite element basis functions}{16}{section.91}
+\contentsline {section}{\numberline {3.3}Least squares with spectral basis functions}{16}{section.92}
+\contentsline {section}{\numberline {3.4}LS spectral method for the diffusion transport reaction equation}{18}{section.97}
+\contentsline {subsection}{\numberline {3.4.1}Laplacian part}{18}{subsection.99}
+\contentsline {subsection}{\numberline {3.4.2}Gradient part}{18}{subsection.100}
+\contentsline {subsection}{\numberline {3.4.3}Reaction part}{19}{subsection.102}
+\contentsline {subsection}{\numberline {3.4.4}The loading function}{19}{subsection.104}
+\contentsline {subsection}{\numberline {3.4.5}Total matrix}{20}{subsection.105}
+\contentsline {section}{\numberline {3.5}non-linear diffusion transport problem}{20}{section.107}
+\contentsline {chapter}{\numberline {4}Results}{22}{chapter.113}
+\contentsline {section}{\numberline {4.1}The main differences}{22}{section.114}
+\contentsline {subsection}{\numberline {4.1.1}Poisson problem}{23}{subsection.115}
+\contentsline {subsection}{\numberline {4.1.2}Diffusion transport equation convergence and condition number}{23}{subsection.118}
+\contentsline {subsection}{\numberline {4.1.3}Diffusion transport equation surface plots}{24}{subsection.122}
 \vspace {2em}
-\contentsline {chapter}{\numberline {A}Appendix Title Here}{3}{appendix.16}
+\contentsline {chapter}{\numberline {A}Appendix Title Here}{28}{appendix.127}
 \vspace {2em}
-\contentsline {chapter}{Bibliography}{4}{dummy.17}
+\contentsline {chapter}{Bibliography}{29}{dummy.128}

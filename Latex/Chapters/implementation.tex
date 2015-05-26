@@ -8,35 +8,7 @@
 
 %----------------------------------------------------------------------------------------
 
-All the implementation has been done in two dimensions on the unit square $(0,1)^2$. The goal of the implementation has been to investigate the virtues of the least-squares method. It is implemented with finite element and spectral basis functions and is compared to the results from standard Galerkin formulation. Finally the combined GLS-method described in chapter \ref{chap:newTheory} is also tested against the separate methods. The problems solved are simply expansions of the Poisson problem (All problems have been implemented with non-homogeneous Dirichlet boundary conditions). 
-\begin{align}
-	-\Delta u = f \text{  in  } \Omega
-	\label{eq:PossionImplementation}
-\end{align}
-Then by adding a transport term you obtain the diffusion transport equation
-\begin{align}
-	-\mu \Delta u + \mathbf{b} \cdot \nabla u = f \text{ in } \Omega
-	\label{eq:DiffTransImplementation}
-\end{align}
-This can be further expanded by adding a reaction term
-\begin{align}
-	-\mu \Delta u + \mathbf{b} \cdot \nabla u +\sigma u = f \text{ in } \Omega
-	\label{eq:ReactionImplementation}
-\end{align}
-And as a final complication the vector field $\mathbf{b}$ can be made dependent on $u$ and hence give us the nonlinear diffusion transport reaction equation
-\begin{align}
-	-\mu \Delta u + \mathbf{b}(u) \cdot \nabla u +\sigma u = f \text{ in } \Omega
-	\label{eq:ReactionImplementation}
-\end{align}
-%
-All the equations listed above are transformed into a first order system of PDE's 
-\begin{align}
-	\mathcal{L}\mathbf{u} = \mathbf{f}.
-	\label{eq:genFirstOrderFormulation}
-\end{align}
-The partial differential operator $\mathcal{L}$ for each problem is the one stated in chapter \ref{chap:theory}.
-%
-\section{The bilinear form obtained from least-squares}
+All the implementation has been done in two dimensions on the unit square $(0,1)^2$. The goal of the implementation has been to investigate the virtues of the least-squares method. It is implemented with finite element and spectral basis functions and is compared to the results from standard Galerkin formulation. Finally the combined GLS-method described in chapter \ref{chap:newTheory} is also tested against the separate methods. \section{The bilinear form obtained from least-squares}
  For the general problem\eref{eq:BVP} the functional $Q$ will take the form 
 \begin{align}
 	Q(u,v)=\int_{\Omega}(\mathcal{L}v)^T(\mathcal{L}u)d\Omega.
@@ -49,11 +21,13 @@ Implementing $Q$ requires two sets of basis functions $\{N_i\}$ that describes t
 \end{align}
 Where $K$ denotes the number of discretization points, which is the same as the number of basis functions. \colorbox{yellow}{Is this statement OK?} Since equation\eref{eq:varFormGen} requires equality for all test functions in the search space we simply solve it for each basis function. We are therefore left with a system of $K$ equations. Equation\eref{eq:functionalInt} can then be written for each test function as  
 \begin{align}
+	\begin{split}
 	Q(u_h,N_I) &= \int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}u_h)d\Omega \\
 	&= \int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}\sum_{J=1}^Ka_JN_J)d\Omega \\
 	&= \sum_{J=1}^K\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}a_JN_J)d\Omega \\
 	&= \sum_{J=1}^K\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}a_JN_J)d\Omega \\
 	&= \sum_{J=1}^K\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega \;\cdot a_J.
+	\end{split}
 	\label{eq:varFormDisc}
 \end{align}
 The total system of equation for all test functions can then be written as a matrix equation 
@@ -75,9 +49,9 @@ K^{LS}_{I,J} = \int_{\Omega}
 \end{bmatrix}
 d\Omega
 $
-where $\partial_x = \partial / \partial x $ for the Poisson problem and $\mu \partial / \partial x - b_1$ for the diffusion transport problem. Similarly $F_I$ will be given as 
+where $\partial_x = \partial / \partial x $ for the Poisson problem and $\partial_x = \mu \partial / \partial x - b_1$ for the diffusion transport problem. Similarly $F^{LS}_I$ will be given as 
 \begin{align}
-	F_I = \int_{\Omega}(\mathcal{L}N_I)^T\vec{f} d\Omega = 
+	F_I^{LS} = \int_{\Omega}(\mathcal{L}N_I)^T\vec{f} d\Omega = 
 	\int_{\Omega}
 \begin{bmatrix}
 	\partial_xN_I \\
@@ -97,7 +71,28 @@ The same triangular grid has been chosen for the implementation of both regular 
 \colorbox{yellow}{What can I say here\ldots not worth to show any derivations}
 \section{Least squares with spectral basis functions}
 
-The spectral implementation is done using Gauss Lobatto nodes and quadrature rule. The basis functions are then chosen as the lagrange functions based on the GL nodes. Notice that the discrete solution $\mathbf{u}_h$ consist of the discretization of both $u \text{ and } \mathbf{w} = - \nabla u$.\colorbox{yellow}{is it clear what system I am talking of here??} $\mathbf{u}_h$ can be structured block wise or node wise. By choosing a block wise representation the final system of equations surging from the Poisson problem can be written as 
+The spectral implementation is done using Gauss Lobatto nodes and quadrature rule. The basis functions are then chosen as the lagrange functions based on the GL nodes. Before we continue let us define the two matrices $W$ and $L$ that will help us construct the final block matrices.
+%
+\begin{align}
+	W = \left\{
+		\begin{array}{lr}
+			w_i & \text{ if } i = j \\
+			0 & \text{ otherwise }
+		\end{array}
+		\right.
+	\label{eq:Wdef}
+\end{align}
+%
+Where $w_i$ is the ith GLL-weight, with this notation $W$ is the $n \times n$ diagonal matrix with the GLL-weights along the diagonal, further $L$ is the matrix containing the derivatives of the lagrange polynomials,  
+%
+\begin{align}
+	L_{i,j} &= l_j'(x_i).
+	\label{eq:HelpMatrices}
+\end{align}
+%
+Now, with the helping matrices defined let us look at the linear system surging from a least squares formulation with spectral basis functions. 
+
+Notice that the discrete solution $\mathbf{u}_h$ of the system $Q(\mathbf{u}_h,\mathbf{v}_h) = F(\mathbf{v}_h)$ consist of the discretization of both $u \text{ and } \mathbf{w} = - \nabla u$. $\mathbf{u}_h$ can be structured block wise or node wise, by choosing a block wise representation the final system of equations surging from the Poisson problem can be written as 
 
 $
 \begin{bmatrix}
@@ -120,9 +115,11 @@ $.
 
 Where each block $K_{m,n}$ corresponds to  calculating element $m,n$ in the matrix\eref{mat:basicPoisson} for all combinations of $I,J$. In order to keep track of the indexing we use the expressions $I = i+jN$ and $J = k+lN$ where the helping indices denotes the position in $x,y$-coordinates. Let us take a closer look at element $K_{1,3}$ in order to achieve a more compact notation. 
 \begin{align}
+	\begin{split}
 	(K_{1,3})_{I,J} &= \int_{\Omega} N_I N_{J,x} d\Omega \\
 	&= \int_{\Omega} l_i(x)l_j(y)l'_k(x)l_l(y) d\Omega \\
 	&= \sum_{\alpha}\sum_{\beta} w_{\alpha}w_{\beta}l_i(x_{\alpha})l_j(y_{\beta})l'_k(x_{\alpha})l_l(y_{\beta}).
+	\end{split}
 	\label{eq:MatrixDerivation}
 \end{align}
 The sum is obtained by using Gauss Lobatto quadrature rule. Now notice that the lagrange polynomials $l_j(y_{\beta})$ are non-zero only when $\beta = j$, this implies that for the non-zero terms in the sum we have $\beta = j=l$, and $\alpha = i$. With these considerations the double sum above simplifies to  
@@ -130,7 +127,7 @@ The sum is obtained by using Gauss Lobatto quadrature rule. Now notice that the 
 	(K_{1,3})_{I,J} &= w_{i}w_{j}l'_k(x_{i})
 	\label{eq:MatrixDerivation2}
 \end{align}
-Remember that $I = i+jN$ and $J = k+lN$, with $N$ being the number of nodes in each spacial direction. This means that $K_{1,3}$ will consist of blocks where $i$ and $k$ goes from $1$ to $N$ while $j$ and $k$ are constant within each block. Since we require that $j=k$ we can immediately conclude that $K_{1,3}$ is nonzero only in the blocks along the diagonal. Notice that the factor $w_il'_k(x_i)$ is the same for each block, and it can be written in matrix form as $WL$. With this notation $W$ is the $n \times n$ diagonal matrix with the GLL-weights along the diagonal and $L$ is the matrix containing the derivatives of the lagrange polynomials $(L)_{i,j}= l_j'(x_i)$. Since each block $WL$ is multiplied with $w_j$ the whole matrix can simply be written as the Kronecker tensor product $(W\otimes WL)$. Similar reasoning can be made with all the other block matrices $K_{m,n}$ and for the Poisson problem we end up with a matrix on the form
+Remember that $I = i+jN$ and $J = k+lN$, with $N$ being the number of nodes in each spacial direction. This means that $K_{1,3}$ will consist of blocks where $i$ and $k$ goes from $1$ to $N$ while $j$ and $k$ are constant within each block. Since we require that $j=k$ we can immediately conclude that $K_{1,3}$ is nonzero only in the blocks along the diagonal. Notice that the factor $w_il'_k(x_i)$ is the same for each block. And it can be written in matrix form as $WL$. Since each block $WL$ is multiplied with $w_j$ the whole matrix can simply be written as the Kronecker tensor product $(W\otimes WL)$. Similar reasoning can be made with all the other block matrices $K_{m,n}$ and for the Poisson problem we end up with a matrix on the form
 %In order to implement this matrix it is convenient to write it in a compact form using the Kronecker tensor product. The components needed for this formulation is the $n \times n$ diagonal matrix $ W $ with the GLL-weigths along the diagonal and the $n \times n$ matrix $(L)_{i,j}= l_j'(x_i)$ where $l_j$ is the jth lagrange polynomial and $x_i$ is the ith node in either x or y direction. Note that the formulation is based on a grid of GLL-nodes in both x and y direction. 
 
 %
@@ -166,14 +163,16 @@ $
 \subsection{Gradient part}
 The gradient part will probvide us with a matrix that is dependent of $\mathbf{b}$. Let $B_1$ and $B_2$ be diagonal $n^2 \times n^2$ matrices with the values of the first and second component of $\mathbf{b}$ evaluated in each spacial node along the diagonal.  
 \begin{align}
+	\begin{split}
 	G_{1,1} &= -\mu B_1 (W \otimes WL) -\mu( W \otimes L^TW) B_1 + B_1( W\otimes W) B_1 \\ 	
 	G_{1,2} &= -\mu B_2 (W \otimes WL) -\mu (L^TW \otimes W) B_1 + B_1 (W\otimes W) B_2 \\
 	G_{2,1} &= -\mu B_1 (WL \otimes W) -\mu (W \otimes L^TW) B_2 + B_2 (W\otimes W) B_1 \\
 	G_{2,2} &= -\mu B_2 (WL \otimes W) -\mu (L^TW \otimes W) B_2 + B_2 (W\otimes W) B_2. 
+	\end{split}
 	\label{eq:additionalMatrixDiffTrans}
 \end{align}
 %
-Notice that $G_{2,1} &= G_{1,2}^T $, the least-squares formulation always provide a symmetric system of equations.
+Notice that $G_{2,1} = G_{1,2}^T $, the least-squares formulation always provide a symmetric system of equations.
 The full contribution from the gradient term given as a matrix is then given as  
 
 $ G^{LS}=
@@ -187,9 +186,11 @@ $
 \subsection{Reaction part}
 The reactional term will consist of the following three $n^2 \times n^2$ sub matrices
 \begin{align}
+	\begin{split}
 	R_{1,3} &= \sigma(\mu W\otimes L^T W - B_1 W\otimes W),\\
 	R_{2,3} &= \sigma(\mu L^T W\otimes W - B_2 W\otimes W),\\
 	R_{3,3} &= \sigma^2(W\otimes W).
+	\end{split}
 	\label{ReactionalTerm}
 \end{align}
 Now, because of the symmetry guaranteed by the least-squares formulation $R_{3,1}=R_{1,3}^T$ and $R_{3,2}=R_{2,3}^T$. Hence the total attribution from the extra reactional term is 

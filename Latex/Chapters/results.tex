@@ -42,7 +42,47 @@ Using least squares will always give you a SPD system of equations which can be 
   \label{fig:ConditionPoisson}
 \end{figure}
 %
-\subsection{Diffusion transport equation}
+\subsection{Diffusion transport equation convergence and condition number}
+One of the disadvantages of least-squares methods is that the resulting
+linear system is badly condition number. Now, let $\mathbf{b}$ be the vector field $[x,y]$, and let us see how the condition number scales with the parameters $\mu$ and $\beta$ in the equation 
+\begin{align}
+	-\mu \Delta u + \beta \mathbf{b} \cdot \nabla u = f
+	\label{eq:difftransForConditionNumberPlotting}
+\end{align}
+%
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\textwidth]{Figures/Spec_difftrans_ConditionNumber.pdf}
+  \end{subfigure}%
+  \quad
+  \begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\textwidth]{Figures/Spec-LS_difftrans_ConditionNumber.pdf}
+  \end{subfigure}
+          %(or a blank line to force the subfigure onto a new line)
+  \vspace{-0.1\baselineskip}
+	\caption{plot of the condition number when the paramaters $\mu$ and $\beta$ are varied, $N=25,\mathbf{b} = -[x,y]$.}
+  \label{fig:CondDifftransSpec}
+\end{figure}
+%
+%
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\textwidth]{Figures/Spec_difftrans_Convergence.pdf}
+  \end{subfigure}%
+  \quad
+  \begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\textwidth]{Figures/Spec-LS_difftrans_Convergence.pdf}
+  \end{subfigure}
+          %(or a blank line to force the subfigure onto a new line)
+  \vspace{-0.1\baselineskip}
+	\caption{convergence plot  $\mathbf{b} = -[x,y]$.}
+  \label{fig:ConvergenceDifftransSpec}
+\end{figure}
+%
+
+\subsection{Diffusion transport equation surface plots}
 \begin{figure}[h!]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}

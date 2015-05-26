@@ -1,80 +1,98 @@
 % Chapter 2 - NEW THEORY
 
-\chapter{New Theory} % Main chapter title
+\chapter{Stability properties of least-squares} % Main chapter title
 
 \label{chap:newTheory} % For referencing the chapter elsewhere, use \ref{Chapter1} 
 
-\lhead{Chapter 2. \emph{New theory}} % This is for the header on each page - perhaps a shortened title
+\lhead{Chapter 2. \emph{Stability properties }} % This is for the header on each page - perhaps a shortened title
 
 %----------------------------------------------------------------------------------------
-\section{Using least-squares method to gain stability}
+\section{Instability with the Galerkin formulation}
 
-With regular Galerkin approach for the diffusion-transport equation you end up with the variational formulation 
+With regular Galerkin approach for the diffusion transport equation you end up with the variational formulation 
+%
 \begin{align}
 	a(u,v) = (f,v) \; \; \; \forall v \in V.
 	\label{eq:varFormDiffFEM}
 \end{align}
+%
 where $V$ is some closed subspace of $H^1$, and the bilinear functional is given as 
+%
 \begin{align}
+	\begin{split}
 	a(u,v) &= \mu\int_{\Omega}\nabla u \cdot \nabla v \: d\Omega 
 	+ \int_{\Omega} v (b \cdot \nabla u) d \Omega
+	\end{split}
 	\label{eq:bilinearFunctional}
 \end{align}
+%
 We can define a new norm from this functional in the following manner
+%
 \begin{align}
+\begin{split}
 	a(u,u) &= \mu\int_{\Omega}\nabla u \cdot \nabla u \: d\Omega 
 	+ \int_{\Omega}  b \cdot (u\nabla u) d \Omega\\
 	       &= \mu||\nabla u||^2_0 
 	+ \frac{1}{2}\int_{\Omega} b \cdot \nabla u^2 d \Omega \\
 	       &= \mu||\nabla u||^2_0 
 	- \frac{1}{2}\int_{\Omega} u^2  (\nabla \cdot b)  d \Omega \\
+\end{split}
 	\label{eq:bilinearFunctional}
 \end{align}
-Where we have used Greens theorem and the assumption that $u=0$ on the boundary in the last equality. Let us assume that the divergence of our vector field can be bounded within some interval, say  $\gamma_0 \leq \frac{1}{2}\nabla \cdot b \leq \gamma_1 $, we can now make a lower and upper bound for the bilinear form 
+%
+Where we have used Greens theorem and the assumption that $u=0$ on the boundary in the last equality. Let us assume that the divergence of our vector field can be bounded within some interval, say  $\gamma_0 \leq -\frac{1}{2}\nabla \cdot b \leq \gamma_1 $, we can now make a lower and upper bound for the norm surging from the bilinear form 
+%
 \begin{align}
-	\mu||\nabla u||^2_0 - \gamma_1||u||^2_0 \leq a(u,u) \leq \mu||\nabla u||^2_0 - \gamma_0||u||^2_0
+	\mu||\nabla u||^2_0 + \gamma_0||u||^2_0 \leq a(u,u) \leq \mu||\nabla u||^2_0 + \gamma_1||u||^2_0
 	\label{eq:bilinearOperatorBounds}
 \end{align}
-
-\colorbox{yellow}{should I change signs in the equation?? } 
-
-
-It is clear that for small $\mu$ and large positive $\gamma_1$ the bilinear form is no longer coercive and thus our convergence requirements are no longer valid. Standard Galerkin method is therefore not a suited way to solve this type of problem. 
+%
+It is clear that for negative $\gamma_0$ and sufficiently small $\mu$ the bilinear form is no longer coercive and thus our convergence requirements are no longer valid. Standard Galerkin method is therefore not a suited way to solve this type of problem. 
+\section{Adding least squares in order to obtain stability}
 
 Now remember from equation \eref{eq:normEq} that the least squares formulation guarantees us a coercive bilinear form, given that the BVP has a solution and that the search- and solution space are chosen correctly. For this particular problem we can find $\alpha,\beta$ such that $\alpha||u||_1^2 \leq Q(\mathbf{u},\mathbf{u}) \leq \beta||u||_1^2 $.
 Now, let us define $\mathring{a}(\cdot,\cdot)$ and $\mathring{f}(\cdot)$ as the as the linear combinations of the linear and bilinear form surging from standard Galerkin and least-squares method. 
 \begin{align}
+	\begin{split}
 	\mathring{a}(u,v) &= a(u,v) + \delta Q(\mathbf{u},\mathbf{\mathbf{v}}) \\
 	 \mathring{f}(v) &= (f,v) + \delta F(\mathbf{\mathbf{v}}) 
+	\end{split}
 	\label{eq:GLS}
 \end{align}
 Let us study the coerciveness of the bilinear form $\mathring{a}(\cdot,\cdot)$
 \begin{align}
+	\begin{split}
 	\mathring{a}(u,u) &\geq \mu ||\nabla u||_0^2+\gamma_0||u||_0^2+\delta \alpha ||u||^2_1 \\
 	&\geq \mu ||\nabla u||_0^2+\gamma_0||u||_0^2+\delta \alpha ||u||^2_0 \\
 	&\geq \mu ||\nabla u||_0^2+\mu ||u||_0^2 \\
 	&= \mu ||u||^2_1
+	\end{split}
 	\label{eq:coercivity}
 \end{align}
 \colorbox{yellow}{Don't like the way Q has to be defined with $\mathbf{u}$}
 In the third inequality we make the assumption that $\gamma_0+\delta \alpha \geq \mu $ in other words $\delta$, (the amount of smoothing from LS) has to be chosen such that $\delta \geq (\mu-\gamma_0)/\alpha$.
-Using \eref{VarFormLinForms} with homogeneous boundary conditions we obtain the identities $Q(\mathbf{u},\mathbf{u}) = (\mathcal{L}\mathbf{u},\mathcal{L}\mathbf{u})$ and $F(\mathbf{u}) = (\mathbf{f},\mathcal{L}\mathbf{u})$ we can derive the following stability result for our discrete solution of the variational formulation, 
+
+Using \eref{eq:VarFormLinForms} with homogeneous boundary conditions we obtain the identities $Q(\mathbf{u},\mathbf{u}) = (\mathcal{L}\mathbf{u},\mathcal{L}\mathbf{u})$ and $F(\mathbf{u}) = (\mathbf{f},\mathcal{L}\mathbf{u})$ we can derive the following stability result for our discrete solution of the variational formulation, 
 	
 \begin{align}
 	\mathring{a}(u_h,u_h)_h \leq C ||f||^2
 	\label{eq:stabilityResult}
 \end{align}
 The proof for a similar method can be found in~\cite{Quarteroni} Ch.12. 
-Let us start by assuming that the Galerkin formulation provides a bilinear form that is normequivalent to the $L^2$-norm, $a(u_h,u_h)= \theta||u_h||_0$. 
-\colorbox{yellow}{Need to fix this Proof, not OK !! }
+Let us start by assuming that the Galerkin formulation provides a bilinear form that can be stated as earlier, $a(u_h,u_h)= \mu||\nabla u_h||^2_0 + \gamma||u_h||^2_0$, with $\gamma > 0$. 
+\colorbox{yellow}{Could be done with negative gamma as well }
+
 Proof:
 \begin{align}
+	\begin{split}
 	\mathring{a}(u_h,u_h) &= \mathring{f}(u_h) \\
 	&= (f,u_h) + \delta(\mathbf{f},\mathcal{L}\mathbf{u_h}) \\
-	&= (\frac{1}{\sqrt{\theta}}f,\sqrt{\theta}u_h) + \delta(\mathbf{f},\mathcal{L}\mathbf{u_h}) \\
-	&\leq ||\frac{1}{\sqrt{\theta}}f||\:||\sqrt{\theta}u_h||+\delta||\mathbf{f}||\:||\mathcal{L}\mathbf{u_h}|| \\
-	&\leq \frac{1}{\theta}||f||^2 + \frac{1}{4}\theta||u_h||^2 + \delta||\mathbf{f}||^2 + \frac{\delta}{4}||\mathcal{L}\mathbf{u_h}||^2 \\
-	&= \frac{1}{\theta}||f||^2 + \delta||f||^2 + \frac{1}{4}\mathring{a}(u_h,u_h).
+	&= (\frac{1}{\sqrt{\gamma}}f,\sqrt{\gamma}u_h) + \delta(\mathbf{f},\mathcal{L}\mathbf{u_h}) \\
+	&\leq ||\frac{1}{\sqrt{\gamma}}f||\:||\sqrt{\gamma}u_h||+\delta||\mathbf{f}||\:||\mathcal{L}\mathbf{u_h}|| \\
+	&\leq \frac{1}{\gamma}||f||^2 + \frac{1}{4}\gamma||u_h||^2 + \delta||\mathbf{f}||^2 + \frac{\delta}{4}||\mathcal{L}\mathbf{u_h}||^2 \\
+	&\leq \frac{1}{\gamma}||f||^2 + \delta||\mathbf{f}||^2 + \frac{1}{4}\gamma||u_h||^2 + \frac{1}{4}\mu||\nabla u_h||^2 + \frac{\delta}{4}||\mathcal{L}\mathbf{u_h}||^2 \\
+	&= \frac{1}{\gamma}||f||^2 + \delta||f||^2 + \frac{1}{4}\mathring{a}(u_h,u_h).
+	\end{split}
 	\label{eq:derivationStabilityResult}
 \end{align}
 
@@ -93,18 +111,21 @@ Which Allows us to determine the constant $C= \frac{4}{3}(\frac{1}{\theta}+\delt
 %\end{align}
 
 
-\subsection{estimation of the constant $\alpha$}
+\section{Estimation of the coercivity constant $\alpha$}
 
-By performing the proof of the Poincar\'e inequality from~\cite{Quarteroni} for our domain $\Omega=(0,1)^2$ we end up with showing that $|v|_1\leq \sqrt{2/3}||v||_1 \;\; \forall v \in H^1_0$. 
-Proof
-let $\mathbf{g} = \frac{1}{\sqrt{2}}[x,y]$ such that $k = \nabla \cdot \mathbf{g}=\frac{2}{\sqrt{2}}$ and let $u \in H_0^1$ then we can outline the following
+In order to determine the amount of smoothing acquired it is necessary to know the coercivity constant $\alpha$. In this section I will determine this constant for the Poisson problem on $\Omega = (0,1)^2$.
+
+%from for our domain $\Omega=(0,1)^2$ we end up with showing that $|v|_1\geq \sqrt{1/2}||v||_1 \;\; \forall v \in H^1_0$. 
+We start by proving the Poincar\'e inequality on our domain $ \Omega $, a similar proof can be found in ~\cite{Quarteroni}. Let $\mathbf{g} = \frac{1}{\sqrt{2}}[x,y]$ such that $k = \nabla \cdot \mathbf{g}=\frac{2}{\sqrt{2}}$ and let $u \in H_0^1$ then we can outline the following
 
 \begin{align}
+	\begin{split}
 	||u||_0^2 &= k^{-1}\int_{\Omega}k|u(\mathbf{x})|^2d\Omega \\
 	&= -k^{-1}\int_{\Omega}\mathbf{g}\cdot \nabla(|u(\mathbf{x})|^2)d\Omega \\
 	&= -2k^{-1}\int_{\Omega}\mathbf{g}\cdot [u(\mathbf{x})\nabla(u(\mathbf{x}))]d\Omega \\
 	&\leq 2k^{-1}||\mathbf{g}||_{\infty}||u||_0 \: |u|_1\\
 	&\leq 2k^{-1}\frac{1}{\sqrt{2}}||u||_0 \: |u|_1
+	\end{split}
 	\label{eq:PoincareProof}
 \end{align}
 Dividing both sides with the $L^2$-norm leaves us with
@@ -114,48 +135,31 @@ Dividing both sides with the $L^2$-norm leaves us with
 \end{align}
 Further we can show the following result by using the definition of $||\cdot||_1$
 \begin{align}
+	\begin{split}
 	||u||_1 &= \sqrt{||u||_0^2+|u|_1^2}\\
 	&	\leq \sqrt{2|u|_1^2}\\
 	&= \sqrt{2}|u|_1
+	\end{split}
 	\label{eq:NormInequalitySobolev}
 \end{align}
 
-This result can be used to show some norm equivalency of the bilinear functional. 
-%By using this inequality twice we end up showing for the Poisson problem that
-%\begin{align}
-	%|||v||| \geq \frac{2}{3}||v||_1,
-	%\label{eq:resultAlpha}
-%\end{align}
-%Hence $\alpha=\frac{2}{3}$. \colorbox{yellow}{should find this constant for the difftrans problem}
-%%
-\section{Nonlinear diffusion transport problem}
-Now let the vector field $\mathbf{b}$ from the diffusion transport problem be a function of $u$. 
+This result can be used to show equivalency of the norm surging from the bilinear functional $Q(\cdot,\cdot)$ and the $|| \cdot ||_1$-norm . 
+By using the inequality obtained in the previous section we can make the following argument,
 \begin{align}
-	-\mu \Delta u + \mathbf{b}(u) \cdot \nabla u = f \text{ in } \Omega \\
-	u = g \text{ on } \partial \Omega
-	\label{eq:DiffTransNonLin}
+	\begin{split}
+	|||u||| 
+	&=Q(\mathbf{u},\mathbf{u})^{1/2} 
+	= (\mathcal{L}\mathbf{u},\mathcal{L}\mathbf{u})_0^{1/2} \\
+	&= \sqrt{||\nabla u+\mathbf{w}||^2_0+||\nabla \cdot \mathbf{w}||^2_0}\\
+	&\geq ||\nabla \cdot \mathbf{w}||_0
+	= |\mathbf{w}|_1 \\
+	&\geq \frac{1}{\sqrt{2}}||\mathbf{w}||_1\\
+	&\geq \frac{1}{\sqrt{2}}||\mathbf{w}||_0
+	= \frac{1}{\sqrt{2}}|u|_1\\
+	&\geq \frac{1}{2}||u||_1
+	\end{split}
+	\label{eq:resultAlpha}
 \end{align}
-This gives us a nonlinear variational formulation that does not allow us to solve our system of equations directly. In order to find a solution Newtons method was used. An important difference between standard Galerkin and least-squares, is that the linear functional $F(\cdot)$ will also be non-linear in the LS case. 
-%Needs to add the Jacobian of $F$ as well since this depends on $b$ and thus also $u$. 
-%%
-%Let us consider the diffusion-transport equation with non-homogeneous boundary conditions and a non-linear gradient term with a LS-approach. This corresponds to solving the equation 
-%\begin{align}
-	%Q(\tilde{\mathbf{u}},\mathbf{v};b) &= \tilde{F}(\mathbf{v};b) \\
-	%Q(\tilde{\mathbf{u}},\mathbf{v};b) - \tilde{F}(\mathbf{v};b) &= 0\\
-	%\mathcal{F}(\tilde{\mathbf{u}},\mathbf{v};b) &= 0
-	%\label{eq:varFormNonLin}
-%\end{align}
-%%
-%Where the Dirichlet homogeneous boundary conditions on $\tilde{\mathbf{u}}$ are required by the search space.
-
-%Newtons method is then applied, you start by guessing an initial $\tilde{\mathbf{u}}_h^0$ and then repeating
-%%
-%\begin{enumerate}
-	%\item $r^k = \mathcal{ F } (\tilde{\mathbf{u}}_h^k)$  , Calculating the residual
-	%\item $\hat{e}^k = \mathcal{J}_k^{-1}r^k $  , Calculating the error 
-	%\item $\tilde{\mathbf{u}}_h^{k+1}=\tilde{\mathbf{u}}_h^k-\hat{e}^k$    , updating the solution
-%\end{enumerate}
-%%
-%until you reach your solution. $\mathcal{J}_k$ is the Jacobian matrix of $\mathcal{F}(\mathbf{u_h}^k)$.
-
-
+Hence $\alpha=\frac{1}{2}$. We have then proven coercivity and found the coercivity constant of the energy norm obtained from the least-squares formulation for the Poisson problem.  
+\colorbox{yellow}{should find this constant for the difftrans problem}
+%
