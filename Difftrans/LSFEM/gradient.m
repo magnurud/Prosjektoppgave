@@ -35,7 +35,7 @@ function [Dh] = gradient(dofs,p,tri,b,mu)
         X = [p1(1) p2(1) p3(1)];
         Y = [p1(2) p2(2) p3(2)];
         %A_k = 2*polyarea(X,Y); % twice the area of the element,(Jacobi determinant) 
-        A_k = (p2(1)-p1(1))*(p3(2)-p1(2))-(p3(1)-p1(1))*(p2(2)-p1(2)); %Direct
+        A_k = abs((p1(1)-p3(1))*(p2(2)-p1(2)) - (p1(1)-p2(1))*(p3(2)-p1(2))); % Jacobian 
 
         %Basis functions
         phi1 = @(x,y) (1/(A_k))*((p2(1)*p3(2) - p3(1)*p2(2)) + (p2(2)-p3(2))*x + (p3(1)-p2(1))*y);

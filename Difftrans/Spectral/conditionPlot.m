@@ -20,16 +20,14 @@ figure;
 loglog(alpha,cn_alpha,'r');
 hold on;
 loglog(alpha,cn_mu,'b');
-legend('alpha','mu')
+legend('b','mu')
 grid on;
-fig4 = gcf;
+fig1 = gcf;
 SisteFeil = e(end)
 %Kondisjonstall = cn
 
 polyfit(log(alpha),log(cn_mu),1)
 
-%set(fig1, 'PaperPosition', [0 0 5 5]); %Position plot at left hand corner with width 5 and height 5.
-%set(fig1, 'PaperSize', [5.5 5]); %Set the paper to have width 5 and height 5.
-%saveas(fig1, '../Latex/Figures/errorFEM-LSFEM', 'pdf') %Save figure
-
-
+set(fig1, 'PaperPosition', [0 0 5 5]); %Position plot at left hand corner with width 5 and height 5.
+set(fig1, 'PaperSize', [5.5 5]); %Set the paper to have width 5 and height 5.
+saveas(fig1, '../../Latex/Figures/Spec_difftrans_ConditionNumber', 'pdf') %Save figure

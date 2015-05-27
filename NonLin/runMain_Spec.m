@@ -17,7 +17,7 @@ function [eh cn] = runMain_Spec(N,mu,alpha)
 % author: Magnus Aa. Rud
 % last edit: April 2015
 tic
-maxit = 8;
+maxit = 25;
 eVec = zeros(maxit+1,1);
 Convrate = zeros(maxit,1);
 eVec(1)=1;
@@ -144,15 +144,17 @@ for it = 1:maxit
   eh = norm((uh_BC-U),'inf')/norm(U,'inf');
   eVec(it+1) = eh;
   Convrate(it) = eh/((eVec(it)^2));
-	if(eh<1E-14)
-		break
-	end
+	%if(eh<1E-17)
+		%break
+	%end
 end
 %eVec
-Convrate
+Convrate;
 uh = uh_BC;
 
-plot(1:maxit,log(eVec(2:end)))
+%figure
+%loglog(1:maxit,eVec(2:end))
+%grid on;
 
 % Plotting
 if(0)
@@ -182,3 +184,4 @@ cn = condest(A_L+A_NL);
 %Peclet = max(max(sqrt(B1.^2+B2.^2)))*h/(2*mu)
 toc
 
+eh = eVec(2:end);

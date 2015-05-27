@@ -20,7 +20,7 @@ h = 1/(N-1);
 NLS = 3*N; % Number of unknowns in each direction
 dofs = N^2;
 LSdofs = 3*dofs;
-B = @(x,y) alpha*[1;1]; %Vector Field
+B = @(x,y) alpha*[x;y]; %Vector Field
 % TEST 1 %
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
 		+exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function

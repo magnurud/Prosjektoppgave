@@ -21,7 +21,7 @@ function [eh cn] = runMain_NeuDir(N,mu,alpha,delta)
 	NLS = 3*N; % Number of unknowns in each direction
 	dofs = N^2;
 	LSdofs = 3*dofs;
-	B = @(x,y) alpha*[2;1]; %Vector Field
+	B = @(x,y) alpha*[1;1]; %Vector Field
 	f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
 	+exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 	u = @(x,y) exp(x)*sin(pi*y); % Analytical solution

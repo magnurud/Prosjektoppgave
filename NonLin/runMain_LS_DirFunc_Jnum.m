@@ -27,7 +27,7 @@ LSdofs = 3*dofs;
 sigma = 0;
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
 w2 = @(x,y) pi*exp(x)*cos(pi*y);
-dB = @(x,y) alpha*[x^2;1-2*y]; %Vector Field, linear part
+dB = @(x,y) alpha*[1;1]; %Vector Field, linear part
 f = @(x,y) exp(x)*(mu*pi^2-mu)*sin(pi*y)...
     +exp(x)*(dB(x,y)*u(x,y))'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
@@ -120,7 +120,7 @@ for it = 1:maxit
 	r = (A_L+A_NL)*uh+fh;
 	e = zeros(LSdofs,1);
 	Jac = zeros(LSdofs);
-	d = 0.005;
+	d = 0.01;
 	for It = 1:LSdofs
 		ej = e;
 		ej(It) = d;
@@ -137,10 +137,10 @@ for it = 1:maxit
 			%A_NL = sparse(G_LS); % The non-linear part of A, is already 
 			%fh = F_L-F_NL;%+A_NL*[zeros(2*dofs,1);Rg];
 		%end
-		rh = (A_L+A_NL)*(uh+ej) + fh; 
+		rh = (A_L+A_NL)*(uh+ej)+fh; 
 		Jac(:,It) = (rh-r)/d;
 	end
-	currentstep = it
+	%currentstep = it
 
 	%Step 2
 	%J = sparse(A_L+A_NL+J_LS); % The J-matrix used in the newtons iteration
@@ -154,15 +154,15 @@ for it = 1:maxit
   %eh = norm(uh+[zeros(2*dofs,1) ; Rg ] - U_anal,'inf');%/norm(U_anal,'inf');
   eVec(it+1) = eh;
   Convrate(it) = eh/((eVec(it)^2));
-	if(eh < 1E-9)
-		break	
-	end
+	%if(eh < 1E-9)
+		%break	
+	%end
 end
 uh = uh_BC;
 format long
-Convrate
-figure(1);
-plot(1:maxit,log(eVec(2:end)))
+%Convrate
+%figure(1);
+%plot(1:maxit,log(eVec(2:end)))
 
 % Plotting
 if(0)
@@ -191,6 +191,5 @@ cn = condest(A_L+A_NL);
 %Peclet = max(max(sqrt(B1.^2+B2.^2)))*h/(2*mu)
 toc
 
-
-
+eh = eVec(2:end);
 

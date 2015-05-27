@@ -20,22 +20,22 @@ h = 1/(N-1);
 NLS = 3*N; % Number of unknowns in each direction
 dofs = N^2;
 LSdofs = 3*dofs;
-B = @(x,y) alpha*[0;1]; %Vector Field
+B = @(x,y) alpha*[1;1]; %Vector Field
 f = @(x,y) 1;
 u = @(x,y) 0;% exp(x)*sin(pi*y); % Analytical solution
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
 [y,wY] = GLL_(N,0,1); % getting the GLL-points for the unit square
 LDM = 2*LagrangeDerivativeMatrix_GLL(N); % Need to multiply with 2/(b-a)
 W = diag(wX);
-B1 = zeros(N,N);
-B2 = zeros(N,N);
+dB1 = zeros(dofs);
+dB2 = zeros(dofs);
 U = zeros(dofs,1);
 for I = 1:dofs
   i = mod(I-1,N)+1;
   j = fix((I-1)/N)+1;
   bloc = B(x(i),y(j));
-  B1(i,j) = bloc(1);
-  B2(i,j) = bloc(2); 
+	B1(I,I) = bloc(1);
+	B2(I,I) = bloc(2); 
   U(I) = u(x(i),y(j));
 end
 

@@ -20,16 +20,16 @@ h = 1/(N-1);
 NLS = 3*N; % Number of unknowns in each direction
 dofs = N^2;
 LSdofs = 3*dofs;
-B = @(x,y) alpha*[2*x;y]; %Vector Field
+B = @(x,y) alpha*[x;y]; %Vector Field
 % TEST 1 %
-%f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
-    %+exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
-%u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
+f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
+		+exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
+u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
 
 % TEST 2 %
-f = @(x,y) -mu*(6*x-pi^2*x^3)*sin(pi*y)...
-    +(B(x,y)')*[3*x^2*sin(pi*y) ; x^3*pi*cos(pi*y)]; % Loading function
-u = @(x,y) x^3*sin(pi*y); % Analytical solution
+%f = @(x,y) -mu*(6*x-pi^2*x^3)*sin(pi*y)...
+    %+(B(x,y)')*[3*x^2*sin(pi*y) ; x^3*pi*cos(pi*y)]; % Loading function
+%u = @(x,y) x^3*sin(pi*y); % Analytical solution
 % TEST 3 %
 %f = @(x,y) 1;
 %u = @(x,y) 0; % Analytical solution
@@ -112,27 +112,28 @@ end
 uh = Ah\fh;
 uh = uh+Rg;
 
-% Plotting
-figure;
-subplot(1,2,1)
+%% Plotting
+%figure;
+%subplot(1,2,1)
+%%surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
+%%surf(x,y,reshape(uh(dofs+1:2*dofs),N,N)');
 %surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
-%surf(x,y,reshape(uh(dofs+1:2*dofs),N,N)');
-surf(x,y,reshape(uh(2*dofs+1:end),N,N)');
-title('Numerical Solution');
-xlabel('x')
-ylabel('y')
-zlabel('z')
+%title('Numerical Solution');
+%xlabel('x')
+%ylabel('y')
+%zlabel('z')
 
-%% Plotting the analytical solution
-subplot(1,2,2) % second subplot
-surf(x,y,reshape(U,N,N)');
-title('Analytical Solution');
-xlabel('x')
-ylabel('y')
-zlabel('z')
+%%% Plotting the analytical solution
+%subplot(1,2,2) % second subplot
+%surf(x,y,reshape(U,N,N)');
+%title('Analytical Solution');
+%xlabel('x')
+%ylabel('y')
+%zlabel('z')
 
 eh = norm((uh(2*dofs+1:end)-U),'inf')/norm(U,'inf');
 cn = condest(Ah);
 
 %Peclet number
-Peclet = alpha*h/(2*mu)
+Peclet = alpha*h/(2*mu);
+

@@ -17,12 +17,10 @@ function [eh cn] = runMain_Spec(N,mu,alpha)
 % author: Magnus Aa. Rud
 % last edit: April 2015
 tic
-maxit = 8;
+maxit = 15;
 eVec = zeros(maxit+1,1);
 Convrate = zeros(maxit,1);
-eVec(1)=1;
-sigma = 0;
-delta = 0;
+eVec(1)=1; sigma = 0; delta = 0;
 h = 1/(N-1);
 dofs = N^2;
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
@@ -169,10 +167,10 @@ for it = 1:maxit
   Convrate(it) = eh/((eVec(it)^2));
 end
 %eVec
-Convrate
+Convrate;
 uh = uh_BC;
 
-plot(1:maxit,log(eVec(2:end)))
+%plot(1:maxit,log(eVec(2:end)))
 
 % Plotting
 if(0)
@@ -203,3 +201,4 @@ cn = condest(A_L+A_NL);
 toc
 
 
+eh = eVec(2:end);

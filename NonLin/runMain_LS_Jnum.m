@@ -1,4 +1,4 @@
-function [Jac eh cn] = runMain_LS(N,mu,alpha)
+function [eh cn] = runMain_LS(N,mu,alpha)
 % runMain.m
 %
 % description:
@@ -141,7 +141,7 @@ for it = 1:maxit
 	r = (A_L+A_NL)*uh+fh;
 	e = zeros(LSdofs,1);
 	Jac = zeros(LSdofs);
-	d = 0.005;
+	d = 0.01;
 	for It = 1:LSdofs
 		ej = e;
 		ej(It) = d;
@@ -171,7 +171,7 @@ for it = 1:maxit
 		rh = (A_L+A_NL)*(uh+ej) + fh; 
 		Jac(:,It) = (rh-r)/d;
 	end
-	currentstep = it
+%	currentstep = it
 
 	%Step 2
 	%J = sparse(A_L+A_NL+J_LS); % The J-matrix used in the newtons iteration
@@ -185,15 +185,15 @@ for it = 1:maxit
   %eh = norm(uh+[zeros(2*dofs,1) ; Rg ] - U_anal,'inf');%/norm(U_anal,'inf');
   eVec(it+1) = eh;
   Convrate(it) = eh/((eVec(it)^2));
-	if(eh < 1E-7)
-		break	
-	end
+	%if(eh < 1E-7)
+		%break	
+	%end
 end
 uh = uh_BC;
 format long
-Convrate
-figure(1);
-plot(1:maxit,log(eVec(2:end)))
+%Convrate
+%figure(1);
+%plot(1:maxit,log(eVec(2:end)))
 
 % Plotting
 if(0)
@@ -223,4 +223,4 @@ cn = condest(A_L+A_NL);
 toc
 
 
-
+eh = eVec(2:end);

@@ -18,7 +18,7 @@ function [eh cn] = runMain(N,mu,alpha)
 
 dofs = N^2;
 h = 1/(N-1);
-B = @(x,y) alpha*[1;1]; %Vector Field
+B = @(x,y) alpha*[x;y]; %Vector Field
 % TEST 1 %
 f = @(x,y) mu*exp(x)*(pi^2-1)*sin(pi*y)...
 		+exp(x)*B(x,y)'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
@@ -110,4 +110,4 @@ cn = condest(Ah);
 %eh = norm((uh-U),'inf')/norm(U,'inf');
 eh = norm((uh-U))/norm(U);
 %Peclet number
-Peclet = alpha*h/(2*mu)
+Peclet = alpha*h/(2*mu);

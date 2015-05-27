@@ -1,4 +1,4 @@
-function [J eh cn] = runMain_LS(N,mu,alpha)
+function [eh cn] = runMain_LS(N,mu,alpha)
 % runMain.m
 %
 % description:
@@ -17,7 +17,7 @@ function [J eh cn] = runMain_LS(N,mu,alpha)
 % author: Magnus Aa. Rud
 % last edit: April 2015
 tic
-maxit = 18;
+maxit = 25;
 eVec = zeros(maxit+1,1);
 Convrate = zeros(maxit,1);
 eVec(1)=1;
@@ -55,7 +55,7 @@ dB1(I,I) = bloc(1);
 dB2(I,I) = bloc(2); 
 F(I) = f(x(i),y(j));
 end
-uh = 0.5*U_anal;
+%uh = 0.5*U_anal;
 %% Dirchlet boundary conditions %%
 g1 = @(x,y) u(x,y); % South side boundary function
 g2 = @(x,y) u(x,y); % East side boundary function
@@ -160,10 +160,10 @@ for it = 1:maxit
 end
 uh = uh_BC;
 format long
-Convrate
+%Convrate
 
-figure(1);
-plot(1:maxit,log(eVec(2:end)))
+%figure(1);
+%plot(1:maxit,log(eVec(2:end)))
 
 % Plotting
 if(0)
@@ -192,4 +192,5 @@ cn = condest(A_L+A_NL);
 %Peclet = max(max(sqrt(B1.^2+B2.^2)))*h/(2*mu)
 toc
 
+eh = eVec(2:end);
 
