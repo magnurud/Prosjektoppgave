@@ -8,7 +8,7 @@
 
 %----------------------------------------------------------------------------------------
 \section{The main differences}
-Using least squares will always give you a SPD system of equations which can be advantageous. However for second order equations this system is three times as big as if we were to solve it using more standard methods. Comparing the correctness of the solution as done in figure~\ref{fig:ConvergencePoisson} shows that the convergence rate is the same as for standard methods, but the the value of the residual is slightly higher for the least squares method. This can be explained by the functional that is minimized. Notice that in the least squares methods you minimize the \textbf{square} of the residual, while with galerkin you minimize the residual itself. since the correctness of both methods are restricted by the smoothness of the solution and the number of discrete points LS-methods will minimize the residual squared down to a given precision and hence the residual itself to a slightly higher value. 
+Using least squares will always give you a SPD system of equations which can be advantageous. However for second order equations this system is three times as big as if we were to solve it using more standard methods. Comparing the correctness of the solution as done in figure~\ref{fig:ConvergencePoisson} shows that the convergence rate is the same as for standard methods, but the the value of the residual is slightly higher for the least squares method. This can be explained by the functional that is minimized. Notice that in the least squares methods you minimize the \textbf{square} of the residual, while with Galerkin you minimize the residual itself. since the correctness of both methods are restricted by the smoothness of the solution and the number of discrete points LS-methods will minimize the residual squared down to a given precision and hence the residual itself to a slightly higher value. 
 \newpage
 \subsection{Poisson problem}
 %
@@ -83,7 +83,7 @@ linear system is badly condition number. Now, let $\mathbf{b}$ be the vector fie
 %
 
 \subsection{Diffusion transport equation surface plots}
-\begin{figure}[h!]
+\begin{figure}[h]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
 	\includegraphics[width=\textwidth]{Figures/Spec_difftrans_aNeg.pdf}
@@ -94,64 +94,65 @@ linear system is badly condition number. Now, let $\mathbf{b}$ be the vector fie
   \end{subfigure}
           %(or a blank line to force the subfigure onto a new line)
   \vspace{-0.1\baselineskip}
-	\caption{Surf plot of the numerical solution of the diffusion transport problem solved by galerkin spectral methods to the left and least-squares to the right, $\mu = 10^{-4},N=25,\mathbf{b} = -[x,y]$.}
+	\caption{Surf plot of the numerical solution of the diffusion transport problem solved by Galerkin spectral methods to the left and least-squares to the right, $\mu = 10^{-4},N=25,\mathbf{b} = -[x,y]$.}
   \label{fig:SurfDiffTransPositive}
 \end{figure}
 %
-\begin{figure}[h!]
+\begin{figure}[h]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
 	\includegraphics[width=\textwidth]{Figures/Spec_difftrans_aPos.pdf}
   \end{subfigure}%
   \quad
-  \begin{subfigure}[b]{0.48\textwidth}
-	\includegraphics[width=\textwidth]{Figures/SpecLS_difftrans_aPos.pdf}
-  \end{subfigure}
+  %\begin{subfigure}[b]{0.48\textwidth}
+	%\includegraphics[width=\textwidth]{Figures/SpecLS_difftrans_aPos.pdf}
+  %\end{subfigure}
   \begin{subfigure}[b]{0.48\textwidth}
 	\includegraphics[width=\textwidth]{Figures/SpecGLS_difftrans_aPos.pdf}
   \end{subfigure}
           %(or a blank line to force the subfigure onto a new line)
   \vspace{-0.1\baselineskip}
-  \caption{Surf plot of the numerical solution of the diffusion transport problem solved by galerkin to the left ,least-squares to the right and the combined GLS method below with $\delta = 0.05$, all the plots use the same parameters $\mu = 10^{-4}, N=25,\mathbf{b} = [x,y]$.}
+  \caption{Surf plot of the numerical solution obtained from spectral methods of the diffusion transport problem solved by Galerkin to the left and with a combined GLS method to the right, with smoothening factor $\delta = 0.05$, both plots use the same parameters $\mu = 10^{-4}, N=25,\mathbf{b} = [x,y]$.}
   \label{fig:SurfDiffTransPositive}
 \end{figure}
 %
 %
-\begin{figure}[h!]
+\begin{figure}[h]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
 	\includegraphics[width=\textwidth]{Figures/FEM_difftrans_aNeg.pdf}
   \end{subfigure}%
   \quad
-  \begin{subfigure}[b]{0.48\textwidth}
-	\includegraphics[width=\textwidth]{Figures/LSFEM_difftrans_aNeg.pdf}
-  \end{subfigure}
+  %\begin{subfigure}[b]{0.48\textwidth}
+	%\includegraphics[width=\textwidth]{Figures/LSFEM_difftrans_aNeg.pdf}
+  %\end{subfigure}
   \begin{subfigure}[b]{0.48\textwidth}
 	\includegraphics[width=\textwidth]{Figures/GLSFEM_difftrans_aNeg.pdf}
   \end{subfigure}
           %(or a blank line to force the subfigure onto a new line)
   \vspace{-0.1\baselineskip}
-	\caption{Surf plot of the numerical solution of the diffusion transport problem solved by galerkin FEM to the left, least-squares to the right and the combined GLS method below with $\delta = 0.05$, all the plots use the same parameters, $\mu = 10^{-4},N=25,\mathbf{b} = -[x,y]$.}
+	\caption{Surf plot of the numerical solution of the diffusion transport problem solved by Galerkin FEM to the left and the combined GLS method to the right, with smoothening factor $\delta = 0.05$, both plots use the same parameters, $\mu = 10^{-4},N=25,\mathbf{b} = -[x,y]$.}
   \label{fig:SurfDiffTransPositiveFEM}
 \end{figure}
+
 %
-\begin{figure}[h!]
-  \centering
-  \begin{subfigure}[b]{0.48\textwidth}
-	\includegraphics[width=\textwidth]{Figures/FEM_difftrans_aPos.pdf}
-  \end{subfigure}%
-  \quad
-  \begin{subfigure}[b]{0.48\textwidth}
-	\includegraphics[width=\textwidth]{Figures/LSFEM_difftrans_aPos.pdf}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.48\textwidth}
-	\includegraphics[width=\textwidth]{Figures/GLSFEM_difftrans_aPos.pdf}
-  \end{subfigure}
-          %(or a blank line to force the subfigure onto a new line)
-  \vspace{-0.1\baselineskip}
-  \caption{Surf plot of the numerical solution of the diffusion transport problem solved by galerkin FEM to the left ,least-squares to the right and the combined GLS method below with $\delta = 0.05$, all the plots use the same parameters $\mu = 10^{-4}, N=25,\mathbf{b} = [x,y]$.}
-  \label{fig:SurfDiffTransPositiveFEM}
-\end{figure}
+%\begin{figure}[h!]
+  %\centering
+  %\begin{subfigure}[b]{0.48\textwidth}
+	%\includegraphics[width=\textwidth]{Figures/FEM_difftrans_aPos.pdf}
+  %\end{subfigure}%
+  %\quad
+  %\begin{subfigure}[b]{0.48\textwidth}
+	%\includegraphics[width=\textwidth]{Figures/LSFEM_difftrans_aPos.pdf}
+  %\end{subfigure}
+  %\begin{subfigure}[b]{0.48\textwidth}
+	%\includegraphics[width=\textwidth]{Figures/GLSFEM_difftrans_aPos.pdf}
+  %\end{subfigure}
+          %%(or a blank line to force the subfigure onto a new line)
+  %\vspace{-0.1\baselineskip}
+  %\caption{Surf plot of the numerical solution of the diffusion transport problem solved by Galerkin FEM to the left ,least-squares to the right and the combined GLS method below with $\delta = 0.05$, all the plots use the same parameters $\mu = 10^{-4}, N=25,\mathbf{b} = [x,y]$.}
+  %\label{fig:SurfDiffTransPositiveFEM}
+%\end{figure}
 %\begin{figure}[hl]
 	%\centering
   %\includegraphics[width=80mm]{Figures/condFEM-LSFEM.pdf}
@@ -168,3 +169,18 @@ linear system is badly condition number. Now, let $\mathbf{b}$ be the vector fie
 %\end{figure}
 %%
 
+\subsection{Nonlinear results}
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+	\includegraphics[width=\textwidth]{Figures/Spec_Nonlin_Convergence_Jnum.pdf}
+  \end{subfigure}%
+  \quad
+  \begin{subfigure}[b]{0.48\textwidth}
+	\includegraphics[width=\textwidth]{Figures/Spec_Nonlin_Convergence.pdf}
+  \end{subfigure}%
+  \vspace{-0.1\baselineskip}
+	\caption{Convergence plot of the numerical solution of the nonlinear diffusion transport equation solved by spectral methods, In the figure to the left a numerical jacobian has been calculated and in the figure to the right the analytical one is used. $\mu = 1,N=15,\mathbf{b} = -[x,y]$.}
+  \label{fig:SurfDiffTransPositiveFEM}
+\end{figure}

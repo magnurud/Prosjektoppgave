@@ -46,7 +46,7 @@ where
 	F(v) = (f,Av).
 	\label{def:bilin}
 \end{align}
-Notice that the bilinear form $Q$ is symmetric, this is an important advantage least-squares has over regular Galerkin methods. The bilinear form that surged from a first-order problem by the least-squares leads us to a variational formulation similar to the one obtained from a second order problem by regular FEM. Generally the bilinear form from least-squares will correspond to a bilinear form of a problem of twice the order obtained using FEM. \colorbox{yellow}{Bold statement?} In order to avoid problems of large complexity a higher order PDE should therefore be transformed to a system of first order PDE's (similar to a mixed Galerkin approach) before defining the least squares functional.
+Notice that the bilinear form $Q$ is symmetric, this is an important advantage least-squares has over other projection methods. The bilinear form that surged from a first-order problem by the least-squares leads us to a variational formulation similar to the one obtained from a second order problem by the Galerkin method. Generally the bilinear form from least-squares will correspond to a bilinear form of a problem of twice the order obtained using standard Galerkin. \colorbox{yellow}{Bold statement?} In order to avoid problems of large complexity a higher order PDE should therefore be transformed to a system of first order PDE's (similar to a mixed Galerkin approach) before defining the least squares functional.
 \cite{Jiang}
 %In order to apply a numerical algorithm the domain $\Omega$ needs to be discretized, we name this discretization $\Omega_h$. A set of basis functions $ \left\{ N \right\}_i $ is defined for $V_h = H^1_0(\Omega_h)$ such that the discrete variational formulation can be stated. Find $u_h \in V_h$ such that 
 %\begin{align}
@@ -54,7 +54,7 @@ Notice that the bilinear form $Q$ is symmetric, this is an important advantage l
 	%\label{def:varForm}
 %\end{align}
 
-\section{ Formal formulation of least-squares}
+\section{Formal formulation of least-squares}
 Let us look at a general boundary value problem where $f \in Y(\Omega)$, $g \in B(\partial \Omega)$, $\mathcal{B}\colon X(\partial \Omega) \to B(\partial\Omega) $ and $\mathcal{L}\colon X(\Omega)\to Y(\Omega)$. Find $u \in X(\Omega) $ such that 
 \begin{align}
 	\mathcal{L} u &= f \; \; \; \text{ in } \Omega \\
@@ -187,7 +187,7 @@ which can be written in the same form as ~\eref{eq:BVP} with $ \mathbf{u} = \mat
 	\end{bmatrix}
 	\label{eq:Amatrix}
 \end{align}
-We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\partial \Omega) $. \colorbox{yellow}{Is it ok to write Y x B like this ??} The functional defined in~\eref{eq:FunctionalGen} will for our problem be 
+We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\partial \Omega) $. \colorbox{yellow}{chesck this } The functional defined in~\eref{eq:FunctionalGen} will for our problem be 
 \begin{align}
 	J(u;f) = ||\mathcal{L}u-f||^2_Y.
 	\label{eq:lsFunctionalPoisson}

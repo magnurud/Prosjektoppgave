@@ -4,7 +4,7 @@
 \contentsline {chapter}{Notation}{iv}{dummy.4}
 \contentsline {chapter}{\numberline {1}Theory}{1}{chapter.7}
 \contentsline {section}{\numberline {1.1}Informal introduction to least-squares}{1}{section.8}
-\contentsline {section}{\numberline {1.2} Formal formulation of least-squares}{3}{section.18}
+\contentsline {section}{\numberline {1.2}Formal formulation of least-squares}{3}{section.18}
 \contentsline {section}{\numberline {1.3}Error analysis}{4}{section.28}
 \contentsline {section}{\numberline {1.4}Least squares applied on some common PDE's}{4}{section.31}
 \contentsline {subsection}{\numberline {1.4.1}Poisson problem}{5}{subsection.37}
@@ -34,7 +34,8 @@
 \contentsline {subsection}{\numberline {4.1.1}Poisson problem}{23}{subsection.115}
 \contentsline {subsection}{\numberline {4.1.2}Diffusion transport equation convergence and condition number}{23}{subsection.118}
 \contentsline {subsection}{\numberline {4.1.3}Diffusion transport equation surface plots}{24}{subsection.122}
+\contentsline {subsection}{\numberline {4.1.4}Nonlinear results}{24}{subsection.126}
 \vspace {2em}
-\contentsline {chapter}{\numberline {A}Appendix Title Here}{28}{appendix.127}
+\contentsline {chapter}{\numberline {A}Appendix Title Here}{27}{appendix.128}
 \vspace {2em}
-\contentsline {chapter}{Bibliography}{29}{dummy.128}
+\contentsline {chapter}{Bibliography}{28}{dummy.129}
