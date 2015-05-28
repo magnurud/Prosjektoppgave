@@ -46,7 +46,7 @@ where
 	F(v) = (f,Av).
 	\label{def:bilin}
 \end{align}
-Notice that the bilinear form $Q$ is symmetric, this is an important advantage least-squares has over other projection methods. The bilinear form that surged from a first-order problem by the least-squares leads us to a variational formulation similar to the one obtained from a second order problem by the Galerkin method. Generally the bilinear form from least-squares will correspond to a bilinear form of a problem of twice the order obtained using standard Galerkin. \colorbox{yellow}{Bold statement?} In order to avoid problems of large complexity a higher order PDE should therefore be transformed to a system of first order PDE's (similar to a mixed Galerkin approach) before defining the least squares functional.
+Notice that the bilinear form $Q$ is symmetric, this is an important advantage least-squares has over other projection methods. The bilinear form that surged from a first-order problem by the least-squares leads us to a variational formulation similar to the one obtained from a second order problem by the Galerkin method. Basically the bilinear form from least-squares will correspond to a bilinear form of a problem of twice the order obtained using standard Galerkin. In order to avoid problems of large complexity a higher order PDE should therefore be transformed to a system of first order PDE's (similar to a mixed Galerkin approach) before defining the least squares functional.
 \cite{Jiang}
 %In order to apply a numerical algorithm the domain $\Omega$ needs to be discretized, we name this discretization $\Omega_h$. A set of basis functions $ \left\{ N \right\}_i $ is defined for $V_h = H^1_0(\Omega_h)$ such that the discrete variational formulation can be stated. Find $u_h \in V_h$ such that 
 %\begin{align}
@@ -294,8 +294,8 @@ Because of the geometry of our problem and the fact that we define the flux as a
 \end{align}
 Let us define $\hat{x}$ and $\hat{y}$ as the unit vectors in each direction. Notice that for the west ($x=0$) and east ($x=1$) edges the normal vector $\mathbf{n}= \pm\hat{x}$, and at the north ($y=1$) and south($y=0$) edges $\mathbf{n}=\pm \hat{y}$. This way we can write the Neumann conditions as a Dirichlet condition on the first and second component of $\mathbf{w}= [ w_1 \:\: w_2]$. 
 \begin{align}
-	w_1 = \pm h \text{    for $y = 0$ and $y=1$ }\\
-	w_2 = \pm h \text{    for $x = 0$ and $x=1$ }
+	w_1 = \pm h \text{    for $x = 0$ and $x=1$ }\\
+	w_2 = \pm h \text{    for $y = 0$ and $y=1$ }
 	\label{eq:neumannAsDirichlet}
 \end{align}
 \subsection{Boundary as an additional functional}

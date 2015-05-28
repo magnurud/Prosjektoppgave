@@ -14,11 +14,11 @@ for i = 1:length(N)
 end
 
 figure;
-loglog(h,e1,'r');
+loglog(N,e1,'r');
 hold on;
-loglog(h,e2,'b');
+loglog(N,e2,'b');
 grid on;
-xlabel('h')
+xlabel('N')
 ylabel('error')
 legend('Galerkin','Least-squares: BC Lifting function')%,'Least-squares: BC in functional')
 

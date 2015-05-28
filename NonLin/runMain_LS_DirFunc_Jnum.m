@@ -1,4 +1,4 @@
-function [eh cn] = runMain_LS_DirFunc_Jnum(N,mu,alpha)
+function [eh cn rVec] = runMain_LS_DirFunc_Jnum(N,mu,alpha)
 % runMain.m
 %
 % description:
@@ -17,8 +17,9 @@ function [eh cn] = runMain_LS_DirFunc_Jnum(N,mu,alpha)
 % author: Magnus Aa. Rud
 % last edit: April 2015
 tic
-maxit = 15;
+maxit = 25;
 eVec = zeros(maxit+1,1);
+rVec = zeros(maxit,1);
 Convrate = zeros(maxit,1);
 eVec(1)=1;
 h = 1/(N-1);
@@ -27,7 +28,7 @@ LSdofs = 3*dofs;
 sigma = 0;
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
 w2 = @(x,y) pi*exp(x)*cos(pi*y);
-dB = @(x,y) alpha*[1;1]; %Vector Field, linear part
+dB = @(x,y) alpha*[x^2;y^2]; %Vector Field, linear part
 f = @(x,y) exp(x)*(mu*pi^2-mu)*sin(pi*y)...
     +exp(x)*(dB(x,y)*u(x,y))'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
@@ -39,7 +40,7 @@ dB1 = zeros(dofs);
 dB2 = zeros(dofs);
 U = zeros(dofs,1); %Analytical solution
 U_anal = zeros(LSdofs,1); % Total analytical solution
-uh = 2*ones(LSdofs,1); % Initial guess
+uh = 1*ones(LSdofs,1); % Initial guess
 F  = zeros(dofs,1); % Loading function 
 for I = 1:dofs
   i = mod(I-1,N)+1;
@@ -154,6 +155,7 @@ for it = 1:maxit
   %eh = norm(uh+[zeros(2*dofs,1) ; Rg ] - U_anal,'inf');%/norm(U_anal,'inf');
   eVec(it+1) = eh;
   Convrate(it) = eh/((eVec(it)^2));
+  rVec(it) = norm(r,'inf');
 	%if(eh < 1E-9)
 		%break	
 	%end

@@ -1,6 +1,6 @@
 % ConvergencePlot.m 
 
-N = 15;
+N = 20;
 alpha = [1000:1000:10000];% number of discretization points 
 alpha = logspace(1,4,20);% number of discretization points 
 %alpha = logspace(-5,1,10);
@@ -9,8 +9,8 @@ cn_alpha= zeros(1,length(N));
 cn = zeros(1,length(N));
 mu = 1;
 for i = 1:length(alpha)
-	[e cn_alpha(i)] = runMain_DirFunc(N,mu,alpha(i)); % Varying alpha
-	[e cn_mu(i)] = runMain_DirFunc(N,alpha(i),mu); % varying mu
+	[e cn_alpha(i)] = runMain_DirFunc(N,mu,-alpha(i)); % Varying alpha
+	[e cn_mu(i)]    = runMain_DirFunc(N,1/alpha(i),-mu); % varying mu
 	%[e cn(i)] = runMain_DirFunc(N,alpha(i),alpha(i)); % keeping the relation const 
 end
 
@@ -23,7 +23,9 @@ loglog(alpha,cn_alpha,'r');
 hold on;
 loglog(alpha,cn_mu,'b');
 %loglog(alpha,cn,'b');
-legend('b','mu')
+legend('\mu = 1','b = 1')
+xlabel('|b|/\mu')
+ylabel('condition number')
 grid on;
 fig1 = gcf;
 SisteFeil = e(end)
@@ -33,5 +35,5 @@ polyfit(log(alpha),log(cn_mu),1)
 
 set(fig1, 'PaperPosition', [0 0 5 5]); %Position plot at left hand corner with width 5 and height 5.
 set(fig1, 'PaperSize', [5.5 5]); %Set the paper to have width 5 and height 5.
-saveas(fig1, '../../Latex/Figures/Spec-LS_difftrans_ConditionNumber', 'pdf') %Save figure
+saveas(fig1, '../../Latex/Figures/Spec-LS_difftrans_ConditionNumber_DirFunc', 'pdf') %Save figure
 

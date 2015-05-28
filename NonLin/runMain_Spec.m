@@ -1,4 +1,4 @@
-function [eh cn] = runMain_Spec(N,mu,alpha)
+function [eh cn rVec] = runMain_Spec(N,mu,alpha)
 % runMain.m
 %
 % description:
@@ -17,8 +17,9 @@ function [eh cn] = runMain_Spec(N,mu,alpha)
 % author: Magnus Aa. Rud
 % last edit: April 2015
 tic
-maxit = 25;
+maxit = 35;
 eVec = zeros(maxit+1,1);
+rVec = zeros(maxit,1);
 Convrate = zeros(maxit,1);
 eVec(1)=1;
 sigma = 0;
@@ -26,7 +27,7 @@ delta = 0;
 h = 1/(N-1);
 dofs = N^2;
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
-dB = @(x,y) alpha*[2*x;1-y]; %Vector Field, linear part
+dB = @(x,y) alpha*[x^2;y^2]; %Vector Field, linear part
 f = @(x,y) exp(x)*(mu*pi^2-mu)*sin(pi*y)...
     +exp(x)*(dB(x,y)*u(x,y))'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
@@ -37,7 +38,7 @@ W = diag(wX);
 dB1 = zeros(dofs);
 dB2 = zeros(dofs);
 U = zeros(dofs,1); %Analytical solution
-uh = 100*ones(dofs,1); % Initial guess
+uh = ones(dofs,1); % Initial guess
 F  = zeros(dofs,1); % Loading function 
 for I = 1:dofs
   i = mod(I-1,N)+1;
@@ -147,6 +148,7 @@ for it = 1:maxit
 	%if(eh<1E-17)
 		%break
 	%end
+	rVec(it) = norm(r,'inf');
 end
 %eVec
 Convrate;
