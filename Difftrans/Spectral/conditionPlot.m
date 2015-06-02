@@ -1,14 +1,14 @@
 % ConditionPlot.m 
 
-N = 15;
+N = 20;
 %alpha = [500:500:5000];% number of discretization points 
 alpha = logspace(1,4,20);% number of discretization points 
 cn_mu = zeros(1,length(N));
 cn_alpha= zeros(1,length(N));
 mu = 1;
 for i = 1:length(alpha)
-	[e cn_alpha(i)] = runMain(N,mu,alpha(i));
-	[e cn_mu(i)] = runMain(N,alpha(i),mu);
+	[e cn_alpha(i)] = runMain(N,mu,-alpha(i));
+	[e cn_mu(i)] = runMain(N,1/alpha(i),-mu);
 end
 
 %x = logspace(log(h(1)),log(h(end)));
@@ -20,7 +20,9 @@ figure;
 loglog(alpha,cn_alpha,'r');
 hold on;
 loglog(alpha,cn_mu,'b');
-legend('b','mu')
+legend('\mu = 1','b = 1')
+xlabel('|b|/\mu')
+ylabel('condition number')
 grid on;
 fig1 = gcf;
 SisteFeil = e(end)

@@ -1,4 +1,4 @@
-function [eh cn] = runMain_LS(N,mu,alpha)
+function [eh cn rVec] = runMain_LS(N,mu,alpha)
 % runMain.m
 %
 % description:
@@ -17,8 +17,9 @@ function [eh cn] = runMain_LS(N,mu,alpha)
 % author: Magnus Aa. Rud
 % last edit: April 2015
 tic
-maxit = 25;
+maxit = 35;
 eVec = zeros(maxit+1,1);
+rVec = zeros(maxit,1);
 Convrate = zeros(maxit,1);
 eVec(1)=1;
 h = 1/(N-1);
@@ -27,7 +28,7 @@ LSdofs = 3*dofs;
 sigma = 0;
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
 w2 = @(x,y) pi*exp(x)*cos(pi*y);
-dB = @(x,y) alpha*[x^2;1-2*y]; %Vector Field, linear part
+dB = @(x,y) alpha*[x^2;y^2]; %Vector Field, linear part
 f = @(x,y) exp(x)*(mu*pi^2-mu)*sin(pi*y)...
     +exp(x)*(dB(x,y)*u(x,y))'*[sin(pi*y) ; pi*cos(pi*y)]; % Loading function
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
@@ -156,7 +157,7 @@ for it = 1:maxit
   %eh = norm(uh+[zeros(2*dofs,1) ; Rg ] - U_anal,'inf');%/norm(U_anal,'inf');
   eVec(it+1) = eh;
   Convrate(it) = eh/((eVec(it)^2));
-  
+	rVec(it) = norm(r,'inf');
 end
 uh = uh_BC;
 format long

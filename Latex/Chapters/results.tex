@@ -59,9 +59,12 @@ linear system is badly condition number. Now, let $\mathbf{b}$ be the vector fie
   \begin{subfigure}[b]{0.48\textwidth}
 		\includegraphics[width=\textwidth]{Figures/Spec-LS_difftrans_ConditionNumber.pdf}
   \end{subfigure}
+  \begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\textwidth]{Figures/Spec-LS_difftrans_ConditionNumber_DirFunc.pdf}
+  \end{subfigure}
           %(or a blank line to force the subfigure onto a new line)
   \vspace{-0.1\baselineskip}
-	\caption{plot of the condition number when the parameters $\mu$ and $\beta$ are varied, $N=25,\mathbf{b} = -[x,y]$.}
+	\caption{plot of the condition number as a function of $|b|/\mu \sim \mathbb{P}e$ where $\mathbb{P}e$ is the Peclet number. The parameters $\mu$ and $b$ are varied in turns, $N=20,\mathbf{b} = -b[x,y]$. In the upper left plot standard galerkin is used, in the upper right I have implemented a least-squares formulation with boundary conditions implemented directly into the search space. Finally in the lower plot least squares is used with the BC's added in the functional.}
   \label{fig:CondDifftransSpec}
 \end{figure}
 %
@@ -181,6 +184,6 @@ linear system is badly condition number. Now, let $\mathbf{b}$ be the vector fie
 	\includegraphics[width=\textwidth]{Figures/Spec_Nonlin_Convergence.pdf}
   \end{subfigure}%
   \vspace{-0.1\baselineskip}
-	\caption{Convergence plot of the numerical solution of the nonlinear diffusion transport equation solved by spectral methods, In the figure to the left a numerical jacobian has been calculated and in the figure to the right the analytical one is used. $\mu = 1,N=15,\mathbf{b} = -[x,y]$.}
+	\caption{Convergence plot of the numerical solution of the nonlinear diffusion transport equation solved by spectral methods, In the figure to the left a numerical jacobian has been calculated and in the figure to the right the analytical one is used. $\mu = 1,N=15,\mathbf{b} = -[x^2,y^2]$.}
   \label{fig:SurfDiffTransPositiveFEM}
 \end{figure}
