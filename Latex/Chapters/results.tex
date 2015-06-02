@@ -1,6 +1,6 @@
 % Chapter 3 - Results 
 
-\chapter{Results} % Main chapter title
+\chapter{Numerical experiments} % Main chapter title
 
 \label{chap:results} % For referencing the chapter elsewhere, use \ref{Chapter1} 
 
@@ -8,7 +8,7 @@
 
 %----------------------------------------------------------------------------------------
 \section{The main differences}
-Using least squares will always give you a SPD system of equations which can be advantageous. However for second order equations this system is three times as big as if we were to solve it using more standard methods. Comparing the correctness of the solution as done in figure~\ref{fig:ConvergencePoisson} shows that the convergence rate is the same as for standard methods, but the the value of the residual is slightly higher for the least squares method. This can be explained by the functional that is minimized. Notice that in the least squares methods you minimize the \textbf{square} of the residual, while with Galerkin you minimize the residual itself. since the correctness of both methods are restricted by the smoothness of the solution and the number of discrete points LS-methods will minimize the residual squared down to a given precision and hence the residual itself to a slightly higher value. 
+Using least squares will always give you a SPD system of equations which can be advantageous. However for second order equations this system is three times as big as if we were to solve it using more standard methods. Comparing the correctness of the solution as done in figure~\ref{fig:ConvergencePoisson} shows that the convergence rate is the same as for standard methods, but the value of the residual is slightly higher for the least squares method. This can be explained by the functional that is minimized. Notice that in the least squares methods you minimize the \textbf{square} of the residual, while with Galerkin you minimize the residual itself. Since the correctness of both methods are restricted by the smoothness of the solution and the number of discrete points LS-methods will minimize the residual squared down to a given precision and hence the residual itself to a slightly higher value. 
 \newpage
 \subsection{Poisson problem}
 %
@@ -61,7 +61,7 @@ linear system is badly condition number. Now, let $\mathbf{b}$ be the vector fie
   \end{subfigure}
           %(or a blank line to force the subfigure onto a new line)
   \vspace{-0.1\baselineskip}
-	\caption{plot of the condition number when the paramaters $\mu$ and $\beta$ are varied, $N=25,\mathbf{b} = -[x,y]$.}
+	\caption{plot of the condition number when the parameters $\mu$ and $\beta$ are varied, $N=25,\mathbf{b} = -[x,y]$.}
   \label{fig:CondDifftransSpec}
 \end{figure}
 %

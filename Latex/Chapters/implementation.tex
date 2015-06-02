@@ -19,7 +19,7 @@ Implementing $Q$ requires two sets of basis functions $\{N_i\}$ that describes t
 	u_h = \sum_{I=0}^{K}a_IN_I.
 	\label{eq:uDisc}
 \end{align}
-Where $K$ denotes the number of discretization points, which is the same as the number of basis functions. \colorbox{yellow}{Is this statement OK?} Since equation\eref{eq:varFormGen} requires equality for all test functions in the search space we simply solve it for each basis function. We are therefore left with a system of $K$ equations. Equation\eref{eq:functionalInt} can then be written for each test function as  
+Where $K$ denotes the number of basis functions. Since equation\eref{eq:varFormGen} requires equality for all test functions in the search space we simply solve it for each basis function. We are therefore left with a system of $K$ equations. Equation\eref{eq:functionalInt} can then be written for each test function as  
 \begin{align}
 	\begin{split}
 	Q(u_h,N_I) &= \int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}u_h)d\Omega \\
@@ -93,26 +93,27 @@ Where $w_i$ is the ith GLL-weight, with this notation $W$ is the $n \times n$ di
 Now, with the helping matrices defined let us look at the linear system surging from a least squares formulation with spectral basis functions. 
 
 Notice that the discrete solution $\mathbf{u}_h$ of the system $Q(\mathbf{u}_h,\mathbf{v}_h) = F(\mathbf{v}_h)$ consist of the discretization of both $u \text{ and } \mathbf{w} = - \nabla u$. $\mathbf{u}_h$ can be structured block wise or node wise, by choosing a block wise representation the final system of equations surging from the Poisson problem can be written as 
-
-$
-\begin{bmatrix}
-	K_{1,1} & K_{1,2} &	K_{1,3} \\ 	
-	K_{2,1} & K_{2,2} & K_{2,3} \\ 	
-	K_{3,1} & K_{3,2} & K_{3,3} \\ 	
-\end{bmatrix}
-\begin{bmatrix}
- u^h \\ 	
- w^h_1\\ 	
- w^h_2\\ 	
-\end{bmatrix}
-=
-\begin{bmatrix}
- F_1 \\ 	
- F_2\\ 	
- 0 \\ 	
-\end{bmatrix}
-$.
-
+%
+\begin{align}
+	\begin{bmatrix}
+		K_{1,1} & K_{1,2} &	K_{1,3} \\ 	
+		K_{2,1} & K_{2,2} & K_{2,3} \\ 	
+		K_{3,1} & K_{3,2} & K_{3,3} \\ 	
+	\end{bmatrix}
+	\begin{bmatrix}
+	 u^h \\ 	
+	 w^h_1\\ 	
+	 w^h_2\\ 	
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+	 F_1 \\ 	
+	 F_2\\ 	
+	 0 \\ 	
+	\end{bmatrix}.
+	\label{eq:KMatrix}
+\end{align}
+%
 Where each block $K_{m,n}$ corresponds to  calculating element $m,n$ in the matrix\eref{mat:basicPoisson} for all combinations of $I,J$. In order to keep track of the indexing we use the expressions $I = i+jN$ and $J = k+lN$ where the helping indices denotes the position in $x,y$-coordinates. Let us take a closer look at element $K_{1,3}$ in order to achieve a more compact notation. 
 \begin{align}
 	\begin{split}
@@ -174,15 +175,17 @@ The gradient part will probvide us with a matrix that is dependent of $\mathbf{b
 %
 Notice that $G_{2,1} = G_{1,2}^T $, the least-squares formulation always provide a symmetric system of equations.
 The full contribution from the gradient term given as a matrix is then given as  
-
-$ G^{LS}=
+%
+\begin{align}
+G^{LS}=
 \begin{bmatrix}
 	G_{11} & G_{12} &0 \\
 	G_{21} & G_{22} &0 \\
 	0 & 0 & 0 
 \end{bmatrix}.
-$
-
+	\label{eq:GradientMatrix}
+\end{align}
+%
 \subsection{Reaction part}
 The reactional term will consist of the following three $n^2 \times n^2$ sub matrices
 \begin{align}
@@ -194,27 +197,30 @@ The reactional term will consist of the following three $n^2 \times n^2$ sub mat
 	\label{ReactionalTerm}
 \end{align}
 Now, because of the symmetry guaranteed by the least-squares formulation $R_{3,1}=R_{1,3}^T$ and $R_{3,2}=R_{2,3}^T$. Hence the total attribution from the extra reactional term is 
-
-$
+%
+\begin{align}
 R^{LS}=
 \begin{bmatrix}
 	0 & 0	 &	R_{1,3}   \\
 	0 & 0	 &	R_{2,3}   \\
 	R_{3,1} & R_{3,1} & R_{3,3} 
 \end{bmatrix}.
-$
-
+	\label{eq:ReactionMatrix}
+\end{align}
+%
 \subsection{The loading function}
 Adding the gradient and reactional term in our equation also affects the loading function. In a compact notation the discretized loading vector from the variational formulation can be written as
-$
-F^{LS}=
-\begin{bmatrix}
-	\mu(W \otimes L^T W)F_m - (W \otimes W)B_1F_m \\
-	\mu(L^TW \otimes W)F_m - (W \otimes W)B_2F_m \\
-	\sigma(W\otimes W)F_m & 
+%
+\begin{align}
+	F^{LS}=
+	\begin{bmatrix}
+		\mu(W \otimes L^T W)F_m - (W \otimes W)B_1F_m \\
+		\mu(L^TW \otimes W)F_m - (W \otimes W)B_2F_m \\
+		\sigma(W\otimes W)F_m & 
+	\end{bmatrix}
 	\label{mat:FLS}
-\end{bmatrix},
-$
+\end{align}
+%
 where $F_m$ is the vector with the loading function evaluated in each spacial node.
 %
 
