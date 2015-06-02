@@ -7,12 +7,24 @@
 \lhead{Chapter 3. \emph{Comparison of methods}} % This is for the header on each page - perhaps a shortened title
 
 %----------------------------------------------------------------------------------------
-\section{The main differences}
-Using least squares will always give you a SPD system of equations which can be advantageous. However for second order equations this system is three times as big as if we were to solve it using more standard methods. Comparing the correctness of the solution as done in figure~\ref{fig:ConvergencePoisson} shows that the convergence rate is the same as for standard methods, but the value of the residual is slightly higher for the least squares method. This can be explained by the functional that is minimized. Notice that in the least squares methods you minimize the \textbf{square} of the residual, while with Galerkin you minimize the residual itself. Since the correctness of both methods are restricted by the smoothness of the solution and the number of discrete points LS-methods will minimize the residual squared down to a given precision and hence the residual itself to a slightly higher value. 
-\newpage
-\subsection{Poisson problem}
+\section{General results}
+Using least squares assures a SPD system which is an important advantage over regular Galerkin. On the downside the matrix obtained from least squares is a lot worse conditioned and complex to create. For second order equations this system is three times as big as if we were to solve it without doing the transformation to a set of hyperbolic equations, which is the most convenient way to use least squares. Comparing the correctness of the solution to the problems
+%as done in for example figure~\ref{fig:ConvergencePoisson} shows that the convergence rate is the same as for Galerkin, but with a finite element basis the value of the residual is slightly higher for the least squares method, and for spectral basis functions least squares converge to a higher residual.
+reveals that the least squares solution is slightly higher, this effect can be explained by the functional that is minimized. Notice that in the least squares methods you minimize the \textbf{square} of the residual, while with Galerkin you minimize the residual itself. Since the correctness of both methods are restricted by the smoothness of the solution and the number of discrete points LS-methods will minimize the residual squared down to a given precision and hence the residual itself to a slightly higher value. 
+%\newpage
 %
-\begin{figure}[h!]
+\subsection{Poisson problem}
+The test case is constructed by choosing the loading function and analytical solution as 
+\begin{align}
+	f(x,y) &=  e^{x}(\pi^2-1)\sin(\pi y)\\
+	u(x,y) &=  e^{x}\sin(\pi y) % Analytical solution
+	\label{eq:poissonTestCasevariables}
+\end{align}
+%
+The corresponding Poisson equation is then solved by imposing the Dirichlet boundary condition $g$ such that $g(\partial \Omega) = u(\partial \Omega)$.
+In figure\eref{fig:ConvergencePoisson} the convergengence in $L^{\infty}$ is plotted. In the finite element case the least squares solution is slightly higher but has the same convergence rate. Using a spectral basis the least squares solution seems to converge slightly faster, but to a higher residual. The condition number as a function of the number of basis functions is plotted in figure\eref{fig:ConditionPoisson}. The finite element comparison indicates that the condition number only differs with a constant. \colorbox{yellow}{Why is the spectral case a order different!!!??}. 
+%
+\begin{figure}[t]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
 	\includegraphics[width=\textwidth]{Figures/errorFEM-LSFEM.pdf}
@@ -27,7 +39,7 @@ Using least squares will always give you a SPD system of equations which can be 
   \label{fig:ConvergencePoisson}
 \end{figure}
 %
-\begin{figure}[h!]
+\begin{figure}[ht]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
 	\includegraphics[width=\textwidth]{Figures/condFEM-LSFEM.pdf}
@@ -42,13 +54,17 @@ Using least squares will always give you a SPD system of equations which can be 
   \label{fig:ConditionPoisson}
 \end{figure}
 %
-\subsection{Diffusion transport equation convergence and condition number}
-One of the disadvantages of least-squares methods is that the resulting
-linear system is badly condition number. Now, let $\mathbf{b}$ be the vector field $[x,y]$, and let us see how the condition number scales with the parameters $\mu$ and $\beta$ in the equation 
+\subsection{Diffusion transport problem}
+For this problem I will present results obtained with spectral basis functions. It is also experimented with different ways of implementing the boundary conditions, both Dirichlet and Neumann conditions are implemented using both methods described in section \ref{BC}.
+Let us start by letting $\mathbf{b} = [b_1(x),b_2(y)] $ be the normalized vector field in $L^{\infty}$ sence, and  $\mu,b \in \mathbb{R}$ be the scalars used to scale the diffusion and convectional term. The equation analysed is then written as 
 \begin{align}
-	-\mu \Delta u + \beta \mathbf{b} \cdot \nabla u = f
+	-\mu \Delta u + b \; (\mathbf{b} \cdot \nabla u) = f .
 	\label{eq:difftransForConditionNumberPlotting}
 \end{align}
+In figure\eref{fig:CondDifftransSpec} the condition number is analysed as a function of the relation between the parameters $\mu,b$. With the steplength/node distance held constant this is proportional to the Peclet number $\mathbb{P}e \sim |b|/\mu$. Notice that along the blue lines $\mu$ is decreasing and $b$ is held constant, while along the red lines $\mu$ is held constant and $b$ is decreasing. The plots reveal that for the least squares case the condition number is significantly more dependent on large $b$ than on small $\mu$. 
+
+The convergence results are presented in figure\eref{fig:ConvergenceDifftransSpec} and the same results as for the Poisson problem are obtained. It is also clear that imposing the boundary conditions as a restriction in our search space is far more efficient than adding them as an extra term to the functional. 
+
 %
 \begin{figure}[h!]
   \centering
@@ -64,7 +80,7 @@ linear system is badly condition number. Now, let $\mathbf{b}$ be the vector fie
   \end{subfigure}
           %(or a blank line to force the subfigure onto a new line)
   \vspace{-0.1\baselineskip}
-	\caption{plot of the condition number as a function of $|b|/\mu \sim \mathbb{P}e$ where $\mathbb{P}e$ is the Peclet number. The parameters $\mu$ and $b$ are varied in turns, $N=20,\mathbf{b} = -b[x,y]$. In the upper left plot standard galerkin is used, in the upper right I have implemented a least-squares formulation with boundary conditions implemented directly into the search space. Finally in the lower plot least squares is used with the BC's added in the functional.}
+	\caption{plot of the condition number as a function of $|b|/\mu \sim \mathbb{P}e$ where $\mathbb{P}e$ is the Peclet number. The parameters $\mu$ and $b$ are varied in turns, $N=20,\mathbf{b} = -[x,y]$. In the upper left plot standard galerkin is used, in the upper right I have implemented a least-squares formulation with boundary conditions implemented directly into the search space. Finally in the lower plot least squares is used with the BC's added in the functional.}
   \label{fig:CondDifftransSpec}
 \end{figure}
 %

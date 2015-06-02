@@ -273,7 +273,8 @@ This gives us a nonlinear variational formulation that does not allow us to solv
 %\end{enumerate}
 %%
 %until you reach your solution. $\mathcal{J}_k$ is the Jacobian matrix of $\mathcal{F}(\mathbf{u_h}^k)$.
-\section{Boundary conditions}
+\section{Boundary conditions} \label{BC}
+Imposing the boundary conditions in a least squares setting can either be done by creating a lifting function and in this way imposing them by restricting our search space, or it can be added to our functional as implied by formula \eref{eq:FunctionalGen}. In this section these two techniques will be clarified. 
 \subsection{non-homogeneous Dirichlet boundary conditions}
 If $g \neq 0$ then we can simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{\mathbf{u}}=\mathbf{u}-R_g$ we can replace $\mathbf{u}$ in the variation formulation and get 
 \begin{align}
