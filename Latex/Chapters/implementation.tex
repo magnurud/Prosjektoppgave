@@ -55,16 +55,16 @@ where $\partial_x = \partial / \partial x $ for the Poisson problem and $\partia
 	\int_{\Omega}
 \begin{bmatrix}
 	\partial_xN_I \\
-	\partial_xN_I \\
+	\partial_yN_I \\
 	0
 \end{bmatrix}
 	f d\Omega
 	\label{eq:rhsFunctional}
 \end{align}
 
-Notice that by doing the splitting of variables we obtain a system of equations three times as big as if we were to solve the equation directly. 
+Notice that by doing the splitting of variables to get the hyperbolic first order system we end up with three times as many equations and variables. 
 
-Note that the gradient of our solution must be restricted to the space $H^1(\text{div},\Omega) = \left\{  \mathbf{w}\in L^2(\Omega) | \nabla \cdot \mathbf{w} \in L^2(\Omega)\right\} $. In order to simplify the implementation I have in this project chosen my basis functions to a subspace such that $\mathbf{w}\in [H^1(\Omega)]^2$. In other words, the basis functions for the solution, and both components of the gradients are the same.  
+Note that the gradient of our solution must be restricted to the space $H^1(\text{div},\Omega) = \left\{  \mathbf{w}\in L^2(\Omega) | \nabla \cdot \mathbf{w} \in L^2(\Omega)\right\} $. In order to simplify the implementation I have in this project chosen my basis functions to a subspace of $H^{1}(\text{div},\Omega) $ such that $\mathbf{w}\in [H^1(\Omega)]^2$. In other words, the basis functions for the solution, and both components of the gradients are the same.  
 \section{Least squares with finite element basis functions}
 The same triangular grid has been chosen for the implementation of both regular Galerkin FEM and the least-squares FEM. By choosing 1st order hat functions each element consists of three non-zero basis functions. For the GFEM this leads to calculating a $3\times 3$ matrix for each element whereas for LSFEM a $9 \times 9$ matrix has to be calculated, although it has a relatively simple structure it still leads to additional computational costs and is a lot more tedious to implement.
 
@@ -236,29 +236,31 @@ We can now define the total matrix for the diffusion transport reaction problem 
 Notice that most of the terms in the final matrix are cross terms, and does not surge solely from one of the terms in the equation. The way that the matrices have been divided into parts here are of now other than practical reasons and can be done in a different matter.  
 
 \section{non-linear diffusion transport problem}
-The stepwise algorithm to solve the nonlinear equation is described in chapter~\ref{chap:newTheory}. However there are several computational steps that needs to be taken care of, both with regular Galerkin and least squares. In both cases we obtain two matrices which we will name $A$ and $G$ and with superscript LS if they refer to the least squares formulation. In both cases only $G$ will depend on the numerical solution $u_h$. An important difference however is that in the LS setting the $F$ vector will depend on $u_h$ while in the straight forward Galerkin setting it will not. For regular Galerkin spectral approach we obtain
-%
-\begin{align}
-	A \tilde{u} + AR_g  + G(\tilde{u}+R_g)(\tilde{u}+R_g) -F = 0
-\end{align}
-Notice that for each iteration the matrix $G(\tilde{u}+R_g)$ needs to be evaluated, the homogeneous boundary conditions on $\tilde{u}$ needs to be imposed and the Jacobian needs to be calculated. The Jacobian $\mathcal{F}$ will for this setting be given as
-%
-\begin{align}
-	\mathcal{J}_{i,j} = A_{i,j} + G(\tilde{u}+R_g)_{i,j} +  (\tilde{u}+R_g)_i \; \frac{\partial}{\partial \tilde{u}_j} (G(\tilde{u}+R_g))_i.
-\end{align}
-%
-With the LS formulation we obtain
-\begin{align}
-A^{LS}\tilde{u} + A^{LS}R_g  + G^{LS}(\tilde{u}+R_g)(\tilde{u}+R_g) -F^{LS}(\tilde{u}+R_g) = 0\\
-A^{LS}\tilde{u} + A^{LS}R_g  + G^{LS}(\tilde{u}+R_g)\tilde{u} -F^{LS}(\tilde{u}+R_g) = 0
-\end{align}
-It is clear from this equation that the term surging from the loading function also needs to be handled when calculating the Jacobian. The lifting function $R_g$ does only have nonzero values in the third "block", hence it belongs to the kernel of the $G$-matrix.
+The non-linear problem is solved without the reactional term, and both a numerical and analytical jacobian is calculated and applied. The fact that least squares provides a system with many cross-terms for the linear problems makes the non-linear case even more complicated. The non-linearity affects all the matrices including the vector surging from the loading function. This does not only make the jacobian rather hard to implement, but also increases the computational cost drastically. In order to lower the computational time the jacobian is approximated in both the numerical and analytical approach. This simplification consists in simply not actualizing all the matrices for each Newton iteration.   
 
-\begin{align}
-	\mathcal{J}_{i,j} = A_{i,j} + G(\tilde{u}+R_g)_{i,j} +  [\frac{\partial}{\partial \tilde{u}_j} (G(\tilde{u}+R_g))_{i,:}] \tilde{u} \; - \frac{\partial}{\partial \tilde{u}_j}F(\tilde{u}+R_g)_i.
-\end{align}
-%
-Let us first consider the $F$-vector. The terms are given in equation\eref{mat:FLS} and it is clear that only the last terms in each block depends on $u$, notice that it does not depend on the components of the gradient $[ w_1 \; w_2]$. Hence the contribution to the total Jacobi matrix will only be in block $(1,3)$ and $(2,3)$. Further since $B_1$ and $B_2$ are both diagonal matrices where $B_{i,i}(u) = B_{i,i}(u_i)$ the Jacobian can be calculated efficiently by creating the matrices $dB_1$ and $dB_2$ which has the partial derivative of $B_1,B_2$ wrt. $u$ evaluated in each node.   
+%The stepwise algorithm to solve the nonlinear equation is described in chapter~\ref{chap:newTheory}. However there are several computational steps that needs to be taken care of, both with regular Galerkin and least squares. In both cases we obtain two matrices which we will name $A$ and $G$ and with superscript LS if they refer to the least squares formulation. In both cases only $G$ will depend on the numerical solution $u_h$. An important difference however is that in the LS setting the $F$ vector will depend on $u_h$ while in the straight forward Galerkin setting it will not. For regular Galerkin spectral approach we obtain
+%%
+%\begin{align}
+	%A \tilde{u} + AR_g  + G(\tilde{u}+R_g)(\tilde{u}+R_g) -F = 0
+%\end{align}
+%Notice that for each iteration the matrix $G(\tilde{u}+R_g)$ needs to be evaluated, the homogeneous boundary conditions on $\tilde{u}$ needs to be imposed and the Jacobian needs to be calculated. The Jacobian $\mathcal{F}$ will for this setting be given as
+%%
+%\begin{align}
+	%\mathcal{J}_{i,j} = A_{i,j} + G(\tilde{u}+R_g)_{i,j} +  (\tilde{u}+R_g)_i \; \frac{\partial}{\partial \tilde{u}_j} (G(\tilde{u}+R_g))_i.
+%\end{align}
+%%
+%With the LS formulation we obtain
+%\begin{align}
+%A^{LS}\tilde{u} + A^{LS}R_g  + G^{LS}(\tilde{u}+R_g)(\tilde{u}+R_g) -F^{LS}(\tilde{u}+R_g) = 0\\
+%A^{LS}\tilde{u} + A^{LS}R_g  + G^{LS}(\tilde{u}+R_g)\tilde{u} -F^{LS}(\tilde{u}+R_g) = 0
+%\end{align}
+%It is clear from this equation that the term surging from the loading function also needs to be handled when calculating the Jacobian. The lifting function $R_g$ does only have nonzero values in the third "block", hence it belongs to the kernel of the $G$-matrix.
+
+%\begin{align}
+	%\mathcal{J}_{i,j} = A_{i,j} + G(\tilde{u}+R_g)_{i,j} +  [\frac{\partial}{\partial \tilde{u}_j} (G(\tilde{u}+R_g))_{i,:}] \tilde{u} \; - \frac{\partial}{\partial \tilde{u}_j}F(\tilde{u}+R_g)_i.
+%\end{align}
+%%
+%Let us first consider the $F$-vector. The terms are given in equation\eref{mat:FLS} and it is clear that only the last terms in each block depends on $u$, notice that it does not depend on the components of the gradient $[ w_1 \; w_2]$. Hence the contribution to the total Jacobi matrix will only be in block $(1,3)$ and $(2,3)$. Further since $B_1$ and $B_2$ are both diagonal matrices where $B_{i,i}(u) = B_{i,i}(u_i)$ the Jacobian can be calculated efficiently by creating the matrices $dB_1$ and $dB_2$ which has the partial derivative of $B_1,B_2$ wrt. $u$ evaluated in each node.   
 
 
 
