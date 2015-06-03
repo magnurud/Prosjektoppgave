@@ -55,16 +55,13 @@ In figure\eref{fig:ConvergencePoisson} the convergengence in $L^{\infty}$ is plo
 \end{figure}
 %
 \subsection{Diffusion transport problem}
+
 For this problem I will present results obtained with spectral basis functions. It is also experimented with different ways of implementing the boundary conditions, both Dirichlet and Neumann conditions are implemented using both methods described in section \ref{BC}.
 Let us start by letting $\mathbf{b} = [b_1(x),b_2(y)] $ be the normalized vector field in $L^{\infty}$ sence, and  $\mu,b \in \mathbb{R}$ be the scalars used to scale the diffusion and convectional term. The equation analysed is then written as 
 \begin{align}
 	-\mu \Delta u + b \; (\mathbf{b} \cdot \nabla u) = f .
 	\label{eq:difftransForConditionNumberPlotting}
 \end{align}
-In figure\eref{fig:CondDifftransSpec} the condition number is analysed as a function of the relation between the parameters $\mu,b$. With the steplength/node distance held constant this is proportional to the Peclet number $\mathbb{P}e \sim |b|/\mu$. Notice that along the blue lines $\mu$ is decreasing and $b$ is held constant, while along the red lines $\mu$ is held constant and $b$ is decreasing. The plots reveal that for the least squares case the condition number is significantly more dependent on large $b$ than on small $\mu$. 
-
-The convergence results are presented in figure\eref{fig:ConvergenceDifftransSpec} and the same results as for the Poisson problem are obtained. It is also clear that imposing the boundary conditions as a restriction in our search space is far more efficient than adding them as an extra term to the functional. 
-
 %
 \begin{figure}[h!]
   \centering
@@ -84,6 +81,10 @@ The convergence results are presented in figure\eref{fig:ConvergenceDifftransSpe
   \label{fig:CondDifftransSpec}
 \end{figure}
 %
+In figure\eref{fig:CondDifftransSpec} the condition number is analysed as a function of the relation between the parameters $\mu,b$. With the steplength/node distance held constant this is proportional to the Peclet number $\mathbb{P}e \sim |b|/\mu$. Notice that along the blue lines $\mu$ is decreasing and $b$ is held constant, while along the red lines $\mu$ is held constant and $b$ is decreasing. The plots reveal that for the least squares case the condition number is significantly more dependent on large $b$ than on small $\mu$. 
+
+The convergence results are presented in figure\eref{fig:ConvergenceDifftransSpec} and the same results as for the Poisson problem are obtained. It is also clear that imposing the boundary conditions as a restriction in our search space is far more efficient than adding them as an extra term to the functional. 
+
 %
 \begin{figure}[h!]
   \centering
@@ -96,12 +97,14 @@ The convergence results are presented in figure\eref{fig:ConvergenceDifftransSpe
   \end{subfigure}
           %(or a blank line to force the subfigure onto a new line)
   \vspace{-0.1\baselineskip}
-	\caption{convergence plot with pure Dirichlet boundary conditions to the left and Neumann to the right  $\mathbf{b} = -[x,y]$.}
+	\caption{convergence plot of the diffusion transport test case with spectral basis functions and pure Dirichlet boundary conditions to the left and Neumann to the right  $b = 1,\mathbf{b} = -[x,y]$.}
   \label{fig:ConvergenceDifftransSpec}
 \end{figure}
 %
 
+\newpage
 \subsection{Diffusion transport equation surface plots}
+%
 \begin{figure}[h]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
@@ -113,9 +116,11 @@ The convergence results are presented in figure\eref{fig:ConvergenceDifftransSpe
   \end{subfigure}
           %(or a blank line to force the subfigure onto a new line)
   \vspace{-0.1\baselineskip}
-	\caption{Surf plot of the numerical solution of the diffusion transport problem solved by Galerkin spectral methods to the left and least-squares to the right, $\mu = 10^{-4},N=25,\mathbf{b} = -[x,y]$.}
-  \label{fig:SurfDiffTransPositive}
+	\caption{Surf plot of the numerical solution of the diffusion transport problem solved by Galerkin spectral methods to the left and least-squares to the right, $\mu = 10^{-4},N=25,b = 1, \mathbf{b} = -[x,y]$.}
+  \label{fig:SurfDiffTransNeg}
 \end{figure}
+%
+Least squares methods is known to be very stable \colorbox{yellow}{reference} and in figure\eref{fig:SurfDiffTransNeg} we see that LS provides a slightly smoother solution than Galerkin. At the same time the peak is a little bit lower, indicating that least squares has a tendency to even out high gradients.  
 %
 \begin{figure}[h]
   \centering
@@ -131,10 +136,14 @@ The convergence results are presented in figure\eref{fig:ConvergenceDifftransSpe
   \end{subfigure}
           %(or a blank line to force the subfigure onto a new line)
   \vspace{-0.1\baselineskip}
-  \caption{Surf plot of the numerical solution obtained from spectral methods of the diffusion transport problem solved by Galerkin to the left and with a combined GLS method to the right, with smoothening factor $\delta = 0.05$, both plots use the same parameters $\mu = 10^{-4}, N=25,\mathbf{b} = [x,y]$.}
+  \caption{Surf plot of the numerical solution obtained from spectral methods of the diffusion transport problem solved by Galerkin to the left and with a combined GLS method to the right, with smoothening factor $\delta = 0.05$, both plots use the same parameters $\mu = 10^{-4}, N=25,b = 1,\mathbf{b} = [x,y]$.}
   \label{fig:SurfDiffTransPositive}
 \end{figure}
 %
+
+By using the stability abilities of least squares and creating the bilinear form as explained in chapter \ref{chap:newTheory} we obtain the results in figure\eref{fig:SurfDiffTransPositive} and figure\eref{fig:SurfDiffTransPositiveFEM}. The smoothening provided by least squares is indisputable. Note that this is a consistent method, meaning that it does not add a viscous term dependent on the steplength and therefore conserves the convergence rate. 
+
+It works for spectral and finite element basis functions and the combined GLS bilinear form is easily constructed from the two separate forms. 
 %
 \begin{figure}[h]
   \centering
@@ -150,46 +159,13 @@ The convergence results are presented in figure\eref{fig:ConvergenceDifftransSpe
   \end{subfigure}
           %(or a blank line to force the subfigure onto a new line)
   \vspace{-0.1\baselineskip}
-	\caption{Surf plot of the numerical solution of the diffusion transport problem solved by Galerkin FEM to the left and the combined GLS method to the right, with smoothening factor $\delta = 0.05$, both plots use the same parameters, $\mu = 10^{-4},N=25,\mathbf{b} = -[x,y]$.}
+	\caption{Surf plot of the numerical solution of the diffusion transport problem solved by Galerkin FEM to the left and the combined GLS method to the right, with smoothening factor $\delta = 0.05$, both plots use the same parameters, $\mu = 10^{-4},N=25,b = 1,\mathbf{b} = -[x,y]$.}
   \label{fig:SurfDiffTransPositiveFEM}
 \end{figure}
-
 %
-%\begin{figure}[h!]
-  %\centering
-  %\begin{subfigure}[b]{0.48\textwidth}
-	%\includegraphics[width=\textwidth]{Figures/FEM_difftrans_aPos.pdf}
-  %\end{subfigure}%
-  %\quad
-  %\begin{subfigure}[b]{0.48\textwidth}
-	%\includegraphics[width=\textwidth]{Figures/LSFEM_difftrans_aPos.pdf}
-  %\end{subfigure}
-  %\begin{subfigure}[b]{0.48\textwidth}
-	%\includegraphics[width=\textwidth]{Figures/GLSFEM_difftrans_aPos.pdf}
-  %\end{subfigure}
-          %%(or a blank line to force the subfigure onto a new line)
-  %\vspace{-0.1\baselineskip}
-  %\caption{Surf plot of the numerical solution of the diffusion transport problem solved by Galerkin FEM to the left ,least-squares to the right and the combined GLS method below with $\delta = 0.05$, all the plots use the same parameters $\mu = 10^{-4}, N=25,\mathbf{b} = [x,y]$.}
-  %\label{fig:SurfDiffTransPositiveFEM}
-%\end{figure}
-%\begin{figure}[hl]
-	%\centering
-  %\includegraphics[width=80mm]{Figures/condFEM-LSFEM.pdf}
-	%\caption{condition number of LSFEM and FEM}
-	%\label{fig:conditionFEM}
-%\end{figure}
-%%
-%%
-%\begin{figure}[hl]
-	%\centering
-	%\includegraphics[width=80mm]{Figures/condSpec-SpecLS.pdf}
-	%\caption{condition number of Spectral and LS-Spectral method}
-	%\label{fig:conditionSpec}
-%\end{figure}
-%%
-
 \subsection{Nonlinear results}
-
+The nonlinear equation is constructed by making a minor change in our $\mathbf{b}$-vector, explicitly I assume a vector field on the form $\mathbf{b}=[b_1(x)u,b_2(y)u]$. A test case is constructed in the same way as for the previous problems and the jacobian is constructed in an analytical and a numerical fashion, the results are shown in figure \ref{fig:convergenceNonlinear}. For the least squares method the jacobian is approximated in order to save calculation time, hence we have a quasi-newton method and quadratic convergence is not achevied. Note also that the error stabilizes in the same way for the different methods as it did for the linear problems. 
+%
 \begin{figure}[h]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
@@ -201,5 +177,6 @@ The convergence results are presented in figure\eref{fig:ConvergenceDifftransSpe
   \end{subfigure}%
   \vspace{-0.1\baselineskip}
 	\caption{Convergence plot of the numerical solution of the nonlinear diffusion transport equation solved by spectral methods, In the figure to the left a numerical jacobian has been calculated and in the figure to the right the analytical one is used. $\mu = 1,N=15,\mathbf{b} = -[x^2,y^2]$.}
-  \label{fig:SurfDiffTransPositiveFEM}
+  \label{fig:convergenceNonlinear}
 \end{figure}
+%
