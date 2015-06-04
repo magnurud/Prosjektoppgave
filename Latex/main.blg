@@ -4,45 +4,46 @@ The top-level auxiliary file: main.aux
 The style file: unsrtnat.bst
 Database file #1: Bibliography.bib
 Warning--can't use both author and editor fields in Bochev
-You've used 3 entries,
+Warning--can't use both author and editor fields in SM
+You've used 6 entries,
             2481 wiz_defined-function locations,
-            574 strings with 4859 characters,
-and the built_in function-call counts, 854 in all, are:
-= -- 69
-> -- 21
-< -- 3
-+ -- 12
-- -- 6
-* -- 43
-:= -- 146
-add.period$ -- 12
-call.type$ -- 3
-change.case$ -- 3
-chr.to.int$ -- 3
-cite$ -- 4
-duplicate$ -- 57
-empty$ -- 91
-format.name$ -- 9
-if$ -- 178
+            601 strings with 5340 characters,
+and the built_in function-call counts, 1972 in all, are:
+= -- 171
+> -- 66
+< -- 6
++ -- 30
+- -- 18
+* -- 131
+:= -- 320
+add.period$ -- 24
+call.type$ -- 6
+change.case$ -- 8
+chr.to.int$ -- 6
+cite$ -- 8
+duplicate$ -- 114
+empty$ -- 197
+format.name$ -- 30
+if$ -- 418
 int.to.chr$ -- 1
-int.to.str$ -- 4
-missing$ -- 6
-newline$ -- 26
-num.names$ -- 9
-pop$ -- 32
+int.to.str$ -- 7
+missing$ -- 10
+newline$ -- 44
+num.names$ -- 18
+pop$ -- 54
 preamble$ -- 1
-purify$ -- 3
+purify$ -- 6
 quote$ -- 0
-skip$ -- 31
+skip$ -- 65
 stack$ -- 0
-substring$ -- 6
-swap$ -- 7
+substring$ -- 58
+swap$ -- 15
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 12
-warning$ -- 1
-while$ -- 6
+type$ -- 30
+warning$ -- 2
+while$ -- 15
 width$ -- 0
-write$ -- 49
-(There was 1 warning)
+write$ -- 93
+(There were 2 warnings)

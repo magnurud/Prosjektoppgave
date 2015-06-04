@@ -1,4 +1,4 @@
-\begin{thebibliography}{3}
+\begin{thebibliography}{6}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -18,9 +18,28 @@ Max D.~Gunzburger Pavel B.~Bochev.
 \newblock \emph{Least-Squares Finite Element Methods}.
 \newblock Springer, 2009.
 
+\bibitem[Bochev and Gunzburger(1998)]{bochev1998}
+Pavel~B Bochev and Max~D Gunzburger.
+\newblock Finite element methods of least-squares type.
+\newblock \emph{SIAM review}, 40\penalty0 (4):\penalty0 789--837, 1998.
+
+\bibitem[Canuto and Quarteroni(1982)]{Canuto}
+C.~Canuto and A.~Quarteroni.
+\newblock Approximation results for orthogonal polynomials in sobolev spaces.
+\newblock \emph{Mathematics of Computation}, 38\penalty0 (157):\penalty0
+  67–67, Jan 1982.
+\newblock ISSN 0025-5718.
+\newblock \doi{10.1090/s0025-5718-1982-0637287-3}.
+\newblock URL \url{http://dx.doi.org/10.1090/S0025-5718-1982-0637287-3}.
+
 \bibitem[Quarteroni(2014)]{Quarteroni}
 Alfio Quarteroni.
 \newblock \emph{Numerical Models for Differential Problems, 2. edition}.
 \newblock Springer, 2014.
+
+\bibitem[Süli and Mayers(2006)]{SM}
+Endre Süli and David~F. Mayers.
+\newblock \emph{An Introduction to Numerical Analysis}.
+\newblock Cambridge, 2006.
 
 \end{thebibliography}

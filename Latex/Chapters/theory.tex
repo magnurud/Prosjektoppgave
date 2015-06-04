@@ -9,7 +9,9 @@
 %----------------------------------------------------------------------------------------
 
 \section{Informal introduction to least-squares}
-The least-squares finite element method is a numerical method with similarities to mixed Galerkin. However it has a fundamentally different approach regarding the definition of the bilinear functional. Let us look at a system of first order differential equations on the form 
+The least-squares finite element method is a numerical method with similarities to mixed Galerkin. However it has a fundamentally different approach regarding the definition of the bilinear functional. The following theory is mostly assembled from Jiang \cite{Jiang}. 
+
+Let us look at a system of first order differential equations on the form 
 \begin{align}
 	Au &= f \text{ in } \Omega \\
 	u &= g \text{ on } \partial \Omega.
@@ -47,7 +49,6 @@ where
 	\label{def:bilin}
 \end{align}
 Notice that the bilinear form $Q$ is symmetric, this is an important advantage least-squares has over other projection methods. The bilinear form that surged from a first-order problem by the least-squares leads us to a variational formulation similar to the one obtained from a second order problem by the Galerkin method. Basically the bilinear form from least-squares will correspond to a bilinear form of a problem of twice the order obtained using standard Galerkin. In order to avoid problems of large complexity a higher order PDE should therefore be transformed to a system of first order PDE's (similar to a mixed Galerkin approach) before defining the least squares functional.
-\cite{Jiang}
 %In order to apply a numerical algorithm the domain $\Omega$ needs to be discretized, we name this discretization $\Omega_h$. A set of basis functions $ \left\{ N \right\}_i $ is defined for $V_h = H^1_0(\Omega_h)$ such that the discrete variational formulation can be stated. Find $u_h \in V_h$ such that 
 %\begin{align}
 	%Q(u_h,v_h) = F(v_h) \; \; \; , \; \; \; \forall v_h \in V_h,
@@ -55,6 +56,7 @@ Notice that the bilinear form $Q$ is symmetric, this is an important advantage l
 %\end{align}
 
 \section{Formal formulation of least-squares}
+The formulation stated in this section is a short summary of Bochev and Gunzburger~\cite{Bochev}.
 Let us look at a general boundary value problem where $f \in Y(\Omega)$, $g \in B(\partial \Omega)$, $\mathcal{B}\colon X(\partial \Omega) \to B(\partial\Omega) $ and $\mathcal{L}\colon X(\Omega)\to Y(\Omega)$. Find $u \in X(\Omega) $ such that 
 \begin{align}
 	\mathcal{L} u &= f \; \; \; \text{ in } \Omega \\
@@ -103,10 +105,9 @@ In order to solve the BVP numerically we define discrete function spaces $X^h \s
 	\text{find } u^h \in X^h \text{  such that  } Q(u^h,v^h) = F(v^h) \; \; \forall v^h\in X^h.
 	\label{eq:varFormGenDisc}
 \end{align}
-~\cite{Bochev}
 %
 \section{Error analysis}
-Let $u$ be the analytical solution of a problem of the type ~\eref{eq:BVP}, $u^h$ is our numerical solution to ~\eref{eq:varFormGenDisc} and $u^h_{\perp} $ is the orthogonal projection of $u$ in $X_h$. 
+Let $u$ be the analytical solution of a problem of the type ~\eref{eq:BVP}, $u^h$ is our numerical solution to ~\eref{eq:varFormGenDisc} and $u^h_{\perp} $ is the orthogonal projection of $u$ in $X_h$ \cite{bochev1998}. 
 \begin{align}
 	\begin{split}
 	Q(u-u^h,u-u^h) &= Q(u-u^h,u-u^h_{\perp}) + Q(u-u^h,u^h_{\perp}-u^h) \\
@@ -120,8 +121,15 @@ The first equality is due to adding and subtracting $u^h_{\perp}$, because both 
 	||u-u^h||_{X_h}\leq \frac{\beta}{\alpha}||u-u^h_{\perp}||_{X_h} = \min_{w^h \in X_h}\frac{\beta}{\alpha}||u-w^h||_{X_h}.
 	\label{error_final}
 \end{align}
-Hence we can show that the Least squares method provides a convergence result of similar order as the Finite element method.
-\colorbox{yellow}{Add the convergence result of spectral methods}
+The error is reduced to a pure interpolation problem in the same way as Galerkin. 
+
+An important consequence of this result is that by with spectral basis functions one can obtain spectral convergence, proof by Canuto and Quarteroni \cite{Canuto}
+\begin{align}
+	||u-u^h||_{L_2(\Omega)} \leq c_0N^{-\sigma}||u||_{H^{\sigma}(\Omega)}
+	\label{eq:spectralConvergence}
+\end{align}
+Where $N$ is the polynomial order of the basis functions.
+%
 
 \section{Least squares applied on some common PDE's}
 Before we start elaborating to much on each test case, I will provide a quick overview of the problems investigated in this project. All of them are BVP with either Neumann or Dirichlet boundary conditions, the results can be found in chapter~\ref{chap:results}. The problems attempted to be solved in this project are simply expansions of the Poisson problem,  
@@ -187,7 +195,7 @@ which can be written in the same form as ~\eref{eq:BVP} with $ \mathbf{u} = \mat
 	\end{bmatrix}
 	\label{eq:Amatrix}
 \end{align}
-We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \times B  = [L^2(\Omega)]^3\times L^2(\partial \Omega) $. \colorbox{yellow}{chesck this } The functional defined in~\eref{eq:FunctionalGen} will for our problem be 
+We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \cup  B  = [L^2(\Omega)]^3\cup L^2(\partial \Omega) $. The functional defined in~\eref{eq:FunctionalGen} will for our problem be 
 \begin{align}
 	J(u;f) = ||\mathcal{L}u-f||^2_Y.
 	\label{eq:lsFunctionalPoisson}
@@ -197,9 +205,8 @@ The term corresponding to the boundary conditions is imposed directly in the def
 	Q(\mathbf{u},\mathbf{v}) = F(\mathbf{v}) \;\; \forall \;\; \mathbf{v} \in X.
 	\label{eq:VariationalFormulationPoisson}
 \end{align}
-We require that $\mathbf{f} \in Y$.
-\colorbox{yellow}{get a reference on this !!! }
-Notice that the spaces $X$ and $Y$ chosen as described above fulfill the condition ~\eref{eq:normEq}. 
+For the equations to be valid we require that $\mathbf{f} \in Y$.
+Notice that the spaces $X$ and $Y$ chosen as described above fulfill the condition\eref{eq:normEq} due to~\cite{Bochev}. 
 %
 \subsection{Diffusion transport reaction problem}
 %

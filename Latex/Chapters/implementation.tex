@@ -35,10 +35,11 @@ The total system of equation for all test functions can then be written as a mat
 	K^{LS}\mathbf{u} = F^{LS}.
 	\label{eq:matrixEq}
 \end{align}
-Where $K^{LS}_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$. \colorbox{yellow}{Should somehow show the importance of this formula}
+Where $K^{LS}_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$. 
 
 Written explicitly for the \textbf{Poisson and diffusion transport equation} it will be a 3-by-3 matrix on the form 
 
+%
 $
 K^{LS}_{I,J} = \int_{\Omega}
 \begin{bmatrix}
@@ -49,9 +50,11 @@ K^{LS}_{I,J} = \int_{\Omega}
 \end{bmatrix}
 d\Omega
 $
+%
+
 where $\partial_x = \partial / \partial x $ for the Poisson problem and $\partial_x = \mu \partial / \partial x - b_1$ for the diffusion transport problem. Similarly $F^{LS}_I$ will be given as 
 \begin{align}
-	F_I^{LS} = \int_{\Omega}(\mathcal{L}N_I)^T\vec{f} d\Omega = 
+	F_I^{LS} = \int_{\Omega}(\mathcal{L}N_I)^T\mathbf{f} d\Omega = 
 	\int_{\Omega}
 \begin{bmatrix}
 	\partial_xN_I \\
@@ -236,7 +239,7 @@ We can now define the total matrix for the diffusion transport reaction problem 
 Notice that most of the terms in the final matrix are cross terms, and does not surge solely from one of the terms in the equation. The way that the matrices have been divided into parts here are of now other than practical reasons and can be done in a different matter.  
 
 \section{non-linear diffusion transport problem}
-The non-linear problem is solved without the reactional term, and both a numerical and analytical jacobian is calculated and applied. The fact that least squares provides a system with many cross-terms for the linear problems makes the non-linear case even more complicated. The non-linearity affects all the matrices including the vector surging from the loading function. This does not only make the jacobian rather hard to implement, but also increases the computational cost drastically. In order to lower the computational time the jacobian is approximated in both the numerical and analytical approach. This simplification consists in simply not actualizing all the matrices for each Newton iteration.   
+The non-linear problem is solved without the reactional term, Newtons method with both a numerical and analytical jacobian is calculated and applied. A detailed convergence result can be found in \cite{SM}. The fact that least squares provides a system with many cross-terms for the linear problems makes the non-linear case even more complicated. The non-linearity affects all the matrices including the vector surging from the loading function. This does not only make the jacobian rather hard to implement, but also increases the computational cost drastically. In order to lower the computational time the jacobian is approximated in both the numerical and analytical approach. This simplification consists in simply not actualizing all the matrices for each Newton iteration.   
 
 %The stepwise algorithm to solve the nonlinear equation is described in chapter~\ref{chap:newTheory}. However there are several computational steps that needs to be taken care of, both with regular Galerkin and least squares. In both cases we obtain two matrices which we will name $A$ and $G$ and with superscript LS if they refer to the least squares formulation. In both cases only $G$ will depend on the numerical solution $u_h$. An important difference however is that in the LS setting the $F$ vector will depend on $u_h$ while in the straight forward Galerkin setting it will not. For regular Galerkin spectral approach we obtain
 %%
