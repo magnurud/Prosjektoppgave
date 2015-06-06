@@ -50,12 +50,12 @@ Where we have used Greens theorem and the assumption that $u=0$ on the boundary 
 It is clear that for negative $\gamma_0$ and sufficiently small $\mu$ the bilinear form is no longer coercive and thus our convergence requirements are no longer valid. Standard Galerkin method is therefore not a suited way to solve this type of problem. 
 \section{Adding least squares in order to obtain stability}
 
-Now remember from equation \eref{eq:normEq} that the least squares formulation guarantees us a coercive bilinear form, given that the BVP has a solution and that the search- and solution space are chosen correctly. For this particular problem we can find $\alpha,\beta$ such that $\alpha||u||_1^2 \leq Q(\mathbf{u},\mathbf{u}) \leq \beta||u||_1^2 $.
-Now, let us define $\mathring{a}(\cdot,\cdot)$ and $\mathring{f}(\cdot)$ as the as the linear combinations of the linear and bilinear form surging from standard Galerkin and least-squares method. 
+Now remember from equation\eref{eq:normEq} that the least squares formulation guarantees us a coercive bilinear form, given that the BVP has a solution and that the search- and solution space are chosen correctly. For this particular problem we can find $\alpha,\beta$ such that $\alpha||u||_1^2 \leq Q(\mathbf{u},\mathbf{u}) \leq \beta||u||_1^2 $.
+Now, let us define $\mathring{a}(\cdot,\cdot)$ and $\mathring{f}(\cdot)$ as the as the linear combinations of the linear and bilinear form surging from standard Galerkin and least-squares method
 \begin{align}
 	\begin{split}
-	\mathring{a}(u,v) &= a(u,v) + \delta Q(\mathbf{u},\mathbf{\mathbf{v}}) \\
-	 \mathring{f}(v) &= (f,v) + \delta F(\mathbf{\mathbf{v}}) 
+	\mathring{a}(u,v) &= a(u,v) + \delta Q(\mathbf{u},\mathbf{\mathbf{v}}), \\
+	 \mathring{f}(v) &= (f,v) + \delta F(\mathbf{\mathbf{v}}).
 	\end{split}
 	\label{eq:GLS}
 \end{align}

@@ -183,7 +183,7 @@
 %	defined as \examname above so you cite it as \examname
 %----------------------------------------------------------------------------------------
 
-\thesistitle{Least Squares Finite Element Method} % Your thesis title - this is used in the title and abstract
+\thesistitle{Least Squares Method} % Your thesis title - this is used in the title and abstract
 %-------------------------------------------------  
 \supervisor{Anne Kværnø} % You supervisor's name - this is used in the title page
 %-------------------------------------------------   

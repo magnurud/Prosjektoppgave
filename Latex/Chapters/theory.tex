@@ -9,7 +9,7 @@
 %----------------------------------------------------------------------------------------
 
 \section{Informal introduction to least-squares}
-The least-squares finite element method is a numerical method with similarities to mixed Galerkin. However it has a fundamentally different approach regarding the definition of the bilinear functional. The following theory is mostly assembled from Jiang \cite{Jiang}. 
+The least-squares method is a numerical method with similarities to mixed Galerkin. However it has a fundamentally different approach regarding the definition of the bilinear functional. The following theory is mostly assembled from Jiang \cite{Jiang}. 
 
 Let us look at a system of first order differential equations on the form 
 \begin{align}
@@ -32,7 +32,7 @@ and a functional
 	 J(v) = \frac{1}{2}||R(v)||^2_0.
 	\label{eq:Functional}
 \end{align} 
-The solution $u$ and it's gradient needs to be in $L^2$ for the functional to make sense, hence $u$ is restricted to the space $H^1_0(\Omega)$. The homogeneous boundary condition is now baked into the definition of the search space. By minimizing $J$ we obtain 
+The solution $u$ and it's gradient needs to be in $L^2$ for the functional to make sense, hence $u$ is restricted to the space $H^1_0(\Omega)$. The homogeneous boundary condition is now included in the definition of the search space. By minimizing $J$ we obtain 
 \begin{align}
 	\lim_{t\rightarrow 0} \frac{d}{dt}J(u+tv) = \int_{\Omega}(Av)^T(Au-f)d\Omega = 0 \text{    ,   } \forall v \in V.
 	\label{eq:minProb}
@@ -59,8 +59,10 @@ Notice that the bilinear form $Q$ is symmetric, this is an important advantage l
 The formulation stated in this section is a short summary of Bochev and Gunzburger~\cite{Bochev}.
 Let us look at a general boundary value problem where $f \in Y(\Omega)$, $g \in B(\partial \Omega)$, $\mathcal{B}\colon X(\partial \Omega) \to B(\partial\Omega) $ and $\mathcal{L}\colon X(\Omega)\to Y(\Omega)$. Find $u \in X(\Omega) $ such that 
 \begin{align}
+	\begin{split}
 	\mathcal{L} u &= f \; \; \; \text{ in } \Omega \\
 	\mathcal{B}u &= g \; \; \; \text{ on } \partial \Omega.
+	\end{split}
 	\label{eq:BVP}
 \end{align}
 Whenever this BVP has a unique solution, a least-squares functional can be defined as 
@@ -70,15 +72,15 @@ Whenever this BVP has a unique solution, a least-squares functional can be defin
 \end{align}
 and the corresponding minimization problem is then given as 
 \begin{align}
-	\min_{u \in X}J(u;f,g)
+	\min_{u \in X}J(u;f,g).
 	\label{eq:minProbGen}
 \end{align}
-For any well-posed problem $\exists \alpha,\beta > 0$ such that 
+Now, for any well-posed problem $\exists \: \alpha,\beta > 0$ such that 
 \begin{align}
 	\alpha||u||_X^2 \leq J(u;0,0) = (\mathcal{L}u,\mathcal{L}u)_Y+(\mathcal{B}u,\mathcal{B}u)_B \leq \beta||u||_X^2.
 	\label{eq:normEq}
 \end{align}
-The fact that our functional is norm-equivalent is of crucial importance to a successful LS-method. It is therefore important that the spaces $X,Y \text{ and } B$ is chosen such that the LS-functional defines a norm is equivalent to $|| \cdot ||_X$.
+The fact that our functional is norm-equivalent is of crucial importance to a successful LS-method. It is therefore important that the spaces $X,Y \text{ and } B$ are chosen such that the LS-functional defines a norm which is equivalent to $|| \cdot ||_X$.
 Minimizing this functional is equivalent to solving the Euler-Lagrange equations formulated as 
 \begin{align}
 	\text{find } u \in X \text{  such that  } Q(u,v) = F(v) \; \; \forall v\in X
@@ -107,7 +109,7 @@ In order to solve the BVP numerically we define discrete function spaces $X^h \s
 \end{align}
 %
 \section{Error analysis}
-Let $u$ be the analytical solution of a problem of the type ~\eref{eq:BVP}, $u^h$ is our numerical solution to ~\eref{eq:varFormGenDisc} and $u^h_{\perp} $ is the orthogonal projection of $u$ in $X_h$ \cite{bochev1998}. 
+Let $u$ be the analytical solution of a problem of the type\eref{eq:BVP}, $u^h$ is our numerical solution to\eref{eq:varFormGenDisc} and $u^h_{\perp} $ is the orthogonal projection of $u$ in $X_h$ \cite{bochev1998}. 
 \begin{align}
 	\begin{split}
 	Q(u-u^h,u-u^h) &= Q(u-u^h,u-u^h_{\perp}) + Q(u-u^h,u^h_{\perp}-u^h) \\
@@ -116,23 +118,24 @@ Let $u$ be the analytical solution of a problem of the type ~\eref{eq:BVP}, $u^h
 	\end{split}
 	\label{eq:error1}
 \end{align}
-The first equality is due to adding and subtracting $u^h_{\perp}$, because both $u^h$ and $u^h_{\perp}$ solves the variational formulation we can cancel the last term, and by using the norm-equivalency from ~\eref{eq:normEq} and Schwartz inequality we get the last  expression. Now by applying the first inequality of ~\eref{eq:normEq} we end up with 
+The first equality is due to adding and subtracting $u^h_{\perp}$, because both $u^h$ and $u^h_{\perp}$ solves the variational formulation we can cancel the last term, and by using the norm-equivalency from\eref{eq:normEq} and Schwartz inequality we get the last  expression. Now by applying the first inequality of\eref{eq:normEq} we end up with 
 \begin{align}
 	||u-u^h||_{X_h}\leq \frac{\beta}{\alpha}||u-u^h_{\perp}||_{X_h} = \min_{w^h \in X_h}\frac{\beta}{\alpha}||u-w^h||_{X_h}.
 	\label{error_final}
 \end{align}
-The error is reduced to a pure interpolation problem in the same way as Galerkin. 
+The error is reduced to a pure interpolation problem in the same way as with a standard Galerkin method. 
 
-An important consequence of this result is that by with spectral basis functions one can obtain spectral convergence, proof by Canuto and Quarteroni \cite{Canuto}
+An important consequence of this result is that with spectral basis functions one can obtain spectral convergence, 
 \begin{align}
-	||u-u^h||_{L_2(\Omega)} \leq c_0N^{-\sigma}||u||_{H^{\sigma}(\Omega)}
+	||u-u^h||_{L_2(\Omega)} \leq c_0N^{-\sigma}||u||_{H^{\sigma}(\Omega)}.
 	\label{eq:spectralConvergence}
 \end{align}
 Where $N$ is the polynomial order of the basis functions.
+Proof can be found in Canuto and Quarteroni \cite{Canuto}.
 %
 
 \section{Least squares applied on some common PDE's}
-Before we start elaborating to much on each test case, I will provide a quick overview of the problems investigated in this project. All of them are BVP with either Neumann or Dirichlet boundary conditions, the results can be found in chapter~\ref{chap:results}. The problems attempted to be solved in this project are simply expansions of the Poisson problem,  
+Before we start elaborating to much on each test case, I will provide a quick overview of the problems investigated in this project. All of them are BVP with either Neumann or Dirichlet boundary conditions, the results can be found in chapter~\ref{chap:results}. The problems solved in this project are simply expansions of the Poisson equation,  
 %
 \begin{align}
 	-\Delta u = f \text{  in  } \Omega.
@@ -142,21 +145,21 @@ Before we start elaborating to much on each test case, I will provide a quick ov
 Then by adding a transport term you obtain the diffusion transport equation
 %
 \begin{align}
-	-\mu \Delta u + \mathbf{b} \cdot \nabla u = f \text{ in } \Omega
+	-\mu \Delta u + \mathbf{b} \cdot \nabla u = f \text{ in } \Omega.
 	\label{eq:DiffTransImplementation}
 \end{align}
 %
 This can be further expanded by adding a reaction term
 %
 \begin{align}
-	-\mu \Delta u + \mathbf{b} \cdot \nabla u +\sigma u = f \text{ in } \Omega
+	-\mu \Delta u + \mathbf{b} \cdot \nabla u +\sigma u = f \text{ in } \Omega.
 	\label{eq:ReactionImplementation}
 \end{align}
 %
-And as a final complication the vector field $\mathbf{b}$ can be made dependent on $u$ and hence give us the nonlinear diffusion transport reaction equation
+And as a final complication the vector field $\mathbf{b}$ can be made dependent on $u$ and we end up with the nonlinear diffusion transport reaction equation
 %
 \begin{align}
-	-\mu \Delta u + \mathbf{b}(u) \cdot \nabla u +\sigma u = f \text{ in } \Omega
+	-\mu \Delta u + \mathbf{b}(u) \cdot \nabla u +\sigma u = f \text{ in } \Omega.
 	\label{eq:ReactionImplementation}
 \end{align}
 %
@@ -182,10 +185,10 @@ Let us first consider the homogeneous case. The straight forward least-squares a
 \begin{align}
 	\mathbf{w} + \nabla u = 0 \text{ in } \Omega \\
 	\nabla \cdot \mathbf{w} = f \text{ in } \Omega \\
-	u = 0 \text{ on } \partial \Omega.
+	u = 0 \text{ on } \partial \Omega
 	\label{eq:PoissonSystem}
 \end{align}
-which can be written in the same form as ~\eref{eq:BVP} with $ \mathbf{u} = \mathbf{w} \oplus u $, $\mathbf{f} = (0,0,f)$, $g=0$, $\mathcal{B} = (0,0,1)^T $ and $\mathcal{L}$ given as 
+which can be written in the same form as\eref{eq:BVP} with $ \mathbf{u} = \mathbf{w} \oplus u $, $\mathbf{f} = [0,0,f]$, $g=0$, $\mathcal{B} = [0,0,1]^T $ and $\mathcal{L}$ given as 
 \begin{align}
 	\mathcal{L} =
 	\begin{bmatrix}
@@ -195,12 +198,12 @@ which can be written in the same form as ~\eref{eq:BVP} with $ \mathbf{u} = \mat
 	\end{bmatrix}
 	\label{eq:Amatrix}
 \end{align}
-We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \cup  B  = [L^2(\Omega)]^3\cup L^2(\partial \Omega) $. The functional defined in~\eref{eq:FunctionalGen} will for our problem be 
+We define the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$ and the solution space $Y \cup  B  = [L^2(\Omega)]^3\cup L^2(\partial \Omega) $. The functional defined in\eref{eq:FunctionalGen} will for our problem be 
 \begin{align}
 	J(u;f) = ||\mathcal{L}u-f||^2_Y.
 	\label{eq:lsFunctionalPoisson}
 \end{align}
-The term corresponding to the boundary conditions is imposed directly in the definition of our search space and is therefore not included in our functional as implied by equation\eref{eq:FunctionalGen}. We will later show that this results in a better numerical solution. The corresponding variational formulation defined in\eref{eq:VarFormLinForms} can now be stated. Find $ \mathbf{u} \in X $ such that
+The term corresponding to the boundary conditions is imposed directly in the definition of our search space and is therefore not included in our functional as implied by equation\eref{eq:FunctionalGen}. We will later show that this results in a better numerical solution. The corresponding variational formulation with functionals defined in\eref{eq:VarFormLinForms} can now be stated. Find $ \mathbf{u} \in X $ such that
 \begin{align}
 	Q(\mathbf{u},\mathbf{v}) = F(\mathbf{v}) \;\; \forall \;\; \mathbf{v} \in X.
 	\label{eq:VariationalFormulationPoisson}
@@ -283,30 +286,31 @@ This gives us a nonlinear variational formulation that does not allow us to solv
 \section{Boundary conditions} \label{BC}
 Imposing the boundary conditions in a least squares setting can either be done by creating a lifting function and in this way imposing them by restricting our search space, or it can be added to our functional as implied by formula \eref{eq:FunctionalGen}. In this section these two techniques will be clarified. 
 \subsection{non-homogeneous Dirichlet boundary conditions}
-If $g \neq 0$ then we can simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{\mathbf{u}}=\mathbf{u}-R_g$ we can replace $\mathbf{u}$ in the variation formulation and get 
+If $g \neq 0$ then we can simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{\mathbf{u}}=\mathbf{u}-R_g$ we can replace this for $\mathbf{u}$ in the variation formulation and get 
 \begin{align}
 	Q(\tilde{\mathbf{u}}+R_g,\mathbf{v}) &= F(\mathbf{v}) \\
 	Q(\tilde{\mathbf{u}},\mathbf{v})+Q(R_g,\mathbf{v}) &= F(\mathbf{v}) \\
 	Q(\tilde{\mathbf{u}},\mathbf{v}) &= F(\mathbf{v}) - Q(R_g,\mathbf{v})\\
-	Q(\tilde{\mathbf{u}},\mathbf{v}) &= \tilde{F}(\mathbf{v}) 
+	Q(\tilde{\mathbf{u}},\mathbf{v}) &= \tilde{F}(\mathbf{v}).
 	\label{eq:liftingFunc}
 \end{align}
 %
+This way the test functions and the solution are in the same space, i.e. $\mathbf{\tilde u}, \mathbf{v} \in X_0$.
 \subsection{non-homogeneous Neumann boundary conditions}
-Because of the geometry of our problem and the fact that we define the flux as an extra variable we can transform the Neumann conditions to a Dirichlet condition on the flux. 
+Because of the geometry of our problem and the fact that we define the flux as an extra variable, we can transform the Neumann conditions to a Dirichlet condition on the flux. 
 \begin{align}
 	\frac{\partial u}{\partial \mathbf{n}} &= h \text{  on   } \partial \Omega \\
 	\nabla u \cdot \mathbf{n} &= h \\
 	 \mathbf{w} \cdot \mathbf{n} &= -h. 
 	\label{eq:neumann}
 \end{align}
-Let us define $\hat{x}$ and $\hat{y}$ as the unit vectors in each direction. Notice that for the west ($x=0$) and east ($x=1$) edges the normal vector $\mathbf{n}= \pm\hat{x}$, and at the north ($y=1$) and south($y=0$) edges $\mathbf{n}=\pm \hat{y}$. This way we can write the Neumann conditions as a Dirichlet condition on the first and second component of $\mathbf{w}= [ w_1 \:\: w_2]$. 
+Let us define $\hat{x}$ and $\hat{y}$ as the unit vectors in each direction. Notice that for the west ($x=0$) and east ($x=1$) edges the normal vector $\mathbf{n}= \pm\hat{x}$, and at the north ($y=1$) and south($y=0$) edges $\mathbf{n}=\pm \hat{y}$. This way we can write the Neumann conditions as a Dirichlet condition on the first and second component of $\mathbf{w}= [ w_1 \:,\: w_2]$. 
 \begin{align}
 	w_1 = \pm h \text{    for $x = 0$ and $x=1$ }\\
 	w_2 = \pm h \text{    for $y = 0$ and $y=1$ }
 	\label{eq:neumannAsDirichlet}
 \end{align}
-\subsection{Boundary as an additional functional}
+\subsection{Boundary conditions as an additional functional}
 The boundary conditions can also be implemented as the functional described in equation \eref{eq:FunctionalGen}. For a BVP with Dirichlet BC's this will correspon to adding $||u-g||^2_0$ to our functional $J$. By minimizing this term we end up with the following contribution to the variational form
 \begin{align}
 	(u,v)_{\partial \Omega}=(g,v)_{\partial \Omega}

@@ -67,7 +67,7 @@ where $\partial_x = \partial / \partial x $ for the Poisson problem and $\partia
 
 Notice that by doing the splitting of variables to get the hyperbolic first order system we end up with three times as many equations and variables. 
 
-Note that the gradient of our solution must be restricted to the space $H^1(\text{div},\Omega) = \left\{  \mathbf{w}\in L^2(\Omega) | \nabla \cdot \mathbf{w} \in L^2(\Omega)\right\} $. In order to simplify the implementation I have in this project chosen my basis functions to a subspace of $H^{1}(\text{div},\Omega) $ such that $\mathbf{w}\in [H^1(\Omega)]^2$. In other words, the basis functions for the solution, and both components of the gradients are the same.  
+Note that the gradient of our solution must be restricted to the space $H^1(\text{div},\Omega) = \left\{  \mathbf{w}\in L^2(\Omega) | \nabla \cdot \mathbf{w} \in L^2(\Omega)\right\} $. In order to simplify the implementation I have in this project chosen the basis functions to a be in a subspace of $H^{1}(\text{div},\Omega) $ such that $\mathbf{w}\in [H^1(\Omega)]^2$. In other words, the basis functions for the solution, and both components of the gradients are the same.  
 \section{Least squares with finite element basis functions}
 The same triangular grid has been chosen for the implementation of both regular Galerkin FEM and the least-squares FEM. By choosing 1st order hat functions each element consists of three non-zero basis functions. For the GFEM this leads to calculating a $3\times 3$ matrix for each element whereas for LSFEM a $9 \times 9$ matrix has to be calculated, although it has a relatively simple structure it still leads to additional computational costs and is a lot more tedious to implement.
 

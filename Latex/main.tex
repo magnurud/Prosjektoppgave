@@ -262,7 +262,7 @@ In this project some basic properties of the least squares method is analysed. B
 \listofsymbols{ll} % Include a list of Abbreviations (a table of two columns)
 {
 \textbf{CONVENTION} & we let subscript $h$ denote the discretized variables \\
-$u$ & Solution of the pde \\
+$u$ & Solution of the partial differential equation\\
 $\mathbf{w} = [w_1 \; w_2 ] $ & Negative gradient of $u$ \\
 $\mathbf{u} = [ \mathbf{w} \; u ]^T$ & Solution to the first order transformation \\ 
 $ R_g $ & Lifting function \\
@@ -278,15 +278,11 @@ $\mathring{a}(\cdot,\cdot)$ & Bilinear form obtained from the combined GLS-metho
 $F(\cdot)$ & Linear form obtained from the least squares approach \\
 $\tilde{F}(\cdot)$ & Linear form obtained from the least squares approach including BC's \\
 $\mathring{F}(\cdot)$ & Linear form obtained from the combined GLS-method \\
-$\mathcal{F}(\cdot,\cdot) $ & non-linear functional \\
-$\mathcal{J} $ & Jacobian of $\mathcal{F}$ \\
 \textbf{Linear Algebra} \\
 $A$ & The stiffness matrix \\
 $G$ & The gradient matrix \\
-$F$ & The vector obtained from the linear functional $F$ \\ 
-$B_1$ & The diagonal matrix with the first component of $b$ evaluated in each node \\
-$B_2$ & The diagonal matrix with the second component of $b$ evaluated in each node \\
-$F$   & The diagonal matrix with the loading function evaluated in each node \\ 
+$R$ & The reaction matrix \\
+$F$ & The vector obtained from the linear functional $F(\cdot)$ \\ 
 $W$ 	& The diagonal matrix with the GLL-weights \\ 
 $L$ 	& The matrix with the derivative of the lagrange functions evaluated in each node \\ 
 %$\Phi$ & $W\otimes WL$\\ 
