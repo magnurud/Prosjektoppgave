@@ -8,12 +8,9 @@ function [eh cn] = runMain(N)
 % last edit: April 2015
 
 dofs = N^2;
-f = @(x,y) 1; % Loading function
 [x,wX] = GLL_(N,0,1); % getting the GLL-points for the unit square
 [y,wY] = GLL_(N,0,1); % getting the GLL-points for the unit square
 LDM = 2*LagrangeDerivativeMatrix_GLL(N); % Need to multiply with 2/(b-a)
-%f = @(x,y) 5*pi^2*sin(pi*x)*sin(2*pi*y); % Loading function
-%u = @(x,y) sin(pi*x)*sin(2*pi*y); % Analytical solution
 f = @(x,y) exp(x)*(pi^2-1)*sin(pi*y);
 u = @(x,y) exp(x)*sin(pi*y); % Analytical solution
 U = zeros(dofs,1);
