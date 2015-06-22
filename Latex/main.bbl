@@ -1,4 +1,4 @@
-\begin{thebibliography}{6}
+\begin{thebibliography}{9}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -32,10 +32,30 @@ C.~Canuto and A.~Quarteroni.
 \newblock \doi{10.1090/s0025-5718-1982-0637287-3}.
 \newblock URL \url{http://dx.doi.org/10.1090/S0025-5718-1982-0637287-3}.
 
+\bibitem[Saad(2003)]{Saad}
+Yousef Saad.
+\newblock \emph{Iterative Methods for Sparse Linear Systems, Second Edition}.
+\newblock Society for Industrial and Applied Mathematics, 2003.
+
+\bibitem[Hoitinga(2004)]{DM}
+Wijnand Hoitinga.
+\newblock \emph{Direct Minimization of Equation Residuals in Least Squares
+  hp-Finite Element Methods}.
+\newblock Technichal University of Delft, 2004.
+\newblock URL
+  \url{http://www.lr.tudelft.nl/fileadmin/Faculteit/LR/Organisatie/Afdelingen_en_Leerstoelen/Afdeling_AEWE/Aerodynamics/Contributor_Area/Secretary/M._Sc._theses/doc/2004_1_06.pdf}.
+
 \bibitem[Quarteroni(2014)]{Quarteroni}
 Alfio Quarteroni.
 \newblock \emph{Numerical Models for Differential Problems, 2. edition}.
 \newblock Springer, 2014.
+
+\bibitem[Arnold and Brezzi(1985)]{arnold1985mixed}
+Douglas~N Arnold and Franco Brezzi.
+\newblock Mixed and nonconforming finite element methods: implementation,
+  postprocessing and error estimates.
+\newblock \emph{RAIRO-Mod{\'e}lisation math{\'e}matique et analyse
+  num{\'e}rique}, 19\penalty0 (1):\penalty0 7--32, 1985.
 
 \bibitem[Süli and Mayers(2006)]{SM}
 Endre Süli and David~F. Mayers.

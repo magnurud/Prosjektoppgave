@@ -134,12 +134,20 @@ Where $N$ is the polynomial order of the basis functions.
 Proof can be found in Canuto and Quarteroni \cite{Canuto}.
 %
 
+\section{Condition number}
+Iterative techniques are becoming more and more popular with the increasingly use of super computers and parallel programming algorithms. A key component to a successful iterative technique such as conjugate gradient is a small condition number \cite{Saad}. The condition number of a matrix $A \in \mathbb{R}^{n\times n}$ corresponding to some norm $||\cdot||_F$ is defined as 
+\begin{align}
+	\kappa_F(A) = ||A||_F||A^{-1}||_F
+\end{align}
+Many iterative methods used to solve the equation $A\mathbf{x}=\mathbf{b}$ requires that $A$ is SPD. In the case that $A$ is not SPD one can multiply with $A^T$ on both sides, thus ending up with the system of equations $A^TA = A^Tb$ called the normal equations. The matrix $A^TA$ is always symmetric positive semi-definite and in many cases SPD, hence suited for iterative methods. The condition number however is the squared of the original system of equations \cite{DM}. Although we do not end up with the exact normal equations when using least squares method, we do see some resemblance. From the straight forward construction of our minimization problem in equation\eref{eq:minProb} we notice the appearance of the $A^TA$. This immediately indicates that the system of equations has a condition number squared of what we usually get with in the standard Galerkin formulation. 
+%
+%
 \section{Least squares applied on some common PDE's}
 Before we start elaborating to much on each test case, I will provide a quick overview of the problems investigated in this project. All of them are BVP with either Neumann or Dirichlet boundary conditions, the results can be found in chapter~\ref{chap:results}. The problems solved in this project are simply expansions of the Poisson equation,  
 %
 \begin{align}
 	-\Delta u = f \text{  in  } \Omega.
-	\label{eq:PossionImplementation}
+	\label{eq:PoissonImplementation}
 \end{align}
 %
 Then by adding a transport term you obtain the diffusion transport equation
@@ -160,7 +168,7 @@ And as a final complication the vector field $\mathbf{b}$ can be made dependent 
 %
 \begin{align}
 	-\mu \Delta u + \mathbf{b}(u) \cdot \nabla u +\sigma u = f \text{ in } \Omega.
-	\label{eq:ReactionImplementation}
+	\label{eq:NonlinImplementation}
 \end{align}
 %
 By defining $\mathbf{w}=-\nabla u$, and $ \mathbf{u} = \mathbf{w} \oplus u $, all the equations listed above are transformed into a first order system of PDE's 
@@ -170,7 +178,7 @@ By defining $\mathbf{w}=-\nabla u$, and $ \mathbf{u} = \mathbf{w} \oplus u $, al
 	\label{eq:genFirstOrderFormulation}
 \end{align}
 %
-We will now investigate the partial differential operator $\mathcal{L}$ for each of the mentioned problems.
+We will now investigate the partial differential operator $\mathcal{L}$ for each of the mentioned problems. For simplicity I will in this project solve all the problems on the unit square $ \Omega = (0,1)^2$.
 %
 
 \subsection{Poisson problem}
@@ -285,7 +293,7 @@ This gives us a nonlinear variational formulation that does not allow us to solv
 %until you reach your solution. $\mathcal{J}_k$ is the Jacobian matrix of $\mathcal{F}(\mathbf{u_h}^k)$.
 \section{Boundary conditions} \label{BC}
 Imposing the boundary conditions in a least squares setting can either be done by creating a lifting function and in this way imposing them by restricting our search space, or it can be added to our functional as implied by formula \eref{eq:FunctionalGen}. In this section these two techniques will be clarified. 
-\subsection{non-homogeneous Dirichlet boundary conditions}
+\subsection{Non-homogeneous Dirichlet boundary conditions}
 If $g \neq 0$ then we can simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{\mathbf{u}}=\mathbf{u}-R_g$ we can replace this for $\mathbf{u}$ in the variation formulation and get 
 \begin{align}
 	Q(\tilde{\mathbf{u}}+R_g,\mathbf{v}) &= F(\mathbf{v}) \\
@@ -296,8 +304,8 @@ If $g \neq 0$ then we can simply define a lifting function $R_g \in X$ such that
 \end{align}
 %
 This way the test functions and the solution are in the same space, i.e. $\mathbf{\tilde u}, \mathbf{v} \in X_0$.
-\subsection{non-homogeneous Neumann boundary conditions}
-Because of the geometry of our problem and the fact that we define the flux as an extra variable, we can transform the Neumann conditions to a Dirichlet condition on the flux. 
+\subsection{Non-homogeneous Neumann boundary conditions}
+Remember that $\Omega = (0,1)^2$ for all the problems solved in this project. Because of this geometry and the fact that we define the flux as an extra variable, we can transform the Neumann conditions to a Dirichlet condition on the flux. 
 \begin{align}
 	\frac{\partial u}{\partial \mathbf{n}} &= h \text{  on   } \partial \Omega \\
 	\nabla u \cdot \mathbf{n} &= h \\
@@ -322,3 +330,12 @@ Similarly for a BVP with Neumann boundary conditions on $\Gamma_N$ and Dirichlet
 	(g_D,v)_{\Gamma_D} + (g_N,v)_{\Gamma_N} 
 	\label{eq:NeuDirFunctional}
 \end{align}
+\section{Spectral methods}
+Spectral methods are related to finite element methods, but with some conceptual differences. In FEM you discretize your domain into elements of selected shape and size, and define basis functions that are compactly supported in only one element. With SM you define your basis functions to be nonzero in the whole domain, (apart from the points that are the roots of the function). In this project I use the Lagrange polynomial as my basis functions
+%
+\begin{align}
+	l_j(x) = \prod_{\substack{0\leq m \leq k \\  m \neq j}} \frac{x-x_j}{x_m-x_j}.
+	\label{eq:lagpolynomials}
+\end{align}
+For the 2-D problems solved in this project $N_I = l_i(x)l_j(y)$ are used as basis functions.
+The roots $\left\{ x_j \right\}_{0\leq j \leq k}$ which defines the Lagrange polynomials can be chosen in many different ways, and are here chosen as the roots of the \textit{first derivative of the Legendre polynomials}. By using this definition we can exploit the Lobatto quadratue rule when calculating our integrals. This gives us a fast and efficient way of creating our matrices. See \cite{Canuto} for further information on spectral methods.

@@ -8,7 +8,7 @@
 
 %----------------------------------------------------------------------------------------
 
-All the implementation has been done in two dimensions on the unit square $(0,1)^2$. The goal of the implementation has been to investigate the virtues of the least-squares method. It is implemented with finite element and spectral basis functions and is compared to the results from standard Galerkin formulation. Finally the combined GLS-method described in chapter \ref{chap:newTheory} is also tested against the separate methods. \section{The bilinear form obtained from least-squares}
+All the implementation has been done in two dimensions on the unit square $(0,1)^2$. The goal of the implementation has been to investigate the virtues of the least-squares method. It is implemented with spectral basis functions and is compared to the results from standard Galerkin formulation. Finally the combined GLS-method described in chapter \ref{chap:newTheory} is also tested against the separate methods. \section{The bilinear form obtained from least-squares}
  For the general problem\eref{eq:BVP} the functional $Q$ will take the form 
 \begin{align}
 	Q(u,v)=\int_{\Omega}(\mathcal{L}v)^T(\mathcal{L}u)d\Omega.
@@ -67,11 +67,11 @@ where $\partial_x = \partial / \partial x $ for the Poisson problem and $\partia
 
 Notice that by doing the splitting of variables to get the hyperbolic first order system we end up with three times as many equations and variables. 
 
-Note that the gradient of our solution must be restricted to the space $H^1(\text{div},\Omega) = \left\{  \mathbf{w}\in L^2(\Omega) | \nabla \cdot \mathbf{w} \in L^2(\Omega)\right\} $. In order to simplify the implementation I have in this project chosen the basis functions to a be in a subspace of $H^{1}(\text{div},\Omega) $ such that $\mathbf{w}\in [H^1(\Omega)]^2$. In other words, the basis functions for the solution, and both components of the gradients are the same.  
+Note that the gradient of our solution must be restricted to the space $H^1(\text{div},\Omega) = \left\{  \mathbf{w}\in L^2(\Omega) | \nabla \cdot \mathbf{w} \in L^2(\Omega)\right\} $. 
+%In order to simplify the implementation I have in this project chosen the basis functions to a be in a subspace of $H^{1}(\text{div},\Omega) $ such that $\mathbf{w}\in [H^1(\Omega)]^2$. In other words, the basis functions for the solution, and both components of the gradients are the same.  
 \section{Least squares with finite element basis functions}
-The same triangular grid has been chosen for the implementation of both regular Galerkin FEM and the least-squares FEM. By choosing 1st order hat functions each element consists of three non-zero basis functions. For the GFEM this leads to calculating a $3\times 3$ matrix for each element whereas for LSFEM a $9 \times 9$ matrix has to be calculated, although it has a relatively simple structure it still leads to additional computational costs and is a lot more tedious to implement.
+For triangular elements the Galerkin FEM leads to calculating a $3\times 3$ matrix for each element. Because of the first order formulation the corresponding matrix in the LSFEM setting will $9 \times 9$, although it will have a relatively simple structure it still leads to additional computational costs and is a lot more tedious to implement. Another complication is the restriction of the gradient $w = -\nabla u$, which has to be in $H^1(\text{div},\Omega) $. Basically this means that the basis functions does not only have to be continuous but also smooth. This creates problems especially along the boundaries of the elements for the standard hat-functions. There are however finite element spaces constructed such that this condition holds, for example Raviart-Thomas finite element space \cite{arnold1985mixed}. 
 
-\colorbox{yellow}{What can I say here\ldots not worth to show any derivations}
 \section{Least squares with spectral basis functions}
 
 The spectral implementation is done using Gauss Lobatto nodes and quadrature rule. The basis functions are then chosen as the lagrange functions based on the GL nodes. Before we continue let us define the two matrices $W$ and $L$ that will help us construct the final block matrices.
