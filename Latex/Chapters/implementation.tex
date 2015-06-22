@@ -8,7 +8,9 @@
 
 %----------------------------------------------------------------------------------------
 
-All the implementation has been done in two dimensions on the unit square $(0,1)^2$. The goal of the implementation has been to investigate the virtues of the least-squares method. It is implemented with spectral basis functions and is compared to the results from standard Galerkin formulation. Finally the combined GLS-method described in chapter \ref{chap:newTheory} is also tested against the separate methods. \section{The bilinear form obtained from least-squares}
+All the implementation has been done in two dimensions on the unit square $(0,1)^2$. The goal of the implementation has been to investigate the virtues of the least-squares method. It is implemented with spectral basis functions and is compared to the results from standard Galerkin formulation. Finally the combined GLS-method described in chapter \ref{chap:newTheory} is also tested against the separate methods. 
+
+\section{The bilinear form obtained from least-squares}
  For the general problem\eref{eq:BVP} the functional $Q$ will take the form 
 \begin{align}
 	Q(u,v)=\int_{\Omega}(\mathcal{L}v)^T(\mathcal{L}u)d\Omega.
@@ -32,10 +34,10 @@ Where $K$ denotes the number of basis functions. Since equation\eref{eq:varFormG
 \end{align}
 The total system of equation for all test functions can then be written as a matrix equation 
 \begin{align}
-	K^{LS}\mathbf{u} = F^{LS}.
+	K^{LS}\mathbf{u_h} = F^{LS}.
 	\label{eq:matrixEq}
 \end{align}
-Where $K^{LS}_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$. 
+Where $K^{LS}_{I,J}=\int_{\Omega}(\mathcal{L}N_I)^T(\mathcal{L}N_J)d\Omega$ and $\mathbf{u_h}$ is the vector containing the $a_J$ coefficients. 
 
 Written explicitly for the \textbf{Poisson and diffusion transport equation} it will be a 3-by-3 matrix on the form 
 
@@ -67,14 +69,13 @@ where $\partial_x = \partial / \partial x $ for the Poisson problem and $\partia
 
 Notice that by doing the splitting of variables to get the hyperbolic first order system we end up with three times as many equations and variables. 
 
-Note that the gradient of our solution must be restricted to the space $H^1(\text{div},\Omega) = \left\{  \mathbf{w}\in L^2(\Omega) | \nabla \cdot \mathbf{w} \in L^2(\Omega)\right\} $. 
 %In order to simplify the implementation I have in this project chosen the basis functions to a be in a subspace of $H^{1}(\text{div},\Omega) $ such that $\mathbf{w}\in [H^1(\Omega)]^2$. In other words, the basis functions for the solution, and both components of the gradients are the same.  
-\section{Least squares with finite element basis functions}
-For triangular elements the Galerkin FEM leads to calculating a $3\times 3$ matrix for each element. Because of the first order formulation the corresponding matrix in the LSFEM setting will $9 \times 9$, although it will have a relatively simple structure it still leads to additional computational costs and is a lot more tedious to implement. Another complication is the restriction of the gradient $w = -\nabla u$, which has to be in $H^1(\text{div},\Omega) $. Basically this means that the basis functions does not only have to be continuous but also smooth. This creates problems especially along the boundaries of the elements for the standard hat-functions. There are however finite element spaces constructed such that this condition holds, for example Raviart-Thomas finite element space \cite{arnold1985mixed}. 
+\section{Least-squares with finite element basis functions} \label{finite element}
+For triangular elements the Galerkin FEM leads to calculating a $3\times 3$ matrix for each element. Because of the first order formulation the corresponding matrix in the LSFEM setting will $9 \times 9$, although it will have a relatively simple structure it still leads to additional computational costs and is a lot more tedious to implement. Another complication is the restriction on the gradient $\mathbf{w} = -\nabla u$, which has to be in $H^1(\text{div},\Omega) $. Basically this means that the basis functions does not only have to be continuous but also smooth. This creates problems especially along the boundaries of the elements for the standard hat-functions. There are however finite element spaces constructed such that this condition holds, for example Raviart-Thomas finite element space \cite{arnold1985mixed}. 
 
-\section{Least squares with spectral basis functions}
+\section{Least-squares with spectral basis functions} \label{Specmets}
 
-The spectral implementation is done using Gauss Lobatto nodes and quadrature rule. The basis functions are then chosen as the lagrange functions based on the GL nodes. Before we continue let us define the two matrices $W$ and $L$ that will help us construct the final block matrices.
+The spectral implementation is done using Gauss-Lobatto-Legendre nodes and quadrature rule. The basis functions are then chosen as the Lagrange functions based on the GLL nodes. Before we continue let us define the two matrices $W$ and $L$ that will help us construct the final block matrices.
 %
 \begin{align}
 	W = \left\{
@@ -86,14 +87,14 @@ The spectral implementation is done using Gauss Lobatto nodes and quadrature rul
 	\label{eq:Wdef}
 \end{align}
 %
-Where $w_i$ is the ith GLL-weight, with this notation $W$ is the $n \times n$ diagonal matrix with the GLL-weights along the diagonal, further $L$ is the matrix containing the derivatives of the lagrange polynomials,  
+Where $w_i$ is the ith GLL-weight, with this notation $W$ is the $n \times n$ diagonal matrix with the GLL-weights along the diagonal, further $L$ is the matrix containing the derivatives of the Lagrange polynomials,  
 %
 \begin{align}
 	L_{i,j} &= l_j'(x_i).
 	\label{eq:HelpMatrices}
 \end{align}
 %
-Now, with the helping matrices defined let us look at the linear system surging from a least squares formulation with spectral basis functions. 
+Now, with the helping matrices defined let us look at the linear system surging from a least-squares formulation with spectral basis functions. 
 
 Notice that the discrete solution $\mathbf{u}_h$ of the system $Q(\mathbf{u}_h,\mathbf{v}_h) = F(\mathbf{v}_h)$ consist of the discretization of both $u \text{ and } \mathbf{w} = - \nabla u$. $\mathbf{u}_h$ can be structured block wise or node wise, by choosing a block wise representation the final system of equations surging from the Poisson problem can be written as 
 %
@@ -126,7 +127,7 @@ Where each block $K_{m,n}$ corresponds to  calculating element $m,n$ in the matr
 	\end{split}
 	\label{eq:MatrixDerivation}
 \end{align}
-The sum is obtained by using Gauss Lobatto quadrature rule. Now notice that the lagrange polynomials $l_j(y_{\beta})$ are non-zero only when $\beta = j$, this implies that for the non-zero terms in the sum we have $\beta = j=l$, and $\alpha = i$. With these considerations the double sum above simplifies to  
+The sum is obtained by using Gauss Lobatto quadrature rule. Now notice that the Lagrange polynomials $l_j(y_{\beta})$ are non-zero only when $\beta = j$, this implies that for the non-zero terms in the sum we have $\beta = j=l$, and $\alpha = i$. With these considerations the double sum above simplifies to  
 \begin{align}
 	(K_{1,3})_{I,J} &= w_{i}w_{j}l'_k(x_{i})
 	\label{eq:MatrixDerivation2}
@@ -147,9 +148,9 @@ $
 Note that without the reformulation of the PDE as a first order system and with regular Galerkin formulation the stiffness matrix will simply be 
 $K_{3,3} = W \otimes L^TWL+ L^TWL \otimes W$.
 \section{LS spectral method for the diffusion transport reaction equation}
-The matrix corresponding to the discretized variational formulation can be divided into three parts due to its dependency on $\mu$,$\mathbf{b}$ and $\sigma$. When using galerkin formulation one can easily add extra terms, and the bilinear form expands as a superposition of the bilinear form from each term. In the least-squares setting this is not the case, each term added creates a bit more chaos, I have however tried to illustrate a way one can divide up the total matrix resulting from the diffusion transport equation
+The matrix corresponding to the discretized variational formulation can be divided into three parts due to its dependency on $\mu$,$\mathbf{b}$ and $\sigma$. When using Galerkin formulation one can easily add extra terms, and the bilinear form expands as a superposition of the bilinear form from each term. In the least-squares setting this is not the case, each term added creates a bit more chaos, I have however tried to illustrate a way one can divide up the total matrix resulting from the diffusion transport equation
 \begin{align}
-	-\mu \Delta u + \mathbf{b} \cdot \nabla u +\sigma u = f \text{ in } \Omega
+	-\mu \Delta u + \mathbf{b} \cdot \nabla u +\sigma u = f \text{ in } \Omega.
 	\label{eq:ReactionImplementation}
 \end{align}
 \subsection{Laplacian part}
@@ -161,11 +162,11 @@ A^{LS} =
 	W \otimes (\mu^2 L^TWL+W) & \mu^2 WL \otimes L^TW 		 &	W \otimes WL  \\ 	
 	\mu^2 L^TW \otimes WL     & (\mu^2 L^TWL+W) \otimes W  &	WL \otimes W  \\ 	
 	W \otimes L^TW		  & L^TW \otimes W       &  L^TWL \otimes W +	W\otimes L^TWL  \\ 	
-\end{bmatrix}
+\end{bmatrix}.
 $
 
 \subsection{Gradient part}
-The gradient part will probvide us with a matrix that is dependent of $\mathbf{b}$. Let $B_1$ and $B_2$ be diagonal $n^2 \times n^2$ matrices with the values of the first and second component of $\mathbf{b}$ evaluated in each spacial node along the diagonal.  
+The gradient part will provide us with a matrix that is dependent of $\mathbf{b}$. Let $B_1$ and $B_2$ be diagonal $n^2 \times n^2$ matrices with the values of the first and second component of $\mathbf{b}$ evaluated in each spacial node along the diagonal.  
 \begin{align}
 	\begin{split}
 	G_{1,1} &= -\mu B_1 (W \otimes WL) -\mu( W \otimes L^TW) B_1 + B_1( W\otimes W) B_1 \\ 	
@@ -190,7 +191,7 @@ G^{LS}=
 \end{align}
 %
 \subsection{Reaction part}
-The reactional term will consist of the following three $n^2 \times n^2$ sub matrices
+The reaction term will consist of the following three $n^2 \times n^2$ sub matrices
 \begin{align}
 	\begin{split}
 	R_{1,3} &= \sigma(\mu W\otimes L^T W - B_1 W\otimes W),\\
@@ -199,7 +200,7 @@ The reactional term will consist of the following three $n^2 \times n^2$ sub mat
 	\end{split}
 	\label{ReactionalTerm}
 \end{align}
-Now, because of the symmetry guaranteed by the least-squares formulation $R_{3,1}=R_{1,3}^T$ and $R_{3,2}=R_{2,3}^T$. Hence the total attribution from the extra reactional term is 
+Now, because of the symmetry guaranteed by the least-squares formulation $R_{3,1}=R_{1,3}^T$ and $R_{3,2}=R_{2,3}^T$. Hence the total attribution from the extra reaction term is 
 %
 \begin{align}
 R^{LS}=
@@ -212,7 +213,7 @@ R^{LS}=
 \end{align}
 %
 \subsection{The loading function}
-Adding the gradient and reactional term in our equation also affects the loading function. In a compact notation the discretized loading vector from the variational formulation can be written as
+Adding the gradient and reaction term in our equation also affects the loading function. In a compact notation the discretized loading vector from the variational formulation can be written as
 %
 \begin{align}
 	F^{LS}=
@@ -220,7 +221,7 @@ Adding the gradient and reactional term in our equation also affects the loading
 		\mu(W \otimes L^T W)F_m - (W \otimes W)B_1F_m \\
 		\mu(L^TW \otimes W)F_m - (W \otimes W)B_2F_m \\
 		\sigma(W\otimes W)F_m & 
-	\end{bmatrix}
+	\end{bmatrix},
 	\label{mat:FLS}
 \end{align}
 %
@@ -231,7 +232,7 @@ where $F_m$ is the vector with the loading function evaluated in each spacial no
 We can now define the total matrix for the diffusion transport reaction problem $K^{LS}$ as
 
 \begin{align}
-	K^{LS} = A^{LS} + G^{LS} + R^{LS}
+	K^{LS} = A^{LS} + G^{LS} + R^{LS}.
 	\label{eq:difftransMatrixSum}
 \end{align}
 %
@@ -239,9 +240,9 @@ We can now define the total matrix for the diffusion transport reaction problem 
 Notice that most of the terms in the final matrix are cross terms, and does not surge solely from one of the terms in the equation. The way that the matrices have been divided into parts here are of now other than practical reasons and can be done in a different matter.  
 
 \section{non-linear diffusion transport problem}
-The non-linear problem is solved without the reactional term, Newtons method with both a numerical and analytical jacobian is calculated and applied. A detailed convergence result can be found in \cite{SM}. The fact that least squares provides a system with many cross-terms for the linear problems makes the non-linear case even more complicated. The non-linearity affects all the matrices including the vector surging from the loading function. This does not only make the jacobian rather hard to implement, but also increases the computational cost drastically. In order to lower the computational time the jacobian is approximated in both the numerical and analytical approach. This simplification consists in simply not actualizing all the matrices for each Newton iteration.   
+The non-linear problem is solved without the reaction term, Newtons method with both a numerical and analytical Jacobian is calculated and applied. A detailed convergence result can be found in \cite{SM}. The fact that least-squares provides a system with many cross-terms for the linear problems makes the non-linear case even more complicated. The non-linearity affects all the matrices including the vector surging from the loading function. This does not only make the Jacobian rather hard to implement, but also increases the computational cost drastically. In order to lower the computational time the Jacobian is approximated in both the numerical and analytical approach. This simplification consists in simply not actualizing all the matrices for each Newton iteration.   
 
-%The stepwise algorithm to solve the nonlinear equation is described in chapter~\ref{chap:newTheory}. However there are several computational steps that needs to be taken care of, both with regular Galerkin and least squares. In both cases we obtain two matrices which we will name $A$ and $G$ and with superscript LS if they refer to the least squares formulation. In both cases only $G$ will depend on the numerical solution $u_h$. An important difference however is that in the LS setting the $F$ vector will depend on $u_h$ while in the straight forward Galerkin setting it will not. For regular Galerkin spectral approach we obtain
+%The stepwise algorithm to solve the nonlinear equation is described in chapter~\ref{chap:newTheory}. However there are several computational steps that needs to be taken care of, both with regular Galerkin and least-squares. In both cases we obtain two matrices which we will name $A$ and $G$ and with superscript LS if they refer to the least-squares formulation. In both cases only $G$ will depend on the numerical solution $u_h$. An important difference however is that in the LS setting the $F$ vector will depend on $u_h$ while in the straight forward Galerkin setting it will not. For regular Galerkin spectral approach we obtain
 %%
 %\begin{align}
 	%A \tilde{u} + AR_g  + G(\tilde{u}+R_g)(\tilde{u}+R_g) -F = 0

@@ -4,35 +4,28 @@
 
 \label{chap:newTheory} % For referencing the chapter elsewhere, use \ref{Chapter1} 
 
-\lhead{Chapter 2. \emph{Stability properties }} % This is for the header on each page - perhaps a shortened title
+\lhead{Chapter 2 \emph{Stability properties }} % This is for the header on each page - perhaps a shortened title
 
 %----------------------------------------------------------------------------------------
-When solving a PDE which includes a transport term such as equations\eref{eq:PoissonImplementation} -\eref{eq:NonlinImplementation} it is not straight forward to obtain a stable numerical method. For many transport-dominated cases, when $||\mathbf{b}/\mu||_{L^{\infty}} \gg 1$, Galerkin and finite difference methods will fail in creating a stable system of equations. This is often solved by adding artificial diffusion, this way sharp gradients will be smoothened out and prevent unstability. The amount of artificial diffusion is traditionally set to be proportional to the grid size $h$ which implies an error of at least order $O(h)$ in our numerical scheme. There are however consistent stabilization techniques which does not impact the error as dramatically as traditional artificial diffusion. One of theese method for a Galerkin scheme are called GLS and consists of adding a least squares functional to the original bilinear form. In this chapter I will provide the details of how this is done by using the least squares bilinear form explicitly. Many of the derivations and ideas in this chapter are inspired by Quarteroni \cite{Quarteroni}. 
-
-Throughout this and the following chapters I will use the definitions of the norms as given below,
-\begin{align}
-	|| f||_0^2 &= \int_{\Omega}f^2d\Omega,\\
-	|| f||_1^2 &= \int_{\Omega} f^2 d\Omega + \int_{\Omega}(\nabla f)^2 d\Omega.
-	\label{eq:norms}
-\end{align}
+When solving a PDE which includes a transport term such as equations\eref{eq:PoissonImplementation} -\eref{eq:NonlinImplementation} it is not straight forward to obtain a stable numerical method. For many transport-dominated cases, when $||\mathbf{b}/\mu||_{L^{\infty}} \gg 1$, Galerkin and finite difference methods will fail in creating a stable system of equations. This is often solved by adding artificial diffusion, this way sharp gradients will be smoothened out and prevent instability. The amount of artificial diffusion is traditionally set to be proportional to the grid size $h$ which implies an error of at least order $O(h)$ in our numerical scheme. There are however consistent stabilization techniques which does not impact the error as dramatically as traditional artificial diffusion. One of these methods for a Galerkin scheme is called Galerkin Least-Squares (GLS) and consists of adding the variational formulation obtained from least-squares to the original Galerkin formulation. In this chapter it will be provided details of how this is done by using the least-squares bilinear form explicitly. Many of the derivations and ideas in this chapter are inspired by Quarteroni \cite{Quarteroni}. 
 
 \section{Instability with the Galerkin formulation}
 
 With regular Galerkin approach for the diffusion transport equation you end up with the variational formulation
 
-find $u \in V$ such that
+Find $u \in V$ such that
 %
 \begin{align}
-	a(u,v) = (f,v) \; \; \; \forall v \in V,
+	a(u,v) = (f,v) \; \; \; \forall v \in V.
 	\label{eq:varFormDiffFEM}
 \end{align}
 %
-where $V$ is some closed subspace of $H^1$, and the bilinear functional is given as 
+Where $V$ is some closed subspace of $H^1$, and the bilinear functional is given as 
 %
 \begin{align}
 	\begin{split}
 	a(u,v) &= \mu\int_{\Omega}\nabla u \cdot \nabla v \: d\Omega 
-	+ \int_{\Omega} v (\mathbf{b} \cdot \nabla u) d \Omega
+	+ \int_{\Omega} v (\mathbf{b} \cdot \nabla u) d \Omega.
 	\end{split}
 	\label{eq:bilinearFunctional}
 \end{align}
@@ -46,7 +39,7 @@ We can define a new norm from this functional in the following manner
 	       &= \mu||\nabla u||^2_0 
 	+ \frac{1}{2}\int_{\Omega} \mathbf{b} \cdot \nabla u^2 d \Omega \\
 	       &= \mu||\nabla u||^2_0 
-	- \frac{1}{2}\int_{\Omega} u^2  (\nabla \cdot \mathbf{b})  d \Omega \\
+	- \frac{1}{2}\int_{\Omega} u^2  (\nabla \cdot \mathbf{b})  d \Omega. \\
 \end{split}
 	\label{eq:bilinearFunctional}
 \end{align}
@@ -79,10 +72,10 @@ By doing the same for the upper bound the lemma is achieved.
 It is clear that for negative $\gamma_0$ and sufficiently small $\mu$ the bilinear form is no longer coercive and thus our convergence requirements are no longer valid. Standard Galerkin method is therefore not a suited way to solve this type of problem. 
 %
 %
-\section{Adding least squares in order to obtain stability}
+\section{Adding least-squares in order to obtain stability}
 
-Now remember from equation\eref{eq:normEq} that the least squares formulation guarantees us a coercive bilinear form, given that the BVP has a solution and that the search- and solution space are chosen correctly. For this particular problem we can find two positive constants $\alpha,\beta$ such that $\alpha||u||_1^2 \leq Q(\mathbf{u},\mathbf{u}) \leq \beta||u||_1^2 $.
-Now, let us define $\mathring{a}(\cdot,\cdot)$ and $\mathring{f}(\cdot)$ as the as the linear combinations of the linear and bilinear form surging from standard Galerkin and least-squares method
+Remember from equation\eref{eq:normEq} that the least-squares formulation guarantees us a coercive bilinear form, given that the BVP has a solution and that the search- and solution space are chosen correctly. For this particular problem we can find two positive constants $\alpha,\beta$ such that $\alpha||u||_1^2 \leq Q(\mathbf{u},\mathbf{u}) \leq \beta||u||_1^2 $.
+Now, let us define $\mathring{a}(\cdot,\cdot)$ and $\mathring{f}(\cdot)$ as the linear combinations of the linear and bilinear form surging from standard Galerkin and least-squares method
 \begin{align}
 	\begin{split}
 	\mathring{a}(u,v) &= a(u,v) + \delta Q(\mathbf{u},\mathbf{\mathbf{v}}), \\
@@ -104,7 +97,7 @@ By applying the lower bound obtained in lemma \eref{eq:bilinearOperatorBounds} y
 	\mathring{a}(u,u) &\geq \mu ||\nabla u||_0^2+\gamma_0||u||_0^2+\delta \alpha ||u||^2_1 \\
 	&\geq \mu ||\nabla u||_0^2+\gamma_0||u||_0^2+\delta \alpha ||u||^2_0 \\
 	&\geq \mu ||\nabla u||_0^2+\mu ||u||_0^2 \\
-	&= \mu ||u||^2_1
+	&= \mu ||u||^2_1.
 	\end{split}
 	\label{eq:coercivity}
 \end{align}
@@ -133,7 +126,7 @@ Let us start by assuming that the Galerkin formulation provides a bilinear form 
 	\label{eq:derivationStabilityResult}
 \end{align}
 %
-Which Allows us to determine the constant $C= (\frac{1}{\gamma}+\delta)$. Note that this proof can be adjusted so that it holds also when $\gamma <0$.	
+Which allows us to determine the constant $C= (\frac{1}{\gamma}+\delta)$. Note that this proof can be expanded so that it holds also when $\gamma <0$, this will however require a larger $\delta$ and then also a larger $C$.	
 \end{proof}
 The proof for a similar method can be found in~\cite{Quarteroni} Ch.12. 
 \section{Estimation of the coercivity constant $\alpha$}
@@ -154,13 +147,13 @@ We start by proving the Poincar\'e inequality on our domain $ \Omega $, a simila
 	-2k^{-1}\int_{\Omega}\mathbf{g}\cdot [u(\mathbf{x})\nabla(u(\mathbf{x}))]d\Omega \\
 	&\leq \frac{1}{2}||u||_0^2 + 2k^{-1}||\mathbf{g}||_{\infty}||u||_0 \: |u|_1\\
 	&\leq \frac{1}{2}||u||_0^2 + 2k^{-1}\frac{1}{\sqrt{2}}||u||_0 \: |u|_1\\
-	&\leq \frac{1}{2}||u||_0^2 + ||u||_0 \: |u|_1
+	&\leq \frac{1}{2}||u||_0^2 + ||u||_0 \: |u|_1.
 	\end{split}
 	\label{eq:PoincareProof}
 \end{align}
 Subtracting the first right hand side term and dividing both sides with the $L^2$-norm leaves us with
 \begin{align}
-	\frac{1}{2}||u||_0 \leq |u|_1
+	\frac{1}{2}||u||_0 \leq |u|_1.
 	\label{eq:PoincareStatement}
 \end{align}
 Further we can show the following result by using the definition of $||\cdot||_1$
@@ -168,12 +161,12 @@ Further we can show the following result by using the definition of $||\cdot||_1
 	\begin{split}
 	||u||_1 &= \sqrt{||u||_0^2+|u|_1^2}\\
 	&	\leq \sqrt{5|u|_1^2}\\
-	&= \sqrt{5}|u|_1
+	&= \sqrt{5}|u|_1.
 	\end{split}
 	\label{eq:NormInequalitySobolev}
 \end{align}
 
-This result can be used to show equivalency of the norm surging from the bilinear functional $Q(\cdot,\cdot)$ and the $|| \cdot ||_1$-norm . 
+This result can be used to show equivalency of the norm surging from the bilinear functional $Q(\cdot,\cdot)$ and the $|| \cdot ||_1$-norm. 
 By using the inequality obtained in the previous section we can make the following argument,
 \begin{align}
 	\begin{split}
@@ -186,7 +179,7 @@ By using the inequality obtained in the previous section we can make the followi
 	&\geq \frac{1}{\sqrt{5}}||\mathbf{w}||_1\\
 	&\geq \frac{1}{\sqrt{5}}||\mathbf{w}||_0
 	= \frac{1}{\sqrt{5}}|u|_1\\
-	&\geq \frac{1}{5}||u||_1
+	&\geq \frac{1}{5}||u||_1.
 	\end{split}
 	\label{eq:resultAlpha}
 \end{align}
