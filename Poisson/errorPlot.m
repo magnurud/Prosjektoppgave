@@ -26,41 +26,41 @@ figure;
 x = logspace(log(h(end)),log(h(1)));
 y = x.^2;
 loglog(N,eFEM(1,:),'r');
-hold on;
-loglog(N,eLSFEM(1,:),'b');
-legend('FEM','LSFEM')
 xlabel('number of nodes in each spacial direction');
 ylabel('error');
+hold on;
+loglog(N,eLSFEM(1,:),'b');
+legend('FEM','LSFEM','Location','Northwest')
 grid on;
 fig1 = gcf;
 
 figure;
 loglog(N,eFEM(2,:),'r');
-hold on;
-loglog(N,eLSFEM(2,:),'b');
-legend('FEM','LSFEM')
 xlabel('number of nodes in each spacial direction');
 ylabel('nondition number');
+hold on;
+loglog(N,eLSFEM(2,:),'b');
+legend('FEM','LSFEM','Location','Northwest')
 grid on;
 fig2 = gcf;
 
 figure;
 loglog(N,eSpec(1,:),'r');
-hold on;
-loglog(N,eSpecLS(1,:),'b');
-legend('Spectral','Spectral LS')
 xlabel('Number of nodes in each spacial direction');
 ylabel('error');
+hold on;
+loglog(N,eSpecLS(1,:),'b');
+legend('Spectral','Spectral LS','Location','Northwest')
 grid on;
 fig3 = gcf;
 
 figure;
 loglog(N,eSpec(2,:),'r');
-hold on;
-loglog(N,eSpecLS(2,:),'b');
-legend('Spectral','Spectral LS')
 xlabel('number of nodes in each spacial direction');
 ylabel('nondition number');
+hold on;
+loglog(N,eSpecLS(2,:),'b');
+legend('Spectral','Spectral LS','Location','Northwest')
 grid on;
 fig4 = gcf;
 
