@@ -30,7 +30,7 @@ Where $V$ is some closed subspace of $H^1$, and the bilinear functional is given
 	\label{eq:bilinearFunctional}
 \end{align}
 %
-We can define a new norm from this functional in the following manner
+Let us investigate the induced norm from $a(\cdot,\cdot)$, 
 %
 \begin{align}
 \begin{split}
@@ -74,7 +74,7 @@ It is clear that for negative $\gamma_0$ and sufficiently small $\mu$ the biline
 %
 \section{Adding least-squares in order to obtain stability}
 
-Remember from equation\eref{eq:normEq} that the least-squares formulation guarantees us a coercive bilinear form, given that the BVP has a solution and that the search- and solution space are chosen correctly. For this particular problem we can find two positive constants $\alpha,\beta$ such that $\alpha||u||_1^2 \leq Q(\mathbf{u},\mathbf{u}) \leq \beta||u||_1^2 $.
+Remember from equation\eref{eq:normEq} that the least-squares formulation guarantees a coercive bilinear form, given that the BVP has a solution and that the search- and solution space are chosen correctly. For this particular problem we can find two positive constants $\alpha,\beta$ such that $\alpha||u||_1^2 \leq Q(\mathbf{u},\mathbf{u}) \leq \beta||u||_1^2 $.
 Now, let us define $\mathring{a}(\cdot,\cdot)$ and $\mathring{f}(\cdot)$ as the linear combinations of the linear and bilinear form surging from standard Galerkin and least-squares method
 \begin{align}
 	\begin{split}
@@ -84,7 +84,7 @@ Now, let us define $\mathring{a}(\cdot,\cdot)$ and $\mathring{f}(\cdot)$ as the 
 	\label{eq:GLS}
 \end{align}
 \begin{lemma}
-	Let $\mathring{a}(\cdot,\cdot)$ and $\mathring{f}(\cdot)$ be the bilinear and the linear functionals surging from a GLS formulation of equation\eref{eq:DiffTransImplementation}. Then for any $\delta$ such that $\gamma_0+\delta \alpha \geq \mu $ we have that $\mathring{a}(u,u) \geq \mu ||u||_1^2>0 \; , \; \forall \; u \neq 0$ .
+	Let $\mathring{a}(\cdot,\cdot)$ and $\mathring{f}(\cdot)$ be the bilinear and the linear functionals surging from a GLS formulation of equation\eref{eq:DiffTransImplementation}. Then for any $\delta$ such that $\delta \geq (\mu-\gamma_0)/\alpha$ we have that $\mathring{a}(u,u) \geq \mu ||u||_1^2>0 \; , \; \forall \; u \neq 0$ .
 	\label{lemmaCoercive}
 \end{lemma}
 
@@ -111,7 +111,7 @@ Using \eref{eq:VarFormLinForms} with homogeneous boundary conditions we obtain t
 \end{lemma}
 
 \begin{proof}
-Let us start by assuming that the Galerkin formulation provides a bilinear form that can be stated as earlier, $a(u_h,u_h)= \mu||\nabla u_h||^2_0 + \gamma||u_h||^2_0$, with $\gamma > 0$. Using Schwartz and Young's inequality we get 
+Let us start by assuming that the Galerkin formulation provides a bilinear form that can be stated as earlier, $a(u_h,u_h)= \mu||\nabla u_h||^2_0 + \gamma||u_h||^2_0$, with $\gamma > 0$. Using Schwartz's and Young's inequality we get 
 %
 \begin{align}
 	\begin{split}
@@ -131,7 +131,7 @@ Which allows us to determine the constant $C= (\frac{1}{\gamma}+\delta)$. Note t
 The proof for a similar method can be found in~\cite{Quarteroni} Ch.12. 
 \section{Estimation of the coercivity constant $\alpha$}
 
-In order to determine the amount of smoothing acquired it is necessary to know the coercivity constant $\alpha$. In this section I will determine this constant for the Poisson problem on $\Omega = (0,1)^2$.
+In order to determine the amount of smoothing acquired it is necessary to know the coercivity constant $\alpha$. In this section the constant for the Poisson problem on $\Omega = (0,1)^2$ will be determined.
 
 %from for our domain $\Omega=(0,1)^2$ we end up with showing that $|v|_1\geq \sqrt{1/2}||v||_1 \;\; \forall v \in H^1_0$. 
 We start by proving the Poincar\'e inequality on our domain $ \Omega $, a similar proof can be found in ~\cite{Quarteroni}. Let $\mathbf{g} = \frac{1}{\sqrt{2}}[x,y]$ such that $k = \nabla \cdot \mathbf{g}=\frac{2}{\sqrt{2}}$ and let $u \in H^1$ then we can outline the following

@@ -108,7 +108,7 @@ Now, for any well-posed problem $\exists \: \alpha,\beta > 0$ such that
 The fact that our functional is norm-equivalent is of crucial importance to a successful LS-method. It is therefore important that the spaces $X,Y \text{ and } B$ are chosen such that the LS-functional defines a norm which is equivalent to $|| \cdot ||_X$.
 Minimizing this functional is equivalent to solving the Euler-Lagrange equations formulated as 
 \begin{align}
-	\text{find } u \in X \text{  such that  } Q(u,v) = F(v) \; \; \forall v\in X
+	\text{find } u \in X \text{  such that  } Q(u,v) = F(v) \; \; \forall v\in X.
 	\label{eq:varFormGen}
 \end{align}
 Where $Q(u,v)$ and $F(v)$ are defined as 
@@ -164,11 +164,11 @@ Iterative techniques are becoming more and more popular with the increasingly us
 \begin{align}
 	\kappa(A) = ||A||||A^{-1}||.
 \end{align}
-Many iterative methods used to solve the equation $A\mathbf{x}=\mathbf{b}$ requires that $A$ is SPD. In the case that $A$ is not SPD one can multiply with $A^T$ on both sides, thus ending up with the system of equations $A^TA = A^Tb$ called the normal equations. The matrix $A^TA$ is always symmetric positive semi-definite and in many cases SPD, hence suited for iterative methods. The condition number however is the squared of the original system of equations \cite{DM}. Although we do not end up with the exact normal equations when using least-squares method, we do see some resemblance. From the straight forward construction of our minimization problem in equation\eref{eq:minProb} we notice the appearance of the $A^TA$-matrix. This immediately indicates that the system of equations has a condition number squared of what we usually get with in the standard Galerkin formulation. 
+Many iterative methods used to solve the equation $A\mathbf{x}=\mathbf{b}$ requires that $A$ is SPD. In the case when $A$ is not SPD one can multiply with $A^T$ on both sides, thus ending up with the system of equations $A^TA = A^Tb$ called the normal equations. The matrix $A^TA$ is always symmetric positive semi-definite and in many cases SPD, hence suited for iterative methods. The condition number however is the squared of the original system of equations \cite{DM}. Although we do not end up with the exact normal equations when using least-squares method, we do see some resemblance. From the straight forward construction of our minimization problem in equation\eref{eq:minProb} we notice the appearance of the $A^TA$-matrix. This immediately indicates that the system of equations has a condition number squared of what we usually get with in the standard Galerkin formulation. 
 %
 %
 \section{Least-squares applied on some common PDEs}
-Before we start elaborating to much on each test case, a quick overview of the problems investigated in this project will be provided. All of them are BVP with either Neumann or Dirichlet boundary conditions, the results can be found in chapter~\ref{chap:results}. 
+Before we start elaborating to much on each test case, a quick overview of the problems investigated in this project will be provided. All of them are BVPs with either Neumann or Dirichlet boundary conditions, the results can be found in chapter~\ref{chap:results}. 
 
 The problems solved in this project are simply expansions of the Poisson equation,  
 %
@@ -235,7 +235,7 @@ Which can be written in the same form as\eref{eq:BVP} with $ \mathbf{u} = \mathb
 	\end{bmatrix}.
 	\label{eq:Amatrix}
 \end{align}
-In order to make the functional $J$ valid for this system of equations it is necessary to put some restrictions to our functions. The first equation in \ref{eq:PoissonSystem} will give a bounded functional if both $\nabla u$ and $\mathbf{w}$ are in $L^2$. For the second equation to be valid $\nabla \cdot \mathbf{w}$ has to be in $L^2(\Omega)$. These conditions tells us that $u \in H_0^1$ and $\mathbf{w} \in H^1(\Omega;\text{div})$. Combining these two conditions to the final solution $\mathbf{u}$ implies choosing the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$. The solution space will then be defined as $Y \cup  B  = [L^2(\Omega)]^3\cup L^2(\partial \Omega) $. The functional defined in\eref{eq:FunctionalGen} will for our problem be 
+In order to make the functional $J$ valid for this system of equations it is necessary to put some restrictions on our functions. The first equation in \ref{eq:PoissonSystem} will give a bounded functional if both $\nabla u$ and $\mathbf{w}$ are in $L^2$. For the second equation to be valid $\nabla \cdot \mathbf{w}$ has to be in $L^2(\Omega)$. These conditions tells us that $u \in H_0^1$ and $\mathbf{w} \in H^1(\Omega;\text{div})$. Combining these two conditions to the final solution $\mathbf{u}$ implies choosing the search space $X =  H^1(\Omega;\text{div}) \times H_0^1(\Omega)$. The solution space will then be defined as $Y \cup  B  = [L^2(\Omega)]^3\cup L^2(\partial \Omega) $. The functional defined in\eref{eq:FunctionalGen} will for our problem be 
 \begin{align}
 	J(u;f) = ||\mathcal{L}u-f||^2_Y.
 	\label{eq:lsFunctionalPoisson}
@@ -299,7 +299,7 @@ Let the vector field $\mathbf{b}$ from the diffusion transport reaction problem 
 	u = g \text{ on } \partial \Omega.
 	\label{eq:DiffTransNonLin}
 \end{align}
-This gives us a nonlinear variational formulation that does not allow us to solve our system of equations directly. In order to find a solution Newtons method or another iteration technique must be applied. A notable difference between standard Galerkin and least-squares is that the linear functional $F(\cdot) = (\mathbf{f},\mathcal{L} v)$ will also be non-linear in the LS case since the linear operator $\mathcal{L}$ is dependent on $\mathbf{b}$.
+This gives us a nonlinear variational formulation that does not allow us to solve our system of equations directly. In order to find a solution Newtons method or another iteration technique must be applied. A notable difference between standard Galerkin and least-squares is that the linear functional $F(\cdot) = (\mathbf{f},\mathcal{L} v)$ will also be non-linear in the LS case since the linear operator $\mathcal{L}$ is dependent on $\mathbf{b}(u)$.
 %Needs to add the Jacobian of $F$ as well since this depends on $b$ and thus also $u$. 
 %%
 %Let us consider the diffusion transport equation with non-homogeneous boundary conditions and a non-linear gradient term with a LS-approach. This corresponds to solving the equation 
@@ -321,14 +321,16 @@ This gives us a nonlinear variational formulation that does not allow us to solv
 %%
 %until you reach your solution. $\mathcal{J}_k$ is the Jacobian matrix of $\mathcal{F}(\mathbf{u_h}^k)$.
 \section{Boundary conditions} \label{BC}
-Imposing the boundary conditions in a least-squares setting can either be done by creating a lifting function $R_g$ such that $R_g(\partial \Omega) = g(\partial\Omega)$ and in this way imposing them by restricting our search space, or it can be added to our functional as implied by formula \eref{eq:FunctionalGen}. In this section these two techniques will be clarified. Remember that for a function space $X(\Omega)$ it can always be defined a space $X_0(\Omega) = \left\{ f\in X | x = 0 \text{ on } \partial \Omega \right\}$ which denotes the functions with homogenous boundary condition. When no confusion is possible the notation $X$ will denote $X(\Omega)$. 
+Imposing the boundary conditions in a least-squares setting can either be done by subtracting a lifting function $R_g$ from the solution, and in this way imposing them by restricting our search space. The other option is to add it to our functional as implied by formula \eref{eq:FunctionalGen}. In this section these two techniques will be clarified. Remember that for a function space $X(\Omega)$ it can always be defined a space $X_0(\Omega) = \left\{ f\in X | x = 0 \text{ on } \partial \Omega \right\}$ which denotes the functions with homogenous boundary condition. When no confusion is possible the notation $X$ will denote $X(\Omega)$. 
 \subsection{Non-homogeneous Dirichlet boundary conditions}
 If $g \neq 0$ then we can simply define a lifting function $R_g \in X$ such that $R_g(\partial \Omega) = g(\partial \Omega)$. By defining $\tilde{\mathbf{u}}=\mathbf{u}-R_g$ we can replace this for $\mathbf{u}$ in the variation formulation and get 
 \begin{align}
+	\begin{split}
 	Q(\tilde{\mathbf{u}}+R_g,\mathbf{v}) &= F(\mathbf{v}) \\
 	Q(\tilde{\mathbf{u}},\mathbf{v})+Q(R_g,\mathbf{v}) &= F(\mathbf{v}) \\
 	Q(\tilde{\mathbf{u}},\mathbf{v}) &= F(\mathbf{v}) - Q(R_g,\mathbf{v})\\
 	Q(\tilde{\mathbf{u}},\mathbf{v}) &= \tilde{F}(\mathbf{v}).
+	\end{split}
 	\label{eq:liftingFunc}
 \end{align}
 %
@@ -350,7 +352,7 @@ Let us define $\hat{x}$ and $\hat{y}$ as the unit vectors in each direction. Not
 \subsection{Boundary conditions as an additional functional}
 The boundary conditions can also be implemented as the additional term in the functional described in equation \eref{eq:FunctionalGen}. For a BVP with Dirichlet BC's this will correspon to adding $||u-g||^2_0$ to our functional $J$. By minimizing this term we end up with the following contribution to the variational form
 \begin{align}
-	(u,v)_{\partial \Omega}=(g,v)_{\partial \Omega}
+	(u,v)_{\partial \Omega}=(g,v)_{\partial \Omega}.
 	\label{eq:BCFunctionalImplementationContribution}
 \end{align}
 Similarly for a BVP with Neumann boundary conditions on $\Gamma_N$ and Dirichlet conditions on $\Gamma_D$ the contribution to the functional will be
@@ -366,5 +368,5 @@ Spectral methods are related to finite element methods, but with some conceptual
 	l_j(x) = \prod_{\substack{0\leq m \leq k \\  m \neq j}} \frac{x-x_j}{x_m-x_j}.
 	\label{eq:lagpolynomials}
 \end{align}
-For the 2-D problems solved in this project $N_I = l_i(x)l_j(y)$ are used as basis functions.
-The roots $\left\{ x_j \right\}_{0\leq j \leq k}$ which defines the Lagrange polynomials can be chosen in many different ways, and are here chosen as the roots of the \textit{first derivative of the Legendre polynomials}. By using this definition we can exploit the Lobatto quadrature rule when calculating our integrals. This gives us a fast and efficient way of creating our matrices. See \cite{Canuto} for further information on spectral methods.
+For the 2-D problems $N_I = l_i(x)l_j(y)$ are used as basis functions.
+The roots $\left\{ x_j \right\}_{0\leq j \leq k}$ which defines the Lagrange polynomials can be chosen in many different ways, and are here chosen as the roots of the \textit{first derivative of the Legendre polynomials}. By using this definition we can exploit the Lobatto quadrature rule in an efficient manner when calculating our integrals. This gives us a fast and simple way of creating our matrices. See \cite{Canuto} for further information on spectral methods.

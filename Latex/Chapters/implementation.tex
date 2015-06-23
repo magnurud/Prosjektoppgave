@@ -8,7 +8,7 @@
 
 %----------------------------------------------------------------------------------------
 
-All the implementation has been done in two dimensions on the unit square $(0,1)^2$. The goal of the implementation has been to investigate the virtues of the least-squares method. It is implemented with spectral basis functions and is compared to the results from standard Galerkin formulation. Finally the combined GLS-method described in chapter \ref{chap:newTheory} is also tested against the separate methods. 
+All the implementation has been done in two dimensions on the unit square $(0,1)^2$. The goal of the implementation has been to investigate the virtues of the least-squares method. It is implemented with spectral basis functions and is compared to the results from standard Galerkin formulation. Finally the combined GLS-method described in chapter \ref{chap:newTheory} is also tested against Galerkin. 
 
 \section{The bilinear form obtained from least-squares}
  For the general problem\eref{eq:BVP} the functional $Q$ will take the form 
@@ -63,7 +63,7 @@ where $\partial_x = \partial / \partial x $ for the Poisson problem and $\partia
 	\partial_yN_I \\
 	0
 \end{bmatrix}
-	f d\Omega
+	f d\Omega.
 	\label{eq:rhsFunctional}
 \end{align}
 
@@ -129,7 +129,7 @@ Where each block $K_{m,n}$ corresponds to  calculating element $m,n$ in the matr
 \end{align}
 The sum is obtained by using Gauss Lobatto quadrature rule. Now notice that the Lagrange polynomials $l_j(y_{\beta})$ are non-zero only when $\beta = j$, this implies that for the non-zero terms in the sum we have $\beta = j=l$, and $\alpha = i$. With these considerations the double sum above simplifies to  
 \begin{align}
-	(K_{1,3})_{I,J} &= w_{i}w_{j}l'_k(x_{i})
+	(K_{1,3})_{I,J} &= w_{i}w_{j}l'_k(x_{i}).
 	\label{eq:MatrixDerivation2}
 \end{align}
 Remember that $I = i+jN$ and $J = k+lN$, with $N$ being the number of nodes in each spacial direction. This means that $K_{1,3}$ will consist of blocks where $i$ and $k$ goes from $1$ to $N$ while $j$ and $k$ are constant within each block. Since we require that $j=k$ we can immediately conclude that $K_{1,3}$ is nonzero only in the blocks along the diagonal. Notice that the factor $w_il'_k(x_i)$ is the same for each block. And it can be written in matrix form as $WL$. Since each block $WL$ is multiplied with $w_j$ the whole matrix can simply be written as the Kronecker tensor product $(W\otimes WL)$. Similar reasoning can be made with all the other block matrices $K_{m,n}$ and for the Poisson problem we end up with a matrix on the form
@@ -142,7 +142,7 @@ K^{LS} =
 	W \otimes (L^TWL+W) & WL \otimes L^TW 		 &	W \otimes WL  \\ 	
 	L^TW \otimes WL     & (L^TWL+W) \otimes W  &	WL \otimes W  \\ 	
 	W \otimes L^TW		  & L^TW \otimes W       &  L^TWL \otimes W +	W\otimes L^TWL  \\ 	
-\end{bmatrix}
+\end{bmatrix}.
 $
 
 Note that without the reformulation of the PDE as a first order system and with regular Galerkin formulation the stiffness matrix will simply be 
@@ -154,7 +154,7 @@ The matrix corresponding to the discretized variational formulation can be divid
 	\label{eq:ReactionImplementation}
 \end{align}
 \subsection{Laplacian part}
-The part of the matrix which is closest related to the laplacian operator can be generated as 
+The part of the matrix which is closest related to the Laplacian operator can be generated as 
 
 $
 A^{LS} = 
@@ -239,7 +239,7 @@ We can now define the total matrix for the diffusion transport reaction problem 
 
 Notice that most of the terms in the final matrix are cross terms, and does not surge solely from one of the terms in the equation. The way that the matrices have been divided into parts here are of now other than practical reasons and can be done in a different matter.  
 
-\section{non-linear diffusion transport problem}
+\section{Non-linear diffusion transport problem}
 The non-linear problem is solved without the reaction term, Newtons method with both a numerical and analytical Jacobian is calculated and applied. A detailed convergence result can be found in \cite{SM}. The fact that least-squares provides a system with many cross-terms for the linear problems makes the non-linear case even more complicated. The non-linearity affects all the matrices including the vector surging from the loading function. This does not only make the Jacobian rather hard to implement, but also increases the computational cost drastically. In order to lower the computational time the Jacobian is approximated in both the numerical and analytical approach. This simplification consists in simply not actualizing all the matrices for each Newton iteration.   
 
 %The stepwise algorithm to solve the nonlinear equation is described in chapter~\ref{chap:newTheory}. However there are several computational steps that needs to be taken care of, both with regular Galerkin and least-squares. In both cases we obtain two matrices which we will name $A$ and $G$ and with superscript LS if they refer to the least-squares formulation. In both cases only $G$ will depend on the numerical solution $u_h$. An important difference however is that in the LS setting the $F$ vector will depend on $u_h$ while in the straight forward Galerkin setting it will not. For regular Galerkin spectral approach we obtain
